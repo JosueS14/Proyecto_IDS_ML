@@ -16,14 +16,10 @@ __pycache__/
 # VS Code
 .vscode/
 
-# Archivos temporales
-*.tmp
-*.log
-
-# Sistema operativo
-.DS_Store
-Thumbs.db
-
-# Datasets
+# Datasets originales
 data/raw/
 data/MachineLearningCSV/
+
+# Datasets procesados
+data/processed/
+*.parquet
