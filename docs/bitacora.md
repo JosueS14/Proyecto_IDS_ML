@@ -42,3 +42,20 @@ Análisis de distribución global: Se realizó un análisis de la distribución 
 
 Decisión pendiente: El tratamiento del desbalance de clases será evaluado durante la fase de Data Preparation, evitando realizar modificaciones al dataset durante la etapa actual de Data Understanding.
 
+# Sesion 5
+## Objetivo
+
+Formalizar la fase 1 de planificación y requisitos a partir del documento académico y del estado actual del repositorio.
+
+## Resultados
+
+- Se documentó el problema, el objetivo general, el alcance y las exclusiones de la primera versión.
+- Se establecieron los requisitos funcionales, técnicos y de seguridad con identificadores verificables.
+- Se definió `MALICIOUS` como la clase positiva para el cálculo de las métricas.
+- Se confirmó el modo por lotes como alcance inicial y se excluyeron temporalmente el modo tiempo real, la respuesta activa y la clasificación multiclase.
+- Se registraron riesgos y pendientes relacionados con la selección de características, el desbalance, la partición de datos y la reproducibilidad.
+
+## Decisión
+
+La siguiente actividad será la fase 2, Comprensión de los datos. No se modificó todavía el pipeline de preparación ni se entrenó un modelo.
+
