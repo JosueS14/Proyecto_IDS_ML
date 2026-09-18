@@ -105,7 +105,7 @@ Los requisitos se expresan con identificadores para facilitar la trazabilidad du
 | RT-09 | El prototipo deberá funcionar con los recursos disponibles del entorno de laboratorio. | Se registra el tiempo de ejecución y, si es necesario, se documenta el muestreo o la reducción aplicada. |
 | RT-10 | El formato, la cantidad final y el orden de las características deberán quedar documentados. | El artefacto incluye o referencia el esquema utilizado en entrenamiento. |
 
-No se fija todavía un número definitivo de características. El repositorio contiene versiones de CIC-IDS2017 con 85 columnas iniciales y el script actual elimina algunas columnas identificadoras; el número final deberá confirmarse durante la comprensión y preparación de datos.
+No se fija todavía un número definitivo de características.
 
 ## 8. Requisitos de seguridad
 
@@ -143,30 +143,7 @@ El proyecto se considerará técnicamente satisfactorio si, como mínimo:
 
 No se fija en esta fase un umbral numérico de accuracy, recall o FPR. Ese umbral debe establecerse después de conocer la distribución real de los datos, el costo relativo de cada error y los resultados de la evaluación. Presentar porcentajes tomados de otros estudios como si fueran objetivos garantizados sería metodológicamente incorrecto.
 
-## 10. Estado actual del repositorio
-
-### 10.1 Avances confirmados
-
-- Existe una estructura inicial con `data/raw`, `data/processed`, `src/data`, `docs` y `thesis`.
-- Se dispone de los ocho archivos CSV principales de CIC-IDS2017 en el entorno local.
-- El script `src/data/01_cargar_dataset.py` carga varios CSV, normaliza nombres de columnas, elimina identificadores seleccionados, trata infinitos y valores nulos y genera un archivo Parquet.
-- La bitácora registra una exploración inicial de columnas, tipos, etiquetas y distribución de clases.
-- Se tomó la decisión de utilizar clasificación binaria y Random Forest como algoritmo principal.
-- Se definió que el tratamiento del desbalance se analizará en la preparación de datos y no se asumirá de antemano.
-
-### 10.2 Diferencias o pendientes detectados
-
-- `thesis/01_Business_Understanding.md` solo contenía decisiones generales; no incluía requisitos verificables, alcance fuera de límites, seguridad ni criterios de aceptación. Esta versión corrige esa carencia.
-- El script actual realiza limpieza y genera datos procesados, pero esas actividades pertenecen principalmente a las fases 2 y 3. Todavía no deben considerarse evidencia de que la preparación final esté aprobada.
-- La bitácora reporta diferencias entre conteos de una sesión y otra. Antes de usar cifras definitivas deberá establecerse un procedimiento único y reproducible de conteo.
-- La selección actual de columnas eliminadas debe revisarse porque quitar `Source Port` y `Destination Port` puede eliminar información útil para detectar ciertos ataques. La decisión final queda pendiente de la fase de comprensión y preparación de datos.
-- El script no recodifica todavía la etiqueta original a `BENIGN` y `MALICIOUS`.
-- Todavía no existe un módulo de entrenamiento, evaluación, inferencia ni generación de alertas.
-- No existe aún un esquema formal de entrada/salida, un modelo persistido ni una guía de ejecución.
-- `README.md` está vacío y deberá completarse durante la integración o el despliegue del prototipo.
-- `requirements.txt` contiene el inventario del entorno, pero su formato y codificación deben verificarse antes de usarlo como archivo de instalación reproducible.
-
-## 11. Riesgos, restricciones y supuestos
+## 10. Riesgos, restricciones y supuestos
 
 | ID | Tipo | Descripción | Tratamiento previsto |
 | --- | --- | --- | --- |
@@ -178,7 +155,7 @@ No se fija en esta fase un umbral numérico de accuracy, recall o FPR. Ese umbra
 | R-006 | Riesgo | Un modelo entrenado puede quedar obsoleto ante cambios en el tráfico. | Definir monitoreo y reentrenamiento en la fase 7. |
 | R-007 | Supuesto | Los archivos de entrada contienen una columna `Label` y características numéricas compatibles. | Verificar el supuesto durante la fase 2. |
 
-## 12. Entregables de la fase 1
+## 11. Entregables de la fase 1
 
 1. Este documento de planificación y requisitos.
 2. Alcance inicial y exclusiones explícitas.
@@ -187,7 +164,7 @@ No se fija en esta fase un umbral numérico de accuracy, recall o FPR. Ese umbra
 5. Registro de decisiones, riesgos, supuestos y pendientes.
 6. Relación inicial entre el estado del repositorio y las actividades de las fases posteriores.
 
-## 13. Criterio para cerrar la fase 1
+## 12. Criterio para cerrar la fase 1
 
 La fase 1 queda cerrada para continuar con la fase 2 cuando se confirme que:
 

@@ -59,3 +59,42 @@ Formalizar la fase 1 de planificación y requisitos a partir del documento acad�
 
 La siguiente actividad será la fase 2, Comprensión de los datos. No se modificó todavía el pipeline de preparación ni se entrenó un modelo.
 
+# Sesion 6
+## Objetivo
+
+Ejecutar una comprensión reproducible de los ocho archivos CSV de CIC-IDS2017 sin modificar los datos originales.
+
+## Resultados
+
+- Se analizaron 3,119,345 filas brutas y 85 columnas con un esquema común.
+- Se detectaron 288,602 filas completamente vacías en el archivo de Web Attacks.
+- Se identificaron 2,830,743 registros con etiqueta válida: 2,273,097 `BENIGN` y 557,646 registros de ataque.
+- La distribución binaria preliminar es 80.30 % `BENIGN` y 19.70 % `MALICIOUS`.
+- Se detectaron valores faltantes en `Flow Bytes/s`, valores infinitos en `Flow Bytes/s` y `Flow Packets/s`, y valores potencialmente inconsistentes en variables como `Flow Duration` y tasas de flujo.
+- Se detectaron 203 duplicados mediante huella de fila entre registros no completamente vacíos, sin contar coincidencias entre archivos diferentes.
+- Se identificaron como posibles fuentes de fuga `Flow ID`, direcciones IP, puertos y `Timestamp`.
+
+## Corrección de trazabilidad
+
+El conteo reproducible de esta sesión sustituye el conteo global registrado en la sesión 4. La diferencia se documentó en `thesis/02_Data_Understanding.md` y en `docs/data_understanding_results.json`.
+
+## Decisión
+
+La limpieza, el tratamiento del desbalance, la selección final de características y la partición del dataset se trasladan a la fase 3. Los archivos originales no fueron modificados y no se entrenó ningún modelo.
+
+# Sesion 7
+## Objetivo
+
+Ajustar `01_cargar_dataset.py` para que cumpla únicamente la función de carga.
+
+## Resultados
+
+- Se eliminó del cargador la eliminación de columnas identificadoras.
+- Se eliminó del cargador el reemplazo de infinitos, la eliminación de valores nulos y la recodificación de etiquetas.
+- Se eliminó la generación automática de un Parquet procesado.
+- El cargador ahora conserva las filas, columnas, valores y etiquetas originales, y utiliza la misma codificación `cp1252` que el analizador de la fase 2.
+
+## Decisión
+
+La limpieza y transformación definitiva quedan reservadas para la fase 3. El archivo `02_comprender_dataset.py` continúa siendo el encargado del análisis descriptivo y no modifica los CSV de origen.
+
