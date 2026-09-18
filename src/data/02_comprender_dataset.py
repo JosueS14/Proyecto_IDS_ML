@@ -1,4 +1,4 @@
-"""Describe CIC-IDS2017 without modifying the source CSV files."""
+# Describe los flujos que se encuentran en el dataset CIC-IDS2017.
 
 from __future__ import annotations
 
@@ -12,12 +12,12 @@ import numpy as np
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-RAW_DIR = PROJECT_ROOT / "data" / "raw"
-REPORT_PATH = PROJECT_ROOT / "docs" / "data_understanding_results.json"
-CHUNK_SIZE = 100_000
+RAIZ_PROYECTO = Path(__file__).resolve().parents[2]
+DIRECTORIO_DATOS_CRUDOS = RAIZ_PROYECTO / "data" / "raw"
+RUTA_INFORME = RAIZ_PROYECTO / "docs" / "resultados_comprension_datos.json"
+TAMANO_BLOQUE = 100_000
 
-IDENTIFIER_COLUMNS = {
+COLUMNAS_IDENTIFICADORAS = {
     "Flow ID",
     "Source IP",
     "Source Port",
@@ -27,55 +27,59 @@ IDENTIFIER_COLUMNS = {
 }
 
 
-def _update_min_max(summary: dict[str, dict[str, float]], frame: pd.DataFrame) -> None:
-    """Update numeric ranges after coercing values for inspection only."""
-    for column in frame.columns:
-        if column == "Label":
+def _actualizar_minimos_maximos(
+    resumen: dict[str, dict[str, float]], bloque: pd.DataFrame
+) -> None:
+    for columna in bloque.columns:
+        if columna == "Label":
             continue
 
-        numeric = pd.to_numeric(frame[column], errors="coerce")
-        finite = numeric[np.isfinite(numeric)]
-        if finite.empty:
+        valores_numericos = pd.to_numeric(bloque[columna], errors="coerce")
+        valores_finitos = valores_numericos[np.isfinite(valores_numericos)]
+        if valores_finitos.empty:
             continue
 
-        values = summary.setdefault(column, {})
-        values["min"] = min(values.get("min", float("inf")), float(finite.min()))
-        values["max"] = max(values.get("max", float("-inf")), float(finite.max()))
+        valores = resumen.setdefault(columna, {})
+        valores["min"] = min(
+            valores.get("min", float("inf")), float(valores_finitos.min())
+        )
+        valores["max"] = max(
+            valores.get("max", float("-inf")), float(valores_finitos.max())
+        )
 
 
-def describe_file(path: Path) -> dict[str, Any]:
-    """Collect schema and quality information for one CSV file."""
-    rows = 0
-    blank_rows = 0
-    missing_by_column: Counter[str] = Counter()
-    infinite_by_column: Counter[str] = Counter()
-    labels: Counter[str] = Counter()
-    row_hashes: Counter[int] = Counter()
-    non_blank_row_hashes: Counter[int] = Counter()
-    observed_dtypes: dict[str, set[str]] = {}
-    numeric_ranges: dict[str, dict[str, float]] = {}
-    columns: list[str] = []
-    duplicate_rows_within_chunks = 0
+def describir_archivo(ruta_archivo: Path) -> dict[str, Any]:
+    filas = 0
+    filas_vacias = 0
+    faltantes_por_columna: Counter[str] = Counter()
+    infinitos_por_columna: Counter[str] = Counter()
+    etiquetas: Counter[str] = Counter()
+    huellas_filas: Counter[int] = Counter()
+    huellas_filas_no_vacias: Counter[int] = Counter()
+    tipos_observados: dict[str, set[str]] = {}
+    rangos_numericos: dict[str, dict[str, float]] = {}
+    columnas: list[str] = []
+    filas_duplicadas_en_bloques = 0
 
-    reader = pd.read_csv(
-        path,
+    lector = pd.read_csv(
+        ruta_archivo,
         encoding="cp1252",
         low_memory=False,
-        chunksize=CHUNK_SIZE,
+        chunksize=TAMANO_BLOQUE,
     )
 
-    for chunk in reader:
-        chunk.columns = chunk.columns.str.strip()
-        if not columns:
-            columns = chunk.columns.tolist()
+    for bloque in lector:
+        bloque.columns = bloque.columns.str.strip()
+        if not columnas:
+            columnas = bloque.columns.tolist()
 
-        rows += len(chunk)
-        blank_rows += int(chunk.isna().all(axis=1).sum())
-        missing_by_column.update(chunk.isna().sum().to_dict())
+        filas += len(bloque)
+        filas_vacias += int(bloque.isna().all(axis=1).sum())
+        faltantes_por_columna.update(bloque.isna().sum().to_dict())
 
-        if "Label" in chunk.columns:
-            labels.update(
-                chunk["Label"]
+        if "Label" in bloque.columns:
+            etiquetas.update(
+                bloque["Label"]
                 .dropna()
                 .astype(str)
                 .str.strip()
@@ -85,126 +89,141 @@ def describe_file(path: Path) -> dict[str, Any]:
                 .to_dict()
             )
 
-        for column in chunk.columns:
-            observed_dtypes.setdefault(column, set()).add(str(chunk[column].dtype))
+        for columna in bloque.columns:
+            tipos_observados.setdefault(columna, set()).add(str(bloque[columna].dtype))
 
-        numeric_chunk = chunk.drop(columns=["Label"], errors="ignore").apply(
+        bloque_numerico = bloque.drop(columns=["Label"], errors="ignore").apply(
             pd.to_numeric, errors="coerce"
         )
-        infinite_by_column.update(
-            np.isinf(numeric_chunk).sum().astype(int).to_dict()
+        infinitos_por_columna.update(
+            np.isinf(bloque_numerico).sum().astype(int).to_dict()
         )
-        _update_min_max(numeric_ranges, chunk)
+        _actualizar_minimos_maximos(rangos_numericos, bloque)
 
-        hashes = pd.util.hash_pandas_object(chunk, index=False)
-        row_hash_counts = hashes.value_counts()
-        duplicate_rows_within_chunks += int((row_hash_counts - 1).clip(lower=0).sum())
-        row_hashes.update(hashes.astype("uint64").tolist())
-        non_blank_row_hashes.update(
-            hashes[~chunk.isna().all(axis=1)].astype("uint64").tolist()
+        huellas = pd.util.hash_pandas_object(bloque, index=False)
+        conteo_huellas = huellas.value_counts()
+        filas_duplicadas_en_bloques += int(
+            (conteo_huellas - 1).clip(lower=0).sum()
+        )
+        huellas_filas.update(huellas.astype("uint64").tolist())
+        huellas_filas_no_vacias.update(
+            huellas[~bloque.isna().all(axis=1)].astype("uint64").tolist()
         )
 
-    duplicate_rows_by_hash = sum(count - 1 for count in row_hashes.values() if count > 1)
-    duplicate_non_blank_rows_by_hash = sum(
-        count - 1 for count in non_blank_row_hashes.values() if count > 1
+    filas_duplicadas_por_huella = sum(
+        conteo - 1 for conteo in huellas_filas.values() if conteo > 1
     )
-    dtype_counts = Counter(
-        next(iter(dtypes)) for dtypes in observed_dtypes.values() if len(dtypes) == 1
+    filas_no_vacias_duplicadas_por_huella = sum(
+        conteo - 1 for conteo in huellas_filas_no_vacias.values() if conteo > 1
+    )
+    conteo_tipos = Counter(
+        next(iter(tipos)) for tipos in tipos_observados.values() if len(tipos) == 1
     )
 
     return {
-        "file": path.name,
-        "rows": rows,
-        "blank_rows": blank_rows,
-        "columns_count": len(columns),
-        "columns": columns,
-        "labels": dict(labels),
+        "file": ruta_archivo.name,
+        "rows": filas,
+        "blank_rows": filas_vacias,
+        "columns_count": len(columnas),
+        "columns": columnas,
+        "labels": dict(etiquetas),
         "missing_by_column": {
-            column: count for column, count in missing_by_column.items() if count
+            columna: conteo
+            for columna, conteo in faltantes_por_columna.items()
+            if conteo
         },
         "infinite_by_column": {
-            column: count for column, count in infinite_by_column.items() if count
+            columna: conteo
+            for columna, conteo in infinitos_por_columna.items()
+            if conteo
         },
         "observed_dtypes": {
-            column: sorted(dtypes) for column, dtypes in observed_dtypes.items()
+            columna: sorted(tipos)
+            for columna, tipos in tipos_observados.items()
         },
-        "dtype_counts": dict(dtype_counts),
-        "numeric_ranges": numeric_ranges,
-        "duplicate_rows_within_chunks": duplicate_rows_within_chunks,
-        "duplicate_rows_by_row_hash": duplicate_rows_by_hash,
-        "duplicate_non_blank_rows_by_row_hash": duplicate_non_blank_rows_by_hash,
+        "dtype_counts": dict(conteo_tipos),
+        "numeric_ranges": rangos_numericos,
+        "duplicate_rows_within_chunks": filas_duplicadas_en_bloques,
+        "duplicate_rows_by_row_hash": filas_duplicadas_por_huella,
+        "duplicate_non_blank_rows_by_row_hash": filas_no_vacias_duplicadas_por_huella,
     }
 
 
-def main() -> None:
-    reconfigure_stdout = getattr(sys.stdout, "reconfigure", None)
-    if callable(reconfigure_stdout):
-        reconfigure_stdout(encoding="utf-8")
+def ejecutar_analisis() -> None:
+    reconfigurar_salida = getattr(sys.stdout, "reconfigure", None)
+    if callable(reconfigurar_salida):
+        reconfigurar_salida(encoding="utf-8")
 
-    files = sorted(RAW_DIR.glob("*.csv"))
-    if not files:
-        raise FileNotFoundError(f"No se encontraron CSV en {RAW_DIR}")
+    archivos = sorted(DIRECTORIO_DATOS_CRUDOS.glob("*.csv"))
+    if not archivos:
+        raise FileNotFoundError(
+            f"No se encontraron CSV en {DIRECTORIO_DATOS_CRUDOS}"
+        )
 
-    file_reports = [describe_file(path) for path in files]
-    global_labels: Counter[str] = Counter()
-    global_missing: Counter[str] = Counter()
-    global_infinite: Counter[str] = Counter()
-    for report in file_reports:
-        global_labels.update(report["labels"])
-        global_missing.update(report["missing_by_column"])
-        global_infinite.update(report["infinite_by_column"])
+    informes_archivos = [describir_archivo(ruta) for ruta in archivos]
+    etiquetas_globales: Counter[str] = Counter()
+    faltantes_globales: Counter[str] = Counter()
+    infinitos_globales: Counter[str] = Counter()
+    for informe_archivo in informes_archivos:
+        etiquetas_globales.update(informe_archivo["labels"])
+        faltantes_globales.update(informe_archivo["missing_by_column"])
+        infinitos_globales.update(informe_archivo["infinite_by_column"])
 
-    first_columns = file_reports[0]["columns"]
-    schema_differences = {
-        report["file"]: report["columns"]
-        for report in file_reports
-        if report["columns"] != first_columns
+    primeras_columnas = informes_archivos[0]["columns"]
+    diferencias_esquema = {
+        informe_archivo["file"]: informe_archivo["columns"]
+        for informe_archivo in informes_archivos
+        if informe_archivo["columns"] != primeras_columnas
     }
 
-    report = {
-        "source_directory": str(RAW_DIR.relative_to(PROJECT_ROOT)),
-        "files_count": len(file_reports),
-        "files": file_reports,
+    informe = {
+        "source_directory": str(
+            DIRECTORIO_DATOS_CRUDOS.relative_to(RAIZ_PROYECTO)
+        ),
+        "files_count": len(informes_archivos),
+        "files": informes_archivos,
         "global": {
-            "rows": sum(item["rows"] for item in file_reports),
-            "blank_rows": sum(item["blank_rows"] for item in file_reports),
-            "labels": dict(global_labels),
-            "missing_by_column": dict(global_missing),
-            "infinite_by_column": dict(global_infinite),
+            "rows": sum(
+                informe_archivo["rows"] for informe_archivo in informes_archivos
+            ),
+            "blank_rows": sum(
+                informe_archivo["blank_rows"]
+                for informe_archivo in informes_archivos
+            ),
+            "labels": dict(etiquetas_globales),
+            "missing_by_column": dict(faltantes_globales),
+            "infinite_by_column": dict(infinitos_globales),
             "duplicate_rows_by_row_hash_within_files": sum(
-                item["duplicate_rows_by_row_hash"] for item in file_reports
+                informe_archivo["duplicate_rows_by_row_hash"]
+                for informe_archivo in informes_archivos
             ),
             "duplicate_non_blank_rows_by_row_hash_within_files": sum(
-                item["duplicate_non_blank_rows_by_row_hash"] for item in file_reports
+                informe_archivo["duplicate_non_blank_rows_by_row_hash"]
+                for informe_archivo in informes_archivos
             ),
-            "columns_count": len(first_columns),
-            "columns": first_columns,
-            "observed_dtypes": file_reports[0]["observed_dtypes"],
-            "dtype_counts": file_reports[0]["dtype_counts"],
-            "schema_differences": schema_differences,
+            "columns_count": len(primeras_columnas),
+            "columns": primeras_columnas,
+            "observed_dtypes": informes_archivos[0]["observed_dtypes"],
+            "dtype_counts": informes_archivos[0]["dtype_counts"],
+            "schema_differences": diferencias_esquema,
             "possible_identifier_columns": sorted(
-                IDENTIFIER_COLUMNS.intersection(first_columns)
+                COLUMNAS_IDENTIFICADORAS.intersection(primeras_columnas)
             ),
         },
-        "notes": [
-            "Los nombres de columnas se recortan solo para describir el esquema; los CSV originales no se modifican.",
-            "Los duplicados se identifican mediante la huella de cada fila dentro de cada archivo; el total no incluye coincidencias entre archivos.",
-            "Los rangos se calculan sobre valores numéricos finitos y no constituyen todavía reglas de limpieza.",
-        ],
     }
 
-    REPORT_PATH.write_text(
-        json.dumps(report, indent=2, ensure_ascii=False),
+    RUTA_INFORME.write_text(
+        json.dumps(informe, indent=2, ensure_ascii=False),
         encoding="utf-8",
     )
-    print(f"Informe generado: {REPORT_PATH.relative_to(PROJECT_ROOT)}")
-    print(f"Archivos: {report['files_count']}")
-    print(f"Filas brutas: {report['global']['rows']:,}")
-    print(f"Filas completamente vacías: {report['global']['blank_rows']:,}")
+    print(f"Informe generado: {RUTA_INFORME.relative_to(RAIZ_PROYECTO)}")
+    print(f"Archivos: {informe['files_count']}")
+    print(f"Filas brutas: {informe['global']['rows']:,}")
+    print(f"Filas completamente vacías: {informe['global']['blank_rows']:,}")
     print("Etiquetas:")
-    for label, count in sorted(global_labels.items()):
-        print(f"- {label}: {count:,}")
+    for etiqueta, conteo in sorted(etiquetas_globales.items()):
+        print(f"- {etiqueta}: {conteo:,}")
 
 
 if __name__ == "__main__":
-    main()
+    ejecutar_analisis()

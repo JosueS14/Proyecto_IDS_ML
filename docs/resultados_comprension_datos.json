@@ -6143,10 +6143,5 @@
       "Source Port",
       "Timestamp"
     ]
-  },
-  "notes": [
-    "Los nombres de columnas se recortan solo para describir el esquema; los CSV originales no se modifican.",
-    "Los duplicados se identifican mediante la huella de cada fila dentro de cada archivo; el total no incluye coincidencias entre archivos.",
-    "Los rangos se calculan sobre valores numéricos finitos y no constituyen todavía reglas de limpieza."
-  ]
+  }
 }

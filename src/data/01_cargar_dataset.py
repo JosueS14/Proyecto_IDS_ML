@@ -5,8 +5,8 @@ from pathlib import Path
 import pandas as pd
 
 
-PROJECT_ROOT = Path(__file__).resolve().parents[2]
-RUTA_RAW = PROJECT_ROOT / "data" / "raw"
+RAIZ_PROYECTO = Path(__file__).resolve().parents[2]
+DIRECTORIO_DATOS_CRUDOS = RAIZ_PROYECTO / "data" / "raw"
 
 
 def cargar_dataset(directorio_entrada: Path) -> pd.DataFrame:
@@ -16,10 +16,10 @@ def cargar_dataset(directorio_entrada: Path) -> pd.DataFrame:
             f"No se encontraron archivos CSV en: {directorio_entrada}"
         )
 
-    dataframes = []
+    marcos_datos = []
     for archivo in archivos_csv:
         print(f"Cargando: {archivo.name}")
-        dataframes.append(
+        marcos_datos.append(
             pd.read_csv(
                 archivo,
                 encoding="cp1252",
@@ -27,11 +27,11 @@ def cargar_dataset(directorio_entrada: Path) -> pd.DataFrame:
             )
         )
 
-    return pd.concat(dataframes, ignore_index=True)
+    return pd.concat(marcos_datos, ignore_index=True)
 
 
 if __name__ == "__main__":
-    dataset = cargar_dataset(RUTA_RAW)
-    print(f"Archivos cargados: {len(list(RUTA_RAW.glob('*.csv')))}")
-    print(f"Filas cargadas: {len(dataset):,}")
-    print(f"Columnas cargadas: {len(dataset.columns)}")
+    conjunto_datos = cargar_dataset(DIRECTORIO_DATOS_CRUDOS)
+    print(f"Archivos cargados: {len(list(DIRECTORIO_DATOS_CRUDOS.glob('*.csv')))}")
+    print(f"Filas cargadas: {len(conjunto_datos):,}")
+    print(f"Columnas cargadas: {len(conjunto_datos.columns)}")

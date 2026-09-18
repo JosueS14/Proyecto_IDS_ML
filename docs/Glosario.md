@@ -1,3 +1,0 @@
-- Flow es una secuencia de paquetes intercambiados entres dos dispositivos durante una comunicacion. En los conjuntos de datos como CIC-IDS2017, cada flow se representa mediante una fila que contiene caracteristicas estadisticas calculadas a aprtir de todos los paquetes que conforman dicha comunicacion.
-
-- Los Features son propiedades indivudales, medibles y de entrada que se usan para alimentar un modelo informatico con el fin de que aprenda patrones y realice predicciones. 

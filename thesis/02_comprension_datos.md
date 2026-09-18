@@ -4,7 +4,7 @@
 
 Esta fase corresponde a la comprensión de los datos de CRISP-DM. Su objetivo es conocer la fuente, estructura, contenido, calidad y limitaciones del conjunto de datos antes de definir las transformaciones que se aplicarán en la fase 3.
 
-El análisis se realizó sobre los ocho archivos CSV disponibles en `data/raw`. Para evitar alterar la fuente, se utilizó un análisis por bloques mediante `src/data/02_comprender_dataset.py`. El script únicamente describe los datos y genera el informe técnico `docs/data_understanding_results.json`; no limpia, balancea ni sobrescribe los CSV originales.
+El análisis se realizó sobre los ocho archivos CSV disponibles en `data/raw`. Para evitar alterar la fuente, se utilizó un análisis por bloques mediante `src/data/02_comprender_dataset.py`. El script únicamente describe los datos y genera el informe técnico `docs/resultados_comprension_datos.json`; no limpia, balancea ni sobrescribe los CSV originales.
 
 ## 2. Fuente y organización de los datos
 
@@ -39,7 +39,7 @@ Cada archivo contiene 85 columnas: 84 columnas de información del flujo y la co
 - Estadísticas de paquetes, subflujos, ventanas TCP, actividad e inactividad.
 - Etiqueta original: `Label`.
 
-El detalle completo de las 85 columnas se encuentra en `docs/data_understanding_results.json`. En el primer archivo analizado se observaron 56 columnas `int64`, 24 columnas `float64` y 5 columnas de tipo `object`. Las columnas de tipo texto corresponden principalmente a identificadores, la marca temporal y la etiqueta.
+El detalle completo de las 85 columnas se encuentra en `docs/resultados_comprension_datos.json`. En el primer archivo analizado se observaron 56 columnas `int64`, 24 columnas `float64` y 5 columnas de tipo `object`. Las columnas de tipo texto corresponden principalmente a identificadores, la marca temporal y la etiqueta.
 
 ## 4. Distribución de las etiquetas
 
@@ -145,8 +145,8 @@ Por tanto, los resultados de esta fase sustituyen a esas cifras anteriores para 
 ## 8. Artefactos generados
 
 - `src/data/02_comprender_dataset.py`: analizador reproducible por bloques.
-- `docs/data_understanding_results.json`: informe detallado del esquema, etiquetas, calidad, duplicados y rangos.
-- `thesis/02_Data_Understanding.md`: interpretación metodológica de los resultados.
+- `docs/resultados_comprension_datos.json`: informe detallado del esquema, etiquetas, calidad, duplicados y rangos.
+- `thesis/02_comprension_datos.md`: interpretación metodológica de los resultados.
 
 ## 9. Conclusiones de la fase
 

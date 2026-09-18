@@ -76,7 +76,7 @@ Ejecutar una comprensión reproducible de los ocho archivos CSV de CIC-IDS2017 s
 
 ## Corrección de trazabilidad
 
-El conteo reproducible de esta sesión sustituye el conteo global registrado en la sesión 4. La diferencia se documentó en `thesis/02_Data_Understanding.md` y en `docs/data_understanding_results.json`.
+El conteo reproducible de esta sesión sustituye el conteo global registrado en la sesión 4. La diferencia se documentó en `thesis/02_comprension_datos.md` y en `docs/resultados_comprension_datos.json`.
 
 ## Decisión
 
