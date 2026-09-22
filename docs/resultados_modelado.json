@@ -1,0 +1,219 @@
+{
+  "dataset": "data\\processed\\dataset_cicids2017_preparado.parquet",
+  "feature_count": 78,
+  "training_parameters": {
+    "n_estimators": 50,
+    "max_depth": 20,
+    "max_samples_per_tree": 0.5,
+    "n_jobs": 4
+  },
+  "split": {
+    "train_original": 2262141,
+    "train_used": 1762141,
+    "validation": 282768,
+    "test": 282768,
+    "strategy": "stratified_80_10_10",
+    "random_state": 42
+  },
+  "class_counts": {
+    "train": {
+      "BENIGN": 1415310,
+      "MALICIOUS": 346831
+    },
+    "validation": {
+      "BENIGN": 227112,
+      "MALICIOUS": 55656
+    },
+    "test": {
+      "BENIGN": 227112,
+      "MALICIOUS": 55656
+    }
+  },
+  "configurations": [
+    {
+      "configuracion": "sin_balanceo",
+      "class_weight": null,
+      "n_estimators": 50,
+      "n_jobs": 4,
+      "tiempo_entrenamiento_segundos": 54.26875160000054,
+      "validacion": {
+        "accuracy": 0.9984333446500311,
+        "precision_malicious": 0.9962787854818703,
+        "recall_malicious": 0.9957596665229266,
+        "specificity_benign": 0.9990885554263975,
+        "f1_malicious": 0.9960191583620139,
+        "f1_macro": 0.9975219654503327,
+        "fpr": 0.0009114445736024516,
+        "average_precision": 0.999791602635112,
+        "roc_auc": 0.999948402215667,
+        "true_negatives": 226905,
+        "false_positives": 207,
+        "false_negatives": 236,
+        "true_positives": 55420
+      },
+      "prueba_sin_reentrenamiento": {
+        "accuracy": 0.9984510269903242,
+        "precision_malicious": 0.99638619201726,
+        "recall_malicious": 0.9957416990081932,
+        "specificity_benign": 0.9991149741096904,
+        "f1_malicious": 0.9960638412595708,
+        "f1_macro": 0.9975498178692518,
+        "fpr": 0.0008850258903096269,
+        "average_precision": 0.9997278503154067,
+        "roc_auc": 0.9999133079993082,
+        "true_negatives": 226911,
+        "false_positives": 201,
+        "false_negatives": 237,
+        "true_positives": 55419
+      }
+    },
+    {
+      "configuracion": "balanceado",
+      "class_weight": "balanced",
+      "n_estimators": 50,
+      "n_jobs": 4,
+      "tiempo_entrenamiento_segundos": 50.80108249999466,
+      "validacion": {
+        "accuracy": 0.9986137045210207,
+        "precision_malicious": 0.994541289329563,
+        "recall_malicious": 0.9984368262181975,
+        "specificity_benign": 0.9986570502659481,
+        "f1_malicious": 0.9964852506052183,
+        "f1_macro": 0.9978109129463848,
+        "fpr": 0.0013429497340519214,
+        "average_precision": 0.9997537085524356,
+        "roc_auc": 0.9999393243138143,
+        "true_negatives": 226807,
+        "false_positives": 305,
+        "false_negatives": 87,
+        "true_positives": 55569
+      },
+      "prueba_sin_reentrenamiento": {
+        "accuracy": 0.9985889492446104,
+        "precision_malicious": 0.994717710888678,
+        "recall_malicious": 0.9981313784677304,
+        "specificity_benign": 0.9987010814047694,
+        "f1_malicious": 0.9964216209429343,
+        "f1_macro": 0.9977714150971221,
+        "fpr": 0.001298918595230547,
+        "average_precision": 0.9996996629737206,
+        "roc_auc": 0.9999128638588503,
+        "true_negatives": 226817,
+        "false_positives": 295,
+        "false_negatives": 104,
+        "true_positives": 55552
+      }
+    }
+  ],
+  "selection": {
+    "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
+    "configuration": "balanceado",
+    "class_weight": "balanced",
+    "retraining_seconds": 59.33285880001495,
+    "final_test": {
+      "accuracy": 0.9985323657556725,
+      "precision_malicious": 0.994450511090027,
+      "recall_malicious": 0.998113410952997,
+      "specificity_benign": 0.9986350346965374,
+      "f1_malicious": 0.9962785942950402,
+      "f1_macro": 0.9976822678161485,
+      "fpr": 0.0013649653034626087,
+      "average_precision": 0.9996327001190456,
+      "roc_auc": 0.9998981642258111,
+      "true_negatives": 226802,
+      "false_positives": 310,
+      "false_negatives": 105,
+      "true_positives": 55551
+    },
+    "model_path": "data\\processed\\modelos\\random_forest_seleccionado.joblib"
+  },
+  "top_feature_importances": [
+    {
+      "feature": "Init_Win_bytes_forward",
+      "importance": 0.07842215273366597
+    },
+    {
+      "feature": "Max Packet Length",
+      "importance": 0.0759119089880111
+    },
+    {
+      "feature": "Average Packet Size",
+      "importance": 0.05743155564518372
+    },
+    {
+      "feature": "Packet Length Std",
+      "importance": 0.05419748260566382
+    },
+    {
+      "feature": "Init_Win_bytes_backward",
+      "importance": 0.05018973060204824
+    },
+    {
+      "feature": "Min Packet Length",
+      "importance": 0.04800392961816435
+    },
+    {
+      "feature": "Fwd Packet Length Mean",
+      "importance": 0.037951485014087794
+    },
+    {
+      "feature": "Bwd Packet Length Max",
+      "importance": 0.03174531092946554
+    },
+    {
+      "feature": "Bwd Packet Length Std",
+      "importance": 0.02853076913795452
+    },
+    {
+      "feature": "Fwd Header Length",
+      "importance": 0.028142935067185397
+    },
+    {
+      "feature": "Subflow Fwd Bytes",
+      "importance": 0.02635584071736934
+    },
+    {
+      "feature": "Fwd Packet Length Max",
+      "importance": 0.02585221531408336
+    },
+    {
+      "feature": "Avg Bwd Segment Size",
+      "importance": 0.025260434737574573
+    },
+    {
+      "feature": "Packet Length Variance",
+      "importance": 0.02480845952970098
+    },
+    {
+      "feature": "Avg Fwd Segment Size",
+      "importance": 0.024626171593109168
+    },
+    {
+      "feature": "Fwd Header Length.1",
+      "importance": 0.0239707051290061
+    },
+    {
+      "feature": "Bwd Header Length",
+      "importance": 0.02143885673397272
+    },
+    {
+      "feature": "Bwd Packet Length Min",
+      "importance": 0.019545969314636116
+    },
+    {
+      "feature": "Protocol",
+      "importance": 0.01714667244546386
+    },
+    {
+      "feature": "Total Length of Fwd Packets",
+      "importance": 0.016866445977278016
+    }
+  ],
+  "notes": [
+    "No se aplicó escalado porque Random Forest no lo requiere.",
+    "No se aplicó SMOTE ni otro balanceo sintético.",
+    "El conjunto de prueba no se utilizó para seleccionar la configuración.",
+    "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
+    "Por restricción de recursos, la muestra de entrenamiento se limitó a 500,000 filas estratificadas; validación y prueba se conservaron completas."
+  ]
+}

@@ -117,3 +117,25 @@ Preparar el dataset para el modelado y definir el diseño inicial del prototipo 
 
 No se aplicó balanceo, escalado, selección basada en importancia ni división final de entrenamiento y prueba. Esas actividades se trasladan a la fase 4.
 
+# Sesion 9
+## Objetivo
+
+Entrenar y evaluar Random Forest con las decisiones definidas para la fase 4.
+
+## Resultados
+
+- Se generaron particiones estratificadas 80/10/10 con `random_state=42`.
+- Se compararon Random Forest sin balanceo y con `class_weight="balanced"`.
+- La configuración balanceada obtuvo el mayor recall de `MALICIOUS` en validación: 0.998437.
+- El modelo seleccionado alcanzó en prueba final un recall de 0.998113 y una tasa de falsos positivos de 0.001365.
+- La matriz de confusión final registró 226,802 verdaderos negativos, 310 falsos positivos, 105 falsos negativos y 55,551 verdaderos positivos.
+- Se persistió el modelo en `data/processed/modelos/random_forest_seleccionado.joblib`.
+
+## Restricción
+
+El entrenamiento completo superó el tiempo disponible del entorno. Se utilizó una muestra estratificada de 500,000 registros únicamente para entrenar; la validación y la prueba conservaron todos sus registros.
+
+## Decisión
+
+La fase 4 queda cerrada. La siguiente actividad será integrar el modelo seleccionado en el prototipo durante la fase 5.
+
