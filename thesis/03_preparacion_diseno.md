@@ -52,7 +52,7 @@ Recodificación BENIGN/MALICIOUS y eliminación de duplicados
 Dataset Parquet preparado + metadatos del esquema
 ```
 
-El resultado principal es `data/processed/dataset_cicids2017_preparado.parquet`. El esquema y los contadores de filas se almacenan en `data/processed/dataset_cicids2017_preparado_metadata.json`. La carpeta `data/processed` está excluida del control de versiones porque contiene datos derivados del dataset.
+El resultado principal es `data/processed/dataset_cicids2017_preparado.parquet`. El esquema y los contadores de filas se almacenan en `data/processed/dataset_cicids2017_preparado_metadatos.json`.
 
 ## 4. Esquema de salida
 
@@ -143,13 +143,13 @@ La partición de entrenamiento, validación y prueba se realizará después de g
 
 Como estrategia inicial se utilizará una partición estratificada y reproducible. Antes de fijarla definitivamente se analizará si existen flujos relacionados por tiempo, archivo o escenario que requieran una partición por grupos o por orden temporal. Las transformaciones que aprendan parámetros deberán ajustarse únicamente con entrenamiento.
 
-El balanceo, si se utiliza, se aplicará únicamente al conjunto de entrenamiento y no al conjunto de prueba.
+El balanceo, se aplicará únicamente al conjunto de entrenamiento y no al conjunto de prueba.
 
 ## 9. Artefactos de esta fase
 
 - `src/data/03_preparar_dataset.py`: pipeline reproducible de preparación.
 - `data/processed/dataset_cicids2017_preparado.parquet`: salida local derivada, no versionada.
-- `data/processed/dataset_cicids2017_preparado_metadata.json`: esquema, decisiones y contadores de preparación.
+- `data/processed/dataset_cicids2017_preparado_metadatos.json`: esquema, decisiones y contadores de preparación.
 - `thesis/03_preparacion_diseno.md`: descripción de las transformaciones y del diseño lógico.
 
 ## 10. Criterios de aceptación
