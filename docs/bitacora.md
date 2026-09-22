@@ -98,3 +98,22 @@ Ajustar `01_cargar_dataset.py` para que cumpla únicamente la función de carga.
 
 La limpieza y transformación definitiva quedan reservadas para la fase 3. El archivo `02_comprender_dataset.py` continúa siendo el encargado del análisis descriptivo y no modifica los CSV de origen.
 
+# Sesion 8
+## Objetivo
+
+Preparar el dataset para el modelado y definir el diseño inicial del prototipo IDS.
+
+## Resultados
+
+- Se ejecutó `src/data/03_preparar_dataset.py` sobre los ocho archivos CSV.
+- Se eliminaron 288,602 filas completamente vacías, 2,867 filas con características inválidas y 199 duplicados exactos de la fila completa.
+- Se generó un dataset preparado con 2,827,677 filas, 78 características y la columna objetivo `Label`.
+- Las clases de salida son únicamente `BENIGN` y `MALICIOUS`.
+- Se generaron los metadatos del esquema y de los contadores en `data/processed`.
+- Se validó que la salida no contiene valores nulos ni valores no finitos.
+- Se definió el diseño por módulos: ingesta, preparación de características, inferencia y alertas.
+
+## Decisión
+
+No se aplicó balanceo, escalado, selección basada en importancia ni división final de entrenamiento y prueba. Esas actividades se trasladan a la fase 4.
+

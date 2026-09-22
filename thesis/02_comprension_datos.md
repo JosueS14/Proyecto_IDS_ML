@@ -138,7 +138,7 @@ La columna `Label` es la variable objetivo y nunca deberá utilizarse como entra
 
 ## 7. Corrección de resultados previos
 
-La bitácora de la sesión 4 registraba 3,036,743 flujos y una distribución de 74.86 % benigno frente a 25.14 % malicioso. El análisis reproducible de esta fase, ejecutado sobre los ocho archivos actuales y con exclusión explícita de las 288,602 filas completamente vacías, produce 2,830,743 registros con etiqueta válida y una distribución de 80.30 % frente a 19.70 %.
+Se registraron 3,036,743 flujos y una distribución de 74.86 % benigno frente a 25.14 % malicioso. El análisis reproducible de esta fase, ejecutado sobre los ocho archivos actuales y con exclusión explícita de las 288,602 filas completamente vacías, produce 2,830,743 registros con etiqueta válida y una distribución de 80.30 % frente a 19.70 %.
 
 Por tanto, los resultados de esta fase sustituyen a esas cifras anteriores para efectos del proyecto. La diferencia queda registrada como una corrección de trazabilidad y no como una modificación del dataset original.
 
