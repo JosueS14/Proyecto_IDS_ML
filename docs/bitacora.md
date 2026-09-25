@@ -126,14 +126,14 @@ Entrenar y evaluar Random Forest con las decisiones definidas para la fase 4.
 
 - Se generaron particiones estratificadas 80/10/10 con `random_state=42`.
 - Se compararon Random Forest sin balanceo y con `class_weight="balanced"`.
-- La configuración balanceada obtuvo el mayor recall de `MALICIOUS` en validación: 0.998437.
-- El modelo seleccionado alcanzó en prueba final un recall de 0.998113 y una tasa de falsos positivos de 0.001365.
-- La matriz de confusión final registró 226,802 verdaderos negativos, 310 falsos positivos, 105 falsos negativos y 55,551 verdaderos positivos.
+- La configuración balanceada obtuvo el mayor recall de `MALICIOUS` en validación: 0.998149.
+- El modelo seleccionado alcanzó en prueba final un recall de 0.997916 y una tasa de falsos positivos de 0.001220.
+- La matriz de confusión final registró 226,835 verdaderos negativos, 277 falsos positivos, 116 falsos negativos y 55,540 verdaderos positivos.
 - Se persistió el modelo en `data/processed/modelos/random_forest_seleccionado.joblib`.
 
 ## Restricción
 
-El entrenamiento completo superó el tiempo disponible del entorno. Se utilizó una muestra estratificada de 500,000 registros únicamente para entrenar; la validación y la prueba conservaron todos sus registros.
+El entrenamiento completo superó el tiempo disponible del entorno. Se utilizó una muestra estratificada de 1,762,141 registros únicamente para entrenar; la validación y la prueba conservaron todos sus registros.
 
 ## Decisión
 

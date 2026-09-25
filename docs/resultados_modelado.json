@@ -35,36 +35,36 @@
       "class_weight": null,
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 54.26875160000054,
+      "tiempo_entrenamiento_segundos": 73.48781809999491,
       "validacion": {
-        "accuracy": 0.9984333446500311,
-        "precision_malicious": 0.9962787854818703,
-        "recall_malicious": 0.9957596665229266,
-        "specificity_benign": 0.9990885554263975,
-        "f1_malicious": 0.9960191583620139,
-        "f1_macro": 0.9975219654503327,
-        "fpr": 0.0009114445736024516,
-        "average_precision": 0.999791602635112,
-        "roc_auc": 0.999948402215667,
-        "true_negatives": 226905,
-        "false_positives": 207,
-        "false_negatives": 236,
-        "true_positives": 55420
+        "accuracy": 0.9984085893736208,
+        "precision_malicious": 0.9964032658346221,
+        "recall_malicious": 0.9955081213166594,
+        "specificity_benign": 0.9991193772235725,
+        "f1_malicious": 0.9959554924412648,
+        "f1_macro": 0.9974824504299862,
+        "fpr": 0.0008806227764274895,
+        "average_precision": 0.9997505973924152,
+        "roc_auc": 0.9999366862903774,
+        "true_negatives": 226912,
+        "false_positives": 200,
+        "false_negatives": 250,
+        "true_positives": 55406
       },
       "prueba_sin_reentrenamiento": {
-        "accuracy": 0.9984510269903242,
-        "precision_malicious": 0.99638619201726,
-        "recall_malicious": 0.9957416990081932,
-        "specificity_benign": 0.9991149741096904,
-        "f1_malicious": 0.9960638412595708,
-        "f1_macro": 0.9975498178692518,
-        "fpr": 0.0008850258903096269,
-        "average_precision": 0.9997278503154067,
-        "roc_auc": 0.9999133079993082,
-        "true_negatives": 226911,
-        "false_positives": 201,
-        "false_negatives": 237,
-        "true_positives": 55419
+        "accuracy": 0.9983979799694449,
+        "precision_malicious": 0.996278116403258,
+        "recall_malicious": 0.9955799913755929,
+        "specificity_benign": 0.9990885554263975,
+        "f1_malicious": 0.9959289315467365,
+        "f1_macro": 0.997465855937216,
+        "fpr": 0.0009114445736024516,
+        "average_precision": 0.9997016487527693,
+        "roc_auc": 0.9999098297561113,
+        "true_negatives": 226905,
+        "false_positives": 207,
+        "false_negatives": 246,
+        "true_positives": 55410
       }
     },
     {
@@ -72,36 +72,36 @@
       "class_weight": "balanced",
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 50.80108249999466,
+      "tiempo_entrenamiento_segundos": 67.25935790000949,
       "validacion": {
-        "accuracy": 0.9986137045210207,
-        "precision_malicious": 0.994541289329563,
-        "recall_malicious": 0.9984368262181975,
-        "specificity_benign": 0.9986570502659481,
-        "f1_malicious": 0.9964852506052183,
-        "f1_macro": 0.9978109129463848,
-        "fpr": 0.0013429497340519214,
-        "average_precision": 0.9997537085524356,
-        "roc_auc": 0.9999393243138143,
-        "true_negatives": 226807,
-        "false_positives": 305,
-        "false_negatives": 87,
-        "true_positives": 55569
+        "accuracy": 0.9986101680529621,
+        "precision_malicious": 0.9948068692584567,
+        "recall_malicious": 0.9981493459824637,
+        "specificity_benign": 0.9987230969741802,
+        "f1_malicious": 0.996475304711253,
+        "f1_macro": 0.9978048682433185,
+        "fpr": 0.0012769030258198597,
+        "average_precision": 0.9996911748844305,
+        "roc_auc": 0.9999264115668558,
+        "true_negatives": 226822,
+        "false_positives": 290,
+        "false_negatives": 103,
+        "true_positives": 55553
       },
       "prueba_sin_reentrenamiento": {
-        "accuracy": 0.9985889492446104,
-        "precision_malicious": 0.994717710888678,
-        "recall_malicious": 0.9981313784677304,
-        "specificity_benign": 0.9987010814047694,
-        "f1_malicious": 0.9964216209429343,
-        "f1_macro": 0.9977714150971221,
-        "fpr": 0.001298918595230547,
-        "average_precision": 0.9996996629737206,
-        "roc_auc": 0.9999128638588503,
-        "true_negatives": 226817,
-        "false_positives": 295,
-        "false_negatives": 104,
-        "true_positives": 55552
+        "accuracy": 0.9985323657556725,
+        "precision_malicious": 0.9948225514609721,
+        "recall_malicious": 0.9977360931435963,
+        "specificity_benign": 0.9987275000880623,
+        "f1_malicious": 0.9962771921955595,
+        "f1_macro": 0.9976816090409746,
+        "fpr": 0.0012724999119377225,
+        "average_precision": 0.999627371294271,
+        "roc_auc": 0.9998861799887361,
+        "true_negatives": 226823,
+        "false_positives": 289,
+        "false_negatives": 126,
+        "true_positives": 55530
       }
     }
   ],
@@ -109,104 +109,104 @@
     "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
     "configuration": "balanceado",
     "class_weight": "balanced",
-    "retraining_seconds": 59.33285880001495,
+    "retraining_seconds": 78.76187349998509,
     "final_test": {
-      "accuracy": 0.9985323657556725,
-      "precision_malicious": 0.994450511090027,
-      "recall_malicious": 0.998113410952997,
-      "specificity_benign": 0.9986350346965374,
-      "f1_malicious": 0.9962785942950402,
-      "f1_macro": 0.9976822678161485,
-      "fpr": 0.0013649653034626087,
-      "average_precision": 0.9996327001190456,
-      "roc_auc": 0.9998981642258111,
-      "true_negatives": 226802,
-      "false_positives": 310,
-      "false_negatives": 105,
-      "true_positives": 55551
+      "accuracy": 0.9986101680529621,
+      "precision_malicious": 0.9950373542110826,
+      "recall_malicious": 0.99791576829093,
+      "specificity_benign": 0.9987803374546479,
+      "f1_malicious": 0.9964744826101388,
+      "f1_macro": 0.9978044819743157,
+      "fpr": 0.001219662545352073,
+      "average_precision": 0.9996460598027597,
+      "roc_auc": 0.9998904939422522,
+      "true_negatives": 226835,
+      "false_positives": 277,
+      "false_negatives": 116,
+      "true_positives": 55540
     },
     "model_path": "data\\processed\\modelos\\random_forest_seleccionado.joblib"
   },
   "top_feature_importances": [
     {
       "feature": "Init_Win_bytes_forward",
-      "importance": 0.07842215273366597
+      "importance": 0.07994668695688613
     },
     {
       "feature": "Max Packet Length",
-      "importance": 0.0759119089880111
+      "importance": 0.07432493951205373
     },
     {
       "feature": "Average Packet Size",
-      "importance": 0.05743155564518372
+      "importance": 0.0634193556855464
     },
     {
       "feature": "Packet Length Std",
-      "importance": 0.05419748260566382
-    },
-    {
-      "feature": "Init_Win_bytes_backward",
-      "importance": 0.05018973060204824
+      "importance": 0.06318343971237239
     },
     {
       "feature": "Min Packet Length",
-      "importance": 0.04800392961816435
+      "importance": 0.05019010393884091
     },
     {
-      "feature": "Fwd Packet Length Mean",
-      "importance": 0.037951485014087794
-    },
-    {
-      "feature": "Bwd Packet Length Max",
-      "importance": 0.03174531092946554
-    },
-    {
-      "feature": "Bwd Packet Length Std",
-      "importance": 0.02853076913795452
-    },
-    {
-      "feature": "Fwd Header Length",
-      "importance": 0.028142935067185397
+      "feature": "Init_Win_bytes_backward",
+      "importance": 0.04034591456839233
     },
     {
       "feature": "Subflow Fwd Bytes",
-      "importance": 0.02635584071736934
-    },
-    {
-      "feature": "Fwd Packet Length Max",
-      "importance": 0.02585221531408336
-    },
-    {
-      "feature": "Avg Bwd Segment Size",
-      "importance": 0.025260434737574573
+      "importance": 0.035296511959254394
     },
     {
       "feature": "Packet Length Variance",
-      "importance": 0.02480845952970098
+      "importance": 0.032976761994425265
     },
     {
-      "feature": "Avg Fwd Segment Size",
-      "importance": 0.024626171593109168
+      "feature": "Bwd Packet Length Max",
+      "importance": 0.032259466373742746
     },
     {
-      "feature": "Fwd Header Length.1",
-      "importance": 0.0239707051290061
+      "feature": "Fwd Packet Length Mean",
+      "importance": 0.029641765091672864
     },
     {
       "feature": "Bwd Header Length",
-      "importance": 0.02143885673397272
+      "importance": 0.02592382718438029
+    },
+    {
+      "feature": "Avg Bwd Segment Size",
+      "importance": 0.02516588232512653
+    },
+    {
+      "feature": "Avg Fwd Segment Size",
+      "importance": 0.025039596080614714
+    },
+    {
+      "feature": "Fwd Header Length.1",
+      "importance": 0.024453102531331445
+    },
+    {
+      "feature": "Fwd Header Length",
+      "importance": 0.023210342037790876
+    },
+    {
+      "feature": "Fwd Packet Length Max",
+      "importance": 0.022255403701569653
+    },
+    {
+      "feature": "Bwd Packet Length Std",
+      "importance": 0.02206801858628426
     },
     {
       "feature": "Bwd Packet Length Min",
-      "importance": 0.019545969314636116
+      "importance": 0.02121691258992721
     },
     {
-      "feature": "Protocol",
-      "importance": 0.01714667244546386
+      "feature": "Fwd Packet Length Min",
+      "importance": 0.019328847301718365
     },
     {
-      "feature": "Total Length of Fwd Packets",
-      "importance": 0.016866445977278016
+      "feature": "Total Length of Bwd Packets",
+      "importance": 0.017831638463260052
     }
   ],
   "notes": [
@@ -214,6 +214,6 @@
     "No se aplicó SMOTE ni otro balanceo sintético.",
     "El conjunto de prueba no se utilizó para seleccionar la configuración.",
     "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
-    "Por restricción de recursos, la muestra de entrenamiento se limitó a 500,000 filas estratificadas; validación y prueba se conservaron completas."
+    "Por restricción de recursos, la muestra de entrenamiento se limitó a 1,762,141 filas estratificadas; validación y prueba se conservaron completas."
   ]
 }
