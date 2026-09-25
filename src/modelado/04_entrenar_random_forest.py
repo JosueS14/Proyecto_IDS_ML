@@ -36,7 +36,7 @@ DIRECTORIO_MODELOS = DIRECTORIO_DATOS_PROCESADOS / "modelos"
 RUTA_RESULTADOS = RAIZ_PROYECTO / "docs" / "resultados_modelado.json"
 RANDOM_STATE = 42
 N_ESTIMADORES = 50
-MAX_FILAS_ENTRENAMIENTO = 500_000
+MAX_FILAS_ENTRENAMIENTO = 1_762_141
 MAX_PROFUNDIDAD = 20
 MAX_MUESTRAS_POR_ARBOL = 0.5
 N_JOBS = 4
@@ -116,7 +116,7 @@ def limitar_entrenamiento(
         return caracteristicas, objetivo, None
 
     indices = np.arange(len(objetivo))
-    _, indices_muestra = train_test_split(
+    indices_muestra, _ = train_test_split(
         indices,
         train_size=MAX_FILAS_ENTRENAMIENTO,
         stratify=objetivo,
@@ -413,7 +413,7 @@ def main() -> None:
             "No se aplicó SMOTE ni otro balanceo sintético.",
             "El conjunto de prueba no se utilizó para seleccionar la configuración.",
             "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
-            "Por restricción de recursos, la muestra de entrenamiento se limitó a 500,000 filas estratificadas; validación y prueba se conservaron completas.",
+            "Por restricción de recursos, la muestra de entrenamiento se limitó a 1,762,141 filas estratificadas; validación y prueba se conservaron completas.",
         ],
     }
     RUTA_RESULTADOS.write_text(

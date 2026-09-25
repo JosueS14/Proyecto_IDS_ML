@@ -33,9 +33,9 @@ El procedimiento se implementó en `src/modelado/04_entrenar_random_forest.py`.
 
 ## 3. Restricción de recursos
 
-El dataset de entrenamiento contiene 2,262,141 registros. Un entrenamiento completo con 100 árboles excedió el tiempo disponible del entorno de laboratorio. Para obtener una ejecución reproducible y viable se aplicó una muestra estratificada de 500,000 registros únicamente al conjunto de entrenamiento.
+El dataset de entrenamiento contiene 2,262,141 registros. Un entrenamiento completo excedió el tiempo disponible del entorno de laboratorio. Para obtener una ejecución reproducible y viable se aplicó una muestra estratificada de 1,762,141 registros únicamente al conjunto de entrenamiento.
 
-La validación y la prueba conservaron todos sus registros. No se generaron datos sintéticos, no se aplicó SMOTE y no se modificaron los archivos originales ni el dataset preparado.
+La muestra conserva la distribución de clases del entrenamiento original. La validación y la prueba conservaron todos sus registros. No se generaron datos sintéticos, no se aplicó SMOTE y no se modificaron los archivos originales ni el dataset preparado.
 
 Los parámetros utilizados fueron:
 
@@ -51,8 +51,8 @@ Los parámetros utilizados fueron:
 
 | Configuración | Accuracy | Precision `MALICIOUS` | Recall `MALICIOUS` | F1 macro | FPR |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Sin balanceo | 0.998433 | 0.996279 | 0.995760 | 0.997522 | 0.000911 |
-| `class_weight="balanced"` | 0.998614 | 0.994541 | 0.998437 | 0.997811 | 0.001343 |
+| Sin balanceo | 0.998409 | 0.996403 | 0.995508 | 0.997482 | 0.000881 |
+| `class_weight="balanced"` | 0.998610 | 0.994807 | 0.998149 | 0.997805 | 0.001277 |
 
 La configuración balanceada fue seleccionada porque detectó una mayor proporción de tráfico malicioso. El incremento del FPR fue pequeño en términos absolutos y se consideró aceptable frente a la mejora del recall, de acuerdo con el criterio definido previamente.
 
@@ -62,24 +62,24 @@ Después de seleccionar la configuración mediante validación, el modelo balanc
 
 | Métrica | Resultado |
 | --- | ---: |
-| Accuracy | 0.998532 |
-| Precision `MALICIOUS` | 0.994451 |
-| Recall `MALICIOUS` | 0.998113 |
-| Especificidad `BENIGN` | 0.998635 |
-| F1-score `MALICIOUS` | 0.996279 |
-| F1-score macro | 0.997682 |
-| Tasa de falsos positivos | 0.001365 |
-| Average precision | 0.999633 |
-| ROC-AUC | 0.999898 |
+| Accuracy | 0.998610 |
+| Precision `MALICIOUS` | 0.995037 |
+| Recall `MALICIOUS` | 0.997916 |
+| Especificidad `BENIGN` | 0.998780 |
+| F1-score `MALICIOUS` | 0.996474 |
+| F1-score macro | 0.997804 |
+| Tasa de falsos positivos | 0.001220 |
+| Average precision | 0.999646 |
+| ROC-AUC | 0.999890 |
 
 La matriz de confusión final fue:
 
 | | Predicho `BENIGN` | Predicho `MALICIOUS` |
 | --- | ---: | ---: |
-| Real `BENIGN` | 226,802 | 310 |
-| Real `MALICIOUS` | 105 | 55,551 |
+| Real `BENIGN` | 226,835 | 277 |
+| Real `MALICIOUS` | 116 | 55,540 |
 
-Esto significa que el modelo detectó 55,551 de 55,656 registros maliciosos del conjunto de prueba y clasificó erróneamente 310 registros benignos como maliciosos.
+Esto significa que el modelo detectó 55,540 de 55,656 registros maliciosos del conjunto de prueba y clasificó erróneamente 277 registros benignos como maliciosos.
 
 ## 6. Importancia de características
 
@@ -87,16 +87,16 @@ Las características con mayor importancia en el modelo final fueron:
 
 | Característica | Importancia aproximada |
 | --- | ---: |
-| `Init_Win_bytes_forward` | 0.078422 |
-| `Max Packet Length` | 0.075912 |
-| `Average Packet Size` | 0.057432 |
-| `Packet Length Std` | 0.054197 |
-| `Init_Win_bytes_backward` | 0.050190 |
-| `Min Packet Length` | 0.048004 |
-| `Fwd Packet Length Mean` | 0.037952 |
-| `Bwd Packet Length Max` | 0.031745 |
-| `Bwd Packet Length Std` | 0.028531 |
-| `Fwd Header Length` | 0.028142 |
+| `Init_Win_bytes_forward` | 0.079947 |
+| `Max Packet Length` | 0.074325 |
+| `Average Packet Size` | 0.063419 |
+| `Packet Length Std` | 0.063183 |
+| `Min Packet Length` | 0.050190 |
+| `Init_Win_bytes_backward` | 0.040346 |
+| `Subflow Fwd Bytes` | 0.035297 |
+| `Packet Length Variance` | 0.032977 |
+| `Bwd Packet Length Max` | 0.032259 |
+| `Fwd Packet Length Mean` | 0.029642 |
 
 La importancia de características se utilizará como elemento interpretativo y no como criterio para eliminar variables en esta fase. Una selección reducida de características requeriría un experimento separado.
 
