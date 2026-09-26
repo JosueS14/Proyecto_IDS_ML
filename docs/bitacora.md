@@ -139,3 +139,21 @@ El entrenamiento completo superó el tiempo disponible del entorno. Se utilizó 
 
 La fase 4 queda cerrada. La siguiente actividad será integrar el modelo seleccionado en el prototipo durante la fase 5.
 
+# Sesion 10
+## Objetivo
+
+Integrar el modelo persistido en un prototipo de escritorio con una interfaz inspirada en Wireshark.
+
+## Resultados
+
+- Se creó el motor `src/prototipo/inferencia_ids.py`.
+- Se creó la interfaz Tkinter `src/prototipo/05_interfaz_tkinter.py`.
+- Se validó la inferencia con un Parquet preparado y con un CSV original.
+- La interfaz incluye tabla de flujos, filtro, panel de detalles, colores para alertas y barra de resumen.
+- Se definió una vista máxima de 10,000 registros para mantener la interfaz responsiva.
+- Se generó la documentación de integración en `thesis/05_integracion_prototipo.md`.
+
+## Decisión
+
+La interfaz funciona por lotes, no captura paquetes en tiempo real y no ejecuta acciones de bloqueo. La fase 6 se encargará de probar formalmente la integración y el manejo de entradas inválidas.
+
