@@ -1,0 +1,48 @@
+{
+  "fase": "6. Pruebas y validación",
+  "prueba": "Ejecución offline de extremo a extremo en entorno controlado",
+  "estado": "PASÓ",
+  "entorno": {
+    "tipo": "sandbox local basado en archivos",
+    "entrada_local": true,
+    "captura_de_paquetes_en_vivo": false,
+    "inyeccion_de_paquetes": false,
+    "uso_de_sockets_por_la_prueba": false,
+    "red_de_produccion": false
+  },
+  "versiones": {
+    "python": "3.13.2",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.8.0"
+  },
+  "duracion_inferencia_segundos": 0.039760900021065027,
+  "muestra": {
+    "archivo_fuente": "data\\raw\\Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "registros_por_clase_real": {
+      "BENIGN": 10,
+      "MALICIOUS": 10
+    },
+    "total_registros": 20,
+    "caracteristicas": 78,
+    "predicciones": {
+      "BENIGN": 10,
+      "MALICIOUS": 10
+    },
+    "alertas_generadas": 10,
+    "errores_de_datos": 0
+  },
+  "verificaciones": {
+    "entrada_sin_modificar": true,
+    "todos_los_registros_analizados": true,
+    "alertas_solo_para_prediccion_malicious": true,
+    "resultados_y_alertas_guardados_por_separado": true,
+    "evaluacion_de_desempeno_predictivo": false
+  },
+  "artefactos": {
+    "entrada": "data\\processed\\prueba_laboratorio\\flujos_prueba_offline.csv",
+    "resultados": "data\\processed\\prueba_laboratorio\\resultado_inferencia.csv",
+    "alertas": "data\\processed\\prueba_laboratorio\\alertas_ids.csv"
+  },
+  "huella_sha256_entrada": "7ca1c025f91417536ac22fcd740bb160029cc2dfedc4f544a89c02cd43c6d44a",
+  "duracion_total_segundos": 0.4442471999791451
+}
