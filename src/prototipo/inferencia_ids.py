@@ -78,6 +78,8 @@ class IDSInferencia:
         for columna in COLUMNAS_CONTEXTUALES:
             if columna in datos.columns:
                 resultado[columna] = datos[columna].values
+            else:
+                resultado[columna] = "NO DISPONIBLE EN ENTRADA"
 
         resultado["No."] = np.arange(1, len(datos) + 1)
         resultado["Predicción"] = ""

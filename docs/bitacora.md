@@ -157,3 +157,54 @@ Integrar el modelo persistido en un prototipo de escritorio con una interfaz ins
 
 La interfaz funciona por lotes, no captura paquetes en tiempo real y no ejecuta acciones de bloqueo. La fase 6 se encargará de probar formalmente la integración y el manejo de entradas inválidas.
 
+# Sesion 11
+## Objetivo
+
+Mejorar la interfaz del prototipo a partir de la revisión visual.
+
+## Resultados
+
+- Se sustituyeron los textos de acción por iconos de abrir, analizar, limpiar y filtrar.
+- Se agregaron tooltips que describen cada acción al pasar el cursor.
+- El panel de detalles ahora muestra todas las columnas del flujo original mediante desplazamiento vertical.
+- Se conservaron el resumen de predicción, confianza, alerta y estado.
+
+## Verificación
+
+La interfaz y el motor de inferencia compilan correctamente. La clasificación de Parquet y CSV continúa funcionando, y los archivos con características faltantes se rechazan con un error explícito.
+
+# Sesion 13
+## Objetivo
+
+Ejecutar las pruebas funcionales, de integración, robustez y rendimiento básico del prototipo.
+
+## Resultados
+
+- Se ejecutaron 9 pruebas y todas pasaron.
+- Se validó la carga del modelo y sus 78 características.
+- Se probó inferencia con Parquet preparado y CSV original.
+- Se verificó el rechazo de esquemas incompletos y el manejo de valores infinitos.
+- Se validó la consistencia entre predicción y alerta.
+- Se comprobó el filtro de la interfaz y la compilación de sus componentes.
+- La inferencia de 1,000 filas tardó aproximadamente 0.08 segundos después de cargar el modelo.
+
+## Decisión
+
+La fase 6 queda cerrada. La fase 7 se enfocará en documentación de instalación, operación, monitoreo y mantenimiento.
+
+# Sesion 12
+## Objetivo
+
+Revisar falsos positivos y mejorar la visualización de campos contextuales en la interfaz.
+
+## Resultados
+
+- Las predicciones `MALICIOUS` con etiqueta real `BENIGN` se identificaron como falsos positivos del modelo, no como un error de la interfaz.
+- En la vista de 10,000 registros preparados se observaron 33 predicciones maliciosas y todas correspondieron a registros benignos.
+- Se confirmó que `Timestamp`, `Flow ID`, `Source IP` y `Destination IP` no están disponibles en el Parquet preparado porque fueron excluidos para evitar fuga de información.
+- La interfaz ahora muestra `NO DISPONIBLE EN ENTRADA` en lugar de dejar esos campos vacíos.
+
+## Decisión
+
+Para visualizar los valores originales de identificación y contexto se deben abrir los CSV de `data/raw`. Estos campos continuarán excluidos de las características utilizadas por el modelo.
+
