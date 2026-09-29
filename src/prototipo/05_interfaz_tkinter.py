@@ -16,6 +16,48 @@ RAIZ_PROYECTO = Path(__file__).resolve().parents[2]
 LIMITE_PREVISUALIZACION = 10_000
 
 
+class Tooltip:
+    """Mostrar una descripción breve al pasar el cursor sobre un control."""
+
+    def __init__(self, widget: tk.Widget, texto: str) -> None:
+        self.widget = widget
+        self.texto = texto
+        self.ventana: tk.Toplevel | None = None
+        self.identificador: str | None = None
+        widget.bind("<Enter>", self.programar, add="+")
+        widget.bind("<Leave>", self.ocultar, add="+")
+
+    def programar(self, _evento=None) -> None:
+        self.ocultar()
+        self.identificador = self.widget.after(500, self.mostrar)
+
+    def mostrar(self) -> None:
+        if self.ventana is not None:
+            return
+        self.ventana = tk.Toplevel(self.widget)
+        self.ventana.wm_overrideredirect(True)
+        self.ventana.configure(bg="#263238")
+        posicion_x = self.widget.winfo_rootx() + self.widget.winfo_width() + 6
+        posicion_y = self.widget.winfo_rooty() + self.widget.winfo_height() + 2
+        self.ventana.geometry(f"+{posicion_x}+{posicion_y}")
+        tk.Label(
+            self.ventana,
+            text=self.texto,
+            bg="#263238",
+            fg="white",
+            padx=7,
+            pady=4,
+        ).pack()
+
+    def ocultar(self, _evento=None) -> None:
+        if self.identificador is not None:
+            self.widget.after_cancel(self.identificador)
+            self.identificador = None
+        if self.ventana is not None:
+            self.ventana.destroy()
+            self.ventana = None
+
+
 class InterfazIDS:
     """Ventana principal del IDS por lotes."""
 
@@ -27,6 +69,7 @@ class InterfazIDS:
 
         self.motor = IDSInferencia()
         self.ruta_archivo: Path | None = None
+        self.datos_entrada: pd.DataFrame | None = None
         self.resultados: pd.DataFrame | None = None
 
         self._crear_estilos()
@@ -44,26 +87,34 @@ class InterfazIDS:
         barra = ttk.Frame(self.ventana, style="Toolbar.TFrame", padding=6)
         barra.pack(fill="x")
 
-        ttk.Button(
+        boton_abrir = ttk.Button(
             barra,
-            text="Abrir archivo",
+            text="▣",
+            width=3,
             command=self.seleccionar_archivo,
             style="Toolbar.TButton",
-        ).pack(side="left", padx=3)
+        )
+        boton_abrir.pack(side="left", padx=3)
+        Tooltip(boton_abrir, "Abrir archivo CSV o Parquet")
         self.boton_analizar = ttk.Button(
             barra,
-            text="Analizar",
+            text="▶",
+            width=3,
             command=self.analizar_archivo,
             state="disabled",
             style="Toolbar.TButton",
         )
         self.boton_analizar.pack(side="left", padx=3)
-        ttk.Button(
+        Tooltip(self.boton_analizar, "Analizar los flujos seleccionados")
+        boton_limpiar = ttk.Button(
             barra,
-            text="Limpiar",
+            text="×",
+            width=3,
             command=self.limpiar,
             style="Toolbar.TButton",
-        ).pack(side="left", padx=3)
+        )
+        boton_limpiar.pack(side="left", padx=3)
+        Tooltip(boton_limpiar, "Limpiar resultados y detalles")
 
         ttk.Label(barra, text="Filtro:", foreground="white", background="#263238").pack(
             side="left", padx=(18, 4)
@@ -72,9 +123,11 @@ class InterfazIDS:
         entrada_filtro = ttk.Entry(barra, textvariable=self.filtro, width=30)
         entrada_filtro.pack(side="left", padx=3)
         entrada_filtro.bind("<Return>", lambda _evento: self.aplicar_filtro())
-        ttk.Button(barra, text="Aplicar", command=self.aplicar_filtro).pack(
-            side="left", padx=3
+        boton_filtro = ttk.Button(
+            barra, text="⌕", width=3, command=self.aplicar_filtro
         )
+        boton_filtro.pack(side="left", padx=3)
+        Tooltip(boton_filtro, "Aplicar filtro de visualización")
 
         self.etiqueta_archivo = ttk.Label(
             self.ventana,
@@ -151,8 +204,17 @@ class InterfazIDS:
         ttk.Label(panel_detalle, text="Detalles del flujo", style="Title.TLabel").pack(
             anchor="w", padx=4, pady=(4, 0)
         )
-        self.detalle = tk.Text(panel_detalle, height=8, wrap="word", state="disabled")
-        self.detalle.pack(fill="both", expand=True, padx=4, pady=4)
+        contenedor_detalle = ttk.Frame(panel_detalle)
+        contenedor_detalle.pack(fill="both", expand=True, padx=4, pady=4)
+        self.detalle = tk.Text(
+            contenedor_detalle, height=8, wrap="none", state="disabled"
+        )
+        barra_detalle = ttk.Scrollbar(
+            contenedor_detalle, orient="vertical", command=self.detalle.yview
+        )
+        self.detalle.configure(yscrollcommand=barra_detalle.set)
+        self.detalle.pack(side="left", fill="both", expand=True)
+        barra_detalle.pack(side="right", fill="y")
 
         self.barra_estado = ttk.Label(
             self.ventana,
@@ -190,14 +252,22 @@ class InterfazIDS:
             )
             resultados = self.motor.clasificar(datos_entrada)
             self.motor.guardar_resultados(resultados)
-            self.ventana.after(0, lambda: self.mostrar_resultados(resultados))
+            self.ventana.after(
+                0,
+                lambda resultado=resultados, entrada=datos_entrada: self.mostrar_resultados(
+                    resultado, entrada
+                ),
+            )
         except Exception as error:  # pragma: no cover - mostrado en la interfaz
             mensaje_error = str(error)
             self.ventana.after(
                 0, lambda mensaje=mensaje_error: self.mostrar_error(mensaje)
             )
 
-    def mostrar_resultados(self, resultados: pd.DataFrame) -> None:
+    def mostrar_resultados(
+        self, resultados: pd.DataFrame, datos_entrada: pd.DataFrame
+    ) -> None:
+        self.datos_entrada = datos_entrada
         self.resultados = resultados
         self.rellenar_tabla(resultados)
         resumen = self.motor.resumen(resultados)
@@ -238,10 +308,31 @@ class InterfazIDS:
         if not seleccion:
             return
         valores = self.tabla.item(seleccion[0], "values")
-        detalle = "\n".join(
+        resumen = "\n".join(
             f"{columna}: {valor}"
             for columna, valor in zip(self.tabla["columns"], valores)
         )
+        lineas = ["Resumen de clasificación", resumen, "", "Características del flujo"]
+        if self.datos_entrada is not None:
+            try:
+                numero_fila = int(valores[0]) - 1
+                fila_original = self.datos_entrada.iloc[numero_fila]
+                columnas_mostradas = set(fila_original.index)
+                for columna, valor in fila_original.items():
+                    if pd.isna(valor):
+                        valor = ""
+                    lineas.append(f"{columna}: {valor}")
+                for columna in (
+                    "Timestamp",
+                    "Flow ID",
+                    "Source IP",
+                    "Destination IP",
+                ):
+                    if columna not in columnas_mostradas:
+                        lineas.append(f"{columna}: NO DISPONIBLE EN ENTRADA")
+            except (IndexError, ValueError):
+                lineas.append("No fue posible recuperar el flujo original.")
+        detalle = "\n".join(lineas)
         self.detalle.configure(state="normal")
         self.detalle.delete("1.0", "end")
         self.detalle.insert("1.0", detalle)
@@ -255,6 +346,7 @@ class InterfazIDS:
     def limpiar(self) -> None:
         for elemento in self.tabla.get_children():
             self.tabla.delete(elemento)
+        self.datos_entrada = None
         self.resultados = None
         self.filtro.set("")
         self.detalle.configure(state="normal")

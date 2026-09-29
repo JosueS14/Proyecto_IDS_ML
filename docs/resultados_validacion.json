@@ -1,0 +1,94 @@
+{
+  "fase": "6. Pruebas y validación",
+  "total_pruebas": 9,
+  "pruebas_pasaron": 9,
+  "pruebas_fallaron": 0,
+  "pruebas": [
+    {
+      "prueba": "Carga del modelo y esquema",
+      "estado": "PASÓ",
+      "duracion_segundos": 3.0800001695752144e-05,
+      "detalle": {
+        "clases": [
+          "BENIGN",
+          "MALICIOUS"
+        ],
+        "caracteristicas": 78
+      }
+    },
+    {
+      "prueba": "Inferencia con Parquet preparado",
+      "estado": "PASÓ",
+      "duracion_segundos": 2.247250799962785,
+      "detalle": {
+        "total": 200,
+        "benign": 199,
+        "malicious": 1,
+        "errores": 0
+      }
+    },
+    {
+      "prueba": "Inferencia con CSV original",
+      "estado": "PASÓ",
+      "duracion_segundos": 0.08320799999637529,
+      "detalle": {
+        "total": 200,
+        "benign": 192,
+        "malicious": 0,
+        "errores": 8
+      }
+    },
+    {
+      "prueba": "Rechazo de esquema inválido",
+      "estado": "PASÓ",
+      "duracion_segundos": 2.4410299999872223,
+      "detalle": "Faltan características requeridas por el modelo: ['Protocol']"
+    },
+    {
+      "prueba": "Manejo de valores inválidos",
+      "estado": "PASÓ",
+      "duracion_segundos": 1.0534679999691434,
+      "detalle": {
+        "total": 5,
+        "benign": 4,
+        "malicious": 0,
+        "errores": 1
+      }
+    },
+    {
+      "prueba": "Consistencia de alertas",
+      "estado": "PASÓ",
+      "duracion_segundos": 0.10186759999487549,
+      "detalle": {
+        "alertas": 0,
+        "benignos": 491
+      }
+    },
+    {
+      "prueba": "Filtro de la interfaz",
+      "estado": "PASÓ",
+      "duracion_segundos": 0.004544900031760335,
+      "detalle": {
+        "coincidencias": 1
+      }
+    },
+    {
+      "prueba": "Inferencia de un lote de 1,000 filas",
+      "estado": "PASÓ",
+      "duracion_segundos": 0.8424741000053473,
+      "detalle": {
+        "filas": 1000,
+        "segundos": 0.07607910002116114
+      }
+    },
+    {
+      "prueba": "Compilación de componentes",
+      "estado": "PASÓ",
+      "duracion_segundos": 0.07287709997035563,
+      "detalle": {
+        "inferencia": "src\\prototipo\\inferencia_ids.py",
+        "interfaz": "src\\prototipo\\05_interfaz_tkinter.py"
+      }
+    }
+  ]
+}

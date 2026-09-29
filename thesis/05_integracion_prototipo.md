@@ -33,17 +33,19 @@ Tabla de flujos, detalles y alertas
 
 El modelo no utiliza `Flow ID`, direcciones IP, puertos ni `Timestamp` para decidir la clase. Cuando estos campos existen en el archivo, se muestran únicamente como contexto visual en la tabla y no se envían al clasificador.
 
+Si se utiliza `dataset_cicids2017_preparado.parquet`, esos campos no existen porque fueron excluidos durante la preparación. La interfaz los muestra como `NO DISPONIBLE EN ENTRADA`. Para consultar sus valores originales se debe abrir uno de los CSV de `data/raw`.
+
 ## 3. Interfaz inspirada en Wireshark
 
 La interfaz Tkinter incluye:
 
-- Barra de herramientas con acciones **Abrir archivo**, **Analizar** y **Limpiar**.
+- Barra de herramientas con iconos para abrir, analizar, limpiar y filtrar, cada uno con descripción al pasar el cursor.
 - Campo de filtro para buscar `malicious`, `benign`, `alerta` o texto libre.
 - Tabla principal de flujos con número, predicción, confianza, alerta, estado, etiqueta real y campos contextuales.
 - Color rojo para tráfico clasificado como `MALICIOUS`.
 - Color verde para tráfico `BENIGN`.
 - Color amarillo para registros que no pudieron analizarse.
-- Panel inferior de detalles del registro seleccionado.
+- Panel inferior desplazable con todas las columnas del flujo seleccionado, además del resumen de predicción y alerta.
 - Barra de estado con totales de registros, tráfico benigno, tráfico malicioso y errores.
 
 La semejanza con Wireshark se limita a la organización de análisis: barra de herramientas, filtro, lista principal, selección de registro y panel de detalles. No se afirma que la interfaz decodifique paquetes o implemente todas las funciones de Wireshark.
@@ -55,6 +57,7 @@ El motor admite archivos `.csv` y `.parquet`.
 - Los CSV se leen con codificación `cp1252`.
 - Los nombres de columnas se normalizan eliminando espacios externos.
 - Se valida que estén presentes las 78 características del modelo.
+- Los campos contextuales ausentes se muestran explícitamente como `NO DISPONIBLE EN ENTRADA`.
 - Los valores no numéricos, nulos o infinitos se marcan como `ERROR_DATOS` y no se clasifican.
 - El archivo original no se modifica.
 - La interfaz carga como máximo 10,000 filas por ejecución para mantener la respuesta visual.
