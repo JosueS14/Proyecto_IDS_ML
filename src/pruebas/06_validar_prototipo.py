@@ -1,12 +1,14 @@
-"""Ejecuta pruebas reproducibles de la fase 6 del prototipo IDS."""
+# Ejecuta pruebas reproducibles de la fase 6 del prototipo IDS.
 
 from __future__ import annotations
 
 import json
+from collections.abc import Callable, Mapping
 from pathlib import Path
 import py_compile
 import sys
 from time import perf_counter
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -27,7 +29,7 @@ CLASES_ESPERADAS = {"BENIGN", "MALICIOUS"}
 
 
 def registrar_prueba(
-    resultados: list[dict[str, object]], nombre: str, funcion
+    resultados: list[dict[str, Any]], nombre: str, funcion: Callable[[], Any]
 ) -> None:
     """Ejecutar una prueba y guardar su resultado sin ocultar el error."""
     inicio = perf_counter()
@@ -53,16 +55,16 @@ def registrar_prueba(
 
 
 def main() -> None:
-    resultados: list[dict[str, object]] = []
+    resultados: list[dict[str, Any]] = []
     motor = IDSInferencia()
 
-    def probar_modelo() -> dict[str, object]:
+    def probar_modelo() -> Mapping[str, object]:
         clases = set(motor.modelo.classes_)
         assert clases == CLASES_ESPERADAS, clases
         assert len(motor.columnas_caracteristicas) == 78
         return {"clases": sorted(clases), "caracteristicas": len(motor.columnas_caracteristicas)}
 
-    def probar_parquet() -> dict[str, object]:
+    def probar_parquet() -> Mapping[str, object]:
         entrada = motor.cargar_archivo(RUTA_PARQUET, limite=200)
         salida = motor.clasificar(entrada)
         assert len(salida) == 200
@@ -71,7 +73,7 @@ def main() -> None:
         assert (salida["Timestamp"] == "NO DISPONIBLE EN ENTRADA").all()
         return motor.resumen(salida)
 
-    def probar_csv_original() -> dict[str, object]:
+    def probar_csv_original() -> Mapping[str, object]:
         entrada = motor.cargar_archivo(RUTA_CSV, limite=200)
         salida = motor.clasificar(entrada)
         assert len(salida) == 200
@@ -94,7 +96,8 @@ def main() -> None:
         entrada = motor.cargar_archivo(RUTA_PARQUET, limite=5)
         entrada.loc[entrada.index[0], motor.columnas_caracteristicas[0]] = np.inf
         salida = motor.clasificar(entrada)
-        assert salida.loc[salida.index[0], "Estado"] == "ERROR_DATOS"
+        estado = salida.loc[salida.index[0], "Estado"]
+        assert bool(estado == "ERROR_DATOS")
         return motor.resumen(salida)
 
     def probar_alertas() -> dict[str, int]:

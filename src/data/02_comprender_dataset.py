@@ -75,18 +75,21 @@ def describir_archivo(ruta_archivo: Path) -> dict[str, Any]:
 
         filas += len(bloque)
         filas_vacias += int(bloque.isna().all(axis=1).sum())
-        faltantes_por_columna.update(bloque.isna().sum().to_dict())
+        faltantes_por_columna.update(
+            {
+                str(columna): int(conteo)
+                for columna, conteo in bloque.isna().sum().items()
+            }
+        )
 
         if "Label" in bloque.columns:
+            etiquetas_bloque = bloque["Label"].dropna().astype("string").str.strip()
+            etiquetas_bloque = etiquetas_bloque[etiquetas_bloque.ne("")]
             etiquetas.update(
-                bloque["Label"]
-                .dropna()
-                .astype(str)
-                .str.strip()
-                .replace("", np.nan)
-                .dropna()
-                .value_counts()
-                .to_dict()
+                {
+                    str(etiqueta): int(conteo)
+                    for etiqueta, conteo in etiquetas_bloque.value_counts().items()
+                }
             )
 
         for columna in bloque.columns:
@@ -96,7 +99,12 @@ def describir_archivo(ruta_archivo: Path) -> dict[str, Any]:
             pd.to_numeric, errors="coerce"
         )
         infinitos_por_columna.update(
-            np.isinf(bloque_numerico).sum().astype(int).to_dict()
+            {
+                str(columna): int(conteo)
+                for columna, conteo in np.isinf(bloque_numerico)
+                .sum()
+                .items()
+            }
         )
         _actualizar_minimos_maximos(rangos_numericos, bloque)
 
