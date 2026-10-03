@@ -2,7 +2,7 @@
 
 ## 1. Propósito de la fase
 
-Esta fase corresponde al modelado de CRISP-DM. Su objetivo es entrenar y comparar dos configuraciones de Random Forest sobre el dataset preparado, sin utilizar el conjunto de prueba para seleccionar la configuración final.
+Esta fase corresponde al modelado de CRISP-DM. Su objetivo es entrenar y comparar dos configuraciones de Random Forest sobre el dataset preparado. Las configuraciones candidatas se comparan únicamente mediante validación; la prueba se reserva hasta después de seleccionar y reentrenar el modelo final.
 
 Las decisiones adoptadas antes del entrenamiento fueron:
 
@@ -33,9 +33,9 @@ El procedimiento se implementó en `src/modelado/04_entrenar_random_forest.py`.
 
 ## 3. Restricción de recursos
 
-El dataset de entrenamiento contiene 2,262,141 registros. Un entrenamiento completo excedió el tiempo disponible del entorno de laboratorio. Para obtener una ejecución reproducible y viable se aplicó una muestra estratificada de 1,762,141 registros únicamente al conjunto de entrenamiento.
+La partición inicial contiene 2,262,141 registros de entrenamiento, 282,768 de validación y 282,768 de prueba. Un entrenamiento con el conjunto completo excedió el tiempo disponible del entorno de laboratorio. Por este motivo, el script aplica al entrenamiento un límite operativo de 1,762,141 registros mediante muestreo estratificado con semilla 42; validación y prueba conservan todos sus registros. El tamaño del límite se eligió para hacer viable la ejecución en el entorno disponible y no se optimizó como hiperparámetro ni se comparó con otros tamaños de muestra.
 
-La muestra conserva la distribución de clases del entrenamiento original. La validación y la prueba conservaron todos sus registros. No se generaron datos sintéticos, no se aplicó SMOTE y no se modificaron los archivos originales ni el dataset preparado.
+La muestra conserva aproximadamente la distribución de clases del entrenamiento original. Una vez seleccionada la configuración con validación, el reentrenamiento final utiliza los 1,762,141 registros de entrenamiento muestreados más los 282,768 registros de validación, para un total de 2,044,909 registros. La prueba no se incorpora al reentrenamiento. El parámetro `max_samples=0.5` hace que cada árbol utilice una muestra de la mitad de las filas disponibles para ese ajuste; es un muestreo interno del bosque y no debe confundirse con el límite previo de filas de entrenamiento. No se generaron datos sintéticos, no se aplicó SMOTE y no se modificaron los archivos originales ni el dataset preparado.
 
 Los parámetros utilizados fueron:
 
@@ -58,7 +58,7 @@ La configuración balanceada fue seleccionada porque detectó una mayor proporci
 
 ## 5. Evaluación final sobre prueba
 
-Después de seleccionar la configuración mediante validación, el modelo balanceado se reentrenó con entrenamiento más validación y se evaluó sobre la prueba independiente.
+Después de seleccionar la configuración mediante validación, el modelo balanceado se reentrenó con entrenamiento más validación y se evaluó una sola vez sobre la partición de prueba reservada.
 
 | Métrica | Resultado |
 | --- | ---: |
@@ -115,6 +115,8 @@ Los resultados muestran un desempeño elevado sobre CIC-IDS2017, pero no deben i
 La tasa de falsos positivos debe analizarse junto con el volumen real de tráfico antes de valorar una operación continua. Además, las métricas no demuestran detección de ataques zero-day ni sustituyen una validación con tráfico independiente del dataset.
 
 ## 9. Cierre de la fase
+
+La prueba se reservó para la evaluación final y no intervino en la selección de la configuración. Sin embargo, la división fue aleatoria y estratificada por fila sobre los archivos ya integrados, no por día ni por archivo de captura. Por ello, estas métricas describen el desempeño sobre una partición retenida del mismo conjunto CIC-IDS2017; no demuestran generalización a capturas, redes o escenarios independientes. La elevada puntuación debe interpretarse con esta limitación y no como evidencia de detección de ataques nuevos.
 
 La fase 4 queda cerrada porque:
 

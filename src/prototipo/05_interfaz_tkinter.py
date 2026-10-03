@@ -262,7 +262,7 @@ class InterfazIDS:
         columnas = (
             "No.",
             "Predicción",
-            "Confianza",
+            "Probabilidad predicha",
             "Alerta",
             "Estado",
             "Etiqueta real",
@@ -281,7 +281,7 @@ class InterfazIDS:
         anchos = {
             "No.": 60,
             "Predicción": 115,
-            "Confianza": 90,
+            "Probabilidad predicha": 145,
             "Alerta": 100,
             "Estado": 110,
             "Etiqueta real": 110,
@@ -453,7 +453,7 @@ class InterfazIDS:
             valores = []
             for columna in self.tabla["columns"]:
                 valor = fila.get(columna, "")
-                if columna == "Confianza" and valor != "":
+                if columna == "Probabilidad predicha" and valor != "":
                     valor = f"{float(valor):.4f}"
                 valores.append(str(valor))
             if fila.get("Estado") == "ERROR_DATOS":

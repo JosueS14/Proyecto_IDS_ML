@@ -101,9 +101,9 @@ Estos valores pueden aparecer cuando una tasa se calcula con una duración nula 
 
 ### 5.4 Duplicados
 
-La comparación mediante huella de fila detectó 288,803 duplicados dentro de los archivos, de los cuales 203 corresponden a filas no completamente vacías. La mayoría de las coincidencias está relacionada con las filas vacías repetidas del archivo de Web Attacks.
+La comparación mediante huella de fila, realizada por archivo antes de la preparación, detectó 288,803 duplicados; 203 corresponden a filas no completamente vacías. La mayoría de las coincidencias está relacionada con las filas vacías repetidas del archivo de Web Attacks.
 
-El conteo no incluye coincidencias entre archivos diferentes. En la fase 3 se deberá decidir si se eliminan duplicados exactos después de retirar las filas vacías y cómo se evita que la eliminación afecte de manera desproporcionada a una clase minoritaria.
+El conteo no incluye coincidencias entre archivos diferentes ni representa todavía el número de filas que eliminará el pipeline. En la fase 3 se volverán a detectar duplicados después de retirar filas vacías e inválidas, normalizar y recodificar los datos, e incluir coincidencias entre archivos. Por tanto, el conteo bruto y el número final de filas eliminadas corresponden a etapas distintas y no deben compararse como si fueran el mismo contador.
 
 ### 5.5 Rangos y valores potencialmente inconsistentes
 

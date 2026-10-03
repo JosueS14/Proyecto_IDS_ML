@@ -167,7 +167,7 @@ Mejorar la interfaz del prototipo a partir de la revisión visual.
 - Se sustituyeron los textos de acción por iconos de abrir, analizar, limpiar y filtrar.
 - Se agregaron tooltips que describen cada acción al pasar el cursor.
 - El panel de detalles ahora muestra todas las columnas del flujo original mediante desplazamiento vertical.
-- Se conservaron el resumen de predicción, confianza, alerta y estado.
+- Se conservaron el resumen de predicción, probabilidad estimada, alerta y estado.
 
 ## Verificación
 

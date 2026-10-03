@@ -82,6 +82,8 @@ El pipeline se ejecutó sobre los ocho archivos del dataset y produjo los siguie
 
 La salida contiene 2,271,122 registros `BENIGN` y 556,555 registros `MALICIOUS`. La validación del Parquet confirmó que no quedan valores nulos ni valores no finitos en las características y que las etiquetas de salida son únicamente `BENIGN` y `MALICIOUS`.
 
+El conteo de 203 filas no vacías repetidas en la fase 2 proviene del análisis inicial por archivo; las 199 filas de esta tabla son las eliminadas efectivamente por el pipeline después de filtrar registros inválidos, normalizar y recodificar, y buscar coincidencias entre archivos. Al provenir de etapas y alcances de deduplicación distintos, el contador reproducible del pipeline (199) es el que describe la salida preparada.
+
 ## 6. Política de calidad
 
 Las reglas implementadas son:
@@ -135,15 +137,15 @@ Se implementará en la fase 5. Cargará el modelo y los objetos auxiliares persi
 
 ### 7.4 Módulo de alertas y reportes
 
-Se implementará en la fase 5. Registrará como mínimo la fecha de análisis, la clase predicha, la confianza o probabilidad y un identificador del registro. No almacenará cargas útiles ni ejecutará bloqueo activo.
+Se implementará en la fase 5. Registrará como mínimo la fecha de análisis, la clase predicha, la probabilidad estimada de la clase predicha y un identificador del registro. No almacenará cargas útiles ni ejecutará bloqueo activo.
 
 ## 8. Partición y prevención de fuga
 
-La partición de entrenamiento, validación y prueba se realizará después de generar el dataset preparado. El conjunto de prueba deberá mantenerse separado de cualquier ajuste de hiperparámetros.
+La partición de entrenamiento, validación y prueba se realizó después de generar el dataset preparado. El conjunto de prueba se mantuvo separado de la selección de configuración y del ajuste del modelo.
 
-Como estrategia inicial se utilizará una partición estratificada y reproducible. Antes de fijarla definitivamente se analizará si existen flujos relacionados por tiempo, archivo o escenario que requieran una partición por grupos o por orden temporal. Las transformaciones que aprendan parámetros deberán ajustarse únicamente con entrenamiento.
+La estrategia implementada fue una partición aleatoria, estratificada y reproducible por fila, con proporciones 80/10/10 y semilla 42. Los ocho archivos se integraron antes de dividirlos; no se conservaron grupos de origen para separar por día o archivo. En consecuencia, flujos del mismo día o escenario de captura pueden quedar distribuidos entre entrenamiento, validación y prueba. El conjunto de prueba es una partición reservada de CIC-IDS2017, pero no una validación externa independiente del escenario de captura. Esta limitación se considerará al interpretar las métricas.
 
-El balanceo, se aplicará únicamente al conjunto de entrenamiento y no al conjunto de prueba.
+No se aplicó balanceo sintético. La configuración `class_weight="balanced"` del clasificador modifica los pesos de las clases durante el ajuste, sin alterar la composición de validación ni de prueba. Cualquier técnica de remuestreo que se incorpore posteriormente deberá aplicarse únicamente al entrenamiento.
 
 ## 9. Artefactos de esta fase
 

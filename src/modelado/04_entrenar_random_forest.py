@@ -204,16 +204,14 @@ def evaluar_modelo(
 def entrenar_configuracion(
     nombre: str,
     peso_clases: Literal["balanced"] | None,
-    datos: tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.Series],
+    datos: tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series],
 ) -> tuple[dict[str, Any], RandomForestClassifier]:
-    """Entrenar una configuración y evaluarla en validación y prueba."""
+    """Entrenar una configuración y evaluarla únicamente en validación."""
     (
         caracteristicas_entrenamiento,
         caracteristicas_validacion,
-        caracteristicas_prueba,
         objetivo_entrenamiento,
         objetivo_validacion,
-        objetivo_prueba,
     ) = datos
     modelo = RandomForestClassifier(
         n_estimators=N_ESTIMADORES,
@@ -234,9 +232,6 @@ def entrenar_configuracion(
         "tiempo_entrenamiento_segundos": tiempo_entrenamiento,
         "validacion": evaluar_modelo(
             modelo, caracteristicas_validacion, objetivo_validacion
-        ),
-        "prueba_sin_reentrenamiento": evaluar_modelo(
-            modelo, caracteristicas_prueba, objetivo_prueba
         ),
     }
     return resultado, modelo
@@ -293,18 +288,16 @@ def main() -> None:
         ("balanceado", "balanced"),
     ]
     resultados: list[dict[str, Any]] = []
-    datos_entrenamiento = (
+    datos_para_seleccion = (
         caracteristicas_entrenamiento,
         caracteristicas_validacion,
-        caracteristicas_prueba,
         objetivo_entrenamiento,
         objetivo_validacion,
-        objetivo_prueba,
     )
     for nombre, peso_clases in configuraciones:
         print(f"Entrenando configuración: {nombre}", flush=True)
         resultado, modelo = entrenar_configuracion(
-            nombre, peso_clases, datos_entrenamiento
+            nombre, peso_clases, datos_para_seleccion
         )
         resultados.append(resultado)
         print(
@@ -388,6 +381,7 @@ def main() -> None:
             "validation": len(objetivo_validacion),
             "test": len(objetivo_prueba),
             "strategy": "stratified_80_10_10",
+            "grouping": "row-wise after pooling all prepared files; no grouping by source file or capture day",
             "random_state": RANDOM_STATE,
         },
         "class_counts": {
@@ -400,6 +394,7 @@ def main() -> None:
             "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
             "configuration": nombre_seleccionado,
             "class_weight": peso_seleccionado,
+            "final_training_rows": len(objetivo_entrenamiento_validacion),
             "retraining_seconds": tiempo_reentrenamiento,
             "final_test": metricas_prueba_finales,
             "model_path": str(ruta_modelo.relative_to(RAIZ_PROYECTO)),
@@ -411,9 +406,10 @@ def main() -> None:
         "notes": [
             "No se aplicó escalado porque Random Forest no lo requiere.",
             "No se aplicó SMOTE ni otro balanceo sintético.",
-            "El conjunto de prueba no se utilizó para seleccionar la configuración.",
+            "Las configuraciones candidatas se evaluaron únicamente con validación; la prueba se evaluó una sola vez después de seleccionar y reentrenar el modelo.",
             "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
-            "Por restricción de recursos, la muestra de entrenamiento se limitó a 1,762,141 filas estratificadas; validación y prueba se conservaron completas.",
+            "Por restricción de recursos, se configuró un límite operativo de 1,762,141 filas estratificadas para el entrenamiento; este tamaño no se optimizó como hiperparámetro. Validación y prueba se conservaron completas.",
+            "La partición aleatoria por filas no separa días ni archivos de captura; los resultados estiman desempeño dentro de CIC-IDS2017 y no generalización a escenarios independientes.",
         ],
     }
     RUTA_RESULTADOS.write_text(

@@ -15,7 +15,7 @@
     "pandas": "2.3.3",
     "scikit_learn": "1.8.0"
   },
-  "duracion_inferencia_segundos": 0.039760900021065027,
+  "duracion_inferencia_segundos": 0.042703600018285215,
   "muestra": {
     "archivo_fuente": "data\\raw\\Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
     "registros_por_clase_real": {
@@ -44,5 +44,5 @@
     "alertas": "data\\processed\\prueba_laboratorio\\alertas_ids.csv"
   },
   "huella_sha256_entrada": "7ca1c025f91417536ac22fcd740bb160029cc2dfedc4f544a89c02cd43c6d44a",
-  "duracion_total_segundos": 0.4442471999791451
+  "duracion_total_segundos": 0.539861400029622
 }
