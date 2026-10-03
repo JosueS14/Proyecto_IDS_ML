@@ -83,7 +83,7 @@ class IDSInferencia:
 
         resultado["No."] = np.arange(1, len(datos) + 1)
         resultado["Predicción"] = ""
-        resultado["Confianza"] = np.nan
+        resultado["Probabilidad predicha"] = np.nan
         resultado["Alerta"] = ""
         resultado["Estado"] = ""
 
@@ -107,10 +107,12 @@ class IDSInferencia:
             probabilidades = self.modelo.predict_proba(
                 caracteristicas.loc[filas_validas]
             )
-            confianza = probabilidades.max(axis=1)
+            probabilidad_predicha = probabilidades.max(axis=1)
 
             resultado.loc[filas_validas, "Predicción"] = predicciones
-            resultado.loc[filas_validas, "Confianza"] = confianza
+            resultado.loc[filas_validas, "Probabilidad predicha"] = (
+                probabilidad_predicha
+            )
             resultado.loc[filas_validas, "Alerta"] = np.where(
                 predicciones == self.clase_positiva, "ALERTA", "NO"
             )
@@ -119,7 +121,7 @@ class IDSInferencia:
         columnas_principales = [
             "No.",
             "Predicción",
-            "Confianza",
+            "Probabilidad predicha",
             "Alerta",
             "Estado",
             "Etiqueta real",

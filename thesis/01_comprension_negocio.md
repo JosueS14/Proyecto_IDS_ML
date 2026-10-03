@@ -25,9 +25,9 @@ Implementar y evaluar un prototipo de sistema de detección de intrusiones en re
 ### 3.2 Objetivos específicos
 
 1. Establecer una base teórica y metodológica sobre IDS, aprendizaje automático y análisis de tráfico de red.
-2. Identificar y justificar las características que podrán utilizarse para diferenciar el tráfico benigno del malicioso.
+2. Documentar las características excluidas por riesgo de identificación o dependencia del escenario y analizar la importancia de las características utilizadas por Random Forest.
 3. Preparar un conjunto reproducible de datos para clasificación binaria.
-4. Entrenar y evaluar Random Forest como algoritmo principal y comparar, si los recursos lo permiten, al menos un modelo de referencia.
+4. Entrenar y comparar dos configuraciones de Random Forest —sin ponderación de clases y con `class_weight="balanced"`— mediante el conjunto de validación.
 5. Integrar el modelo seleccionado en un prototipo que funcione inicialmente en modo por lotes.
 6. Medir el desempeño mediante exactitud, precisión, sensibilidad, especificidad, F1-score, matriz de confusión, tasa de falsos positivos y, cuando sea pertinente, área bajo la curva precision-recall.
 7. Documentar la instalación, ejecución, limitaciones y condiciones de actualización del prototipo.
@@ -44,8 +44,8 @@ Implementar y evaluar un prototipo de sistema de detección de intrusiones en re
 - Algoritmo principal: Random Forest.
 - Modo inicial de operación: procesamiento por lotes mediante archivos preparados.
 - Entrada prevista: registros tabulares con las características esperadas por el modelo.
-- Salida prevista: clase predicha, confianza o probabilidad cuando esté disponible y registro de eventos maliciosos.
-- Evaluación: conjunto de prueba independiente y métricas definidas en este documento.
+- Salida prevista: clase predicha, probabilidad estimada por el clasificador cuando esté disponible y registro de eventos maliciosos. La probabilidad no se interpretará como confianza calibrada, ya que no se realizó calibración probabilística.
+- Evaluación: partición de prueba reservada, no utilizada para seleccionar o ajustar el modelo, y métricas definidas en este documento. La separación será por fila y no por escenario de captura.
 - Entorno de ejecución: laboratorio controlado y aislado.
 
 ### 4.2 Fuera del alcance de la primera versión
@@ -57,7 +57,7 @@ Implementar y evaluar un prototipo de sistema de detección de intrusiones en re
 - Extracción completa de características de flujo desde paquetes en línea.
 - Clasificación multiclase de cada familia de ataque.
 - Detección garantizada de ataques zero-day.
-- Comparación concluyente contra productos IDS comerciales.
+- Comparación experimental con IDS tradicionales o productos comerciales, porque esta versión no incorpora un sistema de referencia.
 
 La captura en tiempo real, la clasificación multiclase y la respuesta activa quedan registradas como posibles extensiones, no como requisitos de aceptación de esta versión.
 
@@ -85,7 +85,7 @@ Los requisitos se expresan con identificadores para facilitar la trazabilidad du
 | RF-04 | El sistema deberá clasificar cada registro como `BENIGN` o `MALICIOUS`. | La salida solo contiene las dos clases definidas para la primera versión. |
 | RF-05 | El sistema deberá cargar un modelo previamente entrenado sin volver a entrenarlo durante la inferencia. | La ejecución de inferencia utiliza un artefacto persistido. |
 | RF-06 | El sistema deberá generar una alerta informativa para cada registro clasificado como `MALICIOUS`. | Las alertas pueden identificarse y contarse en la salida generada. |
-| RF-07 | El sistema deberá registrar los resultados de clasificación. | Cada resultado incluye, como mínimo, fecha de análisis, clase predicha y confianza o probabilidad si está disponible. |
+| RF-07 | El sistema deberá registrar los resultados de clasificación. | Cada resultado incluye, como mínimo, fecha de análisis, clase predicha y probabilidad estimada de la clase predicha cuando esté disponible. |
 | RF-08 | El proceso de entrenamiento deberá separar los datos de entrenamiento, validación y prueba cuando el volumen y la estrategia elegida lo permitan. | El conjunto de prueba no participa en el ajuste de hiperparámetros. |
 | RF-09 | El sistema deberá calcular las métricas de evaluación definidas. | Se generan valores para accuracy, precision, recall, especificidad, F1-score y FPR, además de la matriz de confusión. |
 | RF-10 | El proceso deberá conservar la relación entre la etiqueta original y la etiqueta binaria. | Se documenta qué etiquetas originales se recodifican como `BENIGN` y cuáles como `MALICIOUS`. |
@@ -148,7 +148,7 @@ No se fija en esta fase un umbral numérico de accuracy, recall o FPR. Ese umbra
 | ID | Tipo | Descripción | Tratamiento previsto |
 | --- | --- | --- | --- |
 | R-001 | Riesgo | El desbalance puede inflar la accuracy y ocultar ataques minoritarios. | Reportar métricas por clase, F1 macro cuando corresponda y matriz de confusión. |
-| R-002 | Riesgo | Puede existir fuga de información por identificadores, marcas temporales o registros relacionados. | Analizar las columnas y documentar la estrategia de división antes de entrenar. |
+| R-002 | Riesgo | Puede existir fuga de información por identificadores, marcas temporales o flujos relacionados entre particiones. | Excluir identificadores del modelo y documentar que la partición implementada es aleatoria y estratificada por fila, sin separar por archivo o día de captura. |
 | R-003 | Riesgo | El dataset experimental puede no representar una red real. | Limitar las conclusiones al entorno controlado y declarar la limitación. |
 | R-004 | Riesgo | La extracción desde paquetes en tiempo real puede no reproducir las características de CICFlowMeter. | Mantener el modo por lotes como alcance inicial. |
 | R-005 | Restricción | El volumen de datos puede superar la memoria o el tiempo disponibles. | Medir recursos y documentar cualquier muestreo o procesamiento por partes. |

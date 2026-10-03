@@ -25,7 +25,7 @@ Validación de las 78 características
 Random Forest persistido
           |
           v
-Predicción y confianza
+Predicción y probabilidad estimada
           |
           v
 Tabla de flujos, detalles y alertas
@@ -41,7 +41,7 @@ La interfaz Tkinter incluye:
 
 - Barra de herramientas con iconos para abrir, analizar, limpiar y filtrar, cada uno con descripción al pasar el cursor.
 - Campo de filtro para buscar `malicious`, `benign`, `alerta` o texto libre.
-- Tabla principal de flujos con número, predicción, confianza, alerta, estado, etiqueta real y campos contextuales.
+- Tabla principal de flujos con número, predicción, probabilidad estimada por el clasificador, alerta, estado, etiqueta real y campos contextuales.
 - Color rojo para tráfico clasificado como `MALICIOUS`.
 - Color verde para tráfico `BENIGN`.
 - Color amarillo para registros que no pudieron analizarse.
@@ -71,7 +71,7 @@ Después del análisis se generan localmente:
 - `data/processed/resultado_inferencia.csv`: resultados de los flujos analizados.
 - `data/processed/alertas_ids.csv`: únicamente los flujos clasificados como `MALICIOUS`.
 
-Cada alerta incluye la predicción, la confianza, el estado y los campos contextuales disponibles. No se almacenan cargas útiles, secretos ni contenido de paquetes.
+Cada alerta incluye la predicción, la probabilidad estimada por el clasificador, el estado y los campos contextuales disponibles. Esa probabilidad no se ha calibrado y no debe interpretarse como una medida de confianza calibrada. No se almacenan cargas útiles, secretos ni contenido de paquetes.
 
 ## 6. Ejecución
 
@@ -91,7 +91,7 @@ La fase se considera integrada cuando:
 2. El modelo persistido se carga correctamente.
 3. Se rechazan archivos con características faltantes.
 4. Se clasifican registros válidos como `BENIGN` o `MALICIOUS`.
-5. Se muestra la confianza de la predicción cuando el modelo la proporciona.
+5. Se muestra la probabilidad estimada de la clase predicha cuando el modelo la proporciona.
 6. Las alertas se distinguen visualmente y se guardan en un archivo separado.
 7. La selección de un registro muestra sus detalles.
 8. Los archivos originales no se sobrescriben.

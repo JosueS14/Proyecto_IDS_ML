@@ -13,6 +13,7 @@
     "validation": 282768,
     "test": 282768,
     "strategy": "stratified_80_10_10",
+    "grouping": "row-wise after pooling all prepared files; no grouping by source file or capture day",
     "random_state": 42
   },
   "class_counts": {
@@ -35,7 +36,7 @@
       "class_weight": null,
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 73.48781809999491,
+      "tiempo_entrenamiento_segundos": 69.40376600000309,
       "validacion": {
         "accuracy": 0.9984085893736208,
         "precision_malicious": 0.9964032658346221,
@@ -50,21 +51,6 @@
         "false_positives": 200,
         "false_negatives": 250,
         "true_positives": 55406
-      },
-      "prueba_sin_reentrenamiento": {
-        "accuracy": 0.9983979799694449,
-        "precision_malicious": 0.996278116403258,
-        "recall_malicious": 0.9955799913755929,
-        "specificity_benign": 0.9990885554263975,
-        "f1_malicious": 0.9959289315467365,
-        "f1_macro": 0.997465855937216,
-        "fpr": 0.0009114445736024516,
-        "average_precision": 0.9997016487527693,
-        "roc_auc": 0.9999098297561113,
-        "true_negatives": 226905,
-        "false_positives": 207,
-        "false_negatives": 246,
-        "true_positives": 55410
       }
     },
     {
@@ -72,7 +58,7 @@
       "class_weight": "balanced",
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 67.25935790000949,
+      "tiempo_entrenamiento_segundos": 62.244796100014355,
       "validacion": {
         "accuracy": 0.9986101680529621,
         "precision_malicious": 0.9948068692584567,
@@ -81,27 +67,12 @@
         "f1_malicious": 0.996475304711253,
         "f1_macro": 0.9978048682433185,
         "fpr": 0.0012769030258198597,
-        "average_precision": 0.9996911748844305,
-        "roc_auc": 0.9999264115668558,
+        "average_precision": 0.9996911748844304,
+        "roc_auc": 0.9999264115668557,
         "true_negatives": 226822,
         "false_positives": 290,
         "false_negatives": 103,
         "true_positives": 55553
-      },
-      "prueba_sin_reentrenamiento": {
-        "accuracy": 0.9985323657556725,
-        "precision_malicious": 0.9948225514609721,
-        "recall_malicious": 0.9977360931435963,
-        "specificity_benign": 0.9987275000880623,
-        "f1_malicious": 0.9962771921955595,
-        "f1_macro": 0.9976816090409746,
-        "fpr": 0.0012724999119377225,
-        "average_precision": 0.999627371294271,
-        "roc_auc": 0.9998861799887361,
-        "true_negatives": 226823,
-        "false_positives": 289,
-        "false_negatives": 126,
-        "true_positives": 55530
       }
     }
   ],
@@ -109,7 +80,8 @@
     "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
     "configuration": "balanceado",
     "class_weight": "balanced",
-    "retraining_seconds": 78.76187349998509,
+    "final_training_rows": 2044909,
+    "retraining_seconds": 74.16487320000306,
     "final_test": {
       "accuracy": 0.9986101680529621,
       "precision_malicious": 0.9950373542110826,
@@ -212,8 +184,9 @@
   "notes": [
     "No se aplicó escalado porque Random Forest no lo requiere.",
     "No se aplicó SMOTE ni otro balanceo sintético.",
-    "El conjunto de prueba no se utilizó para seleccionar la configuración.",
+    "Las configuraciones candidatas se evaluaron únicamente con validación; la prueba se evaluó una sola vez después de seleccionar y reentrenar el modelo.",
     "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
-    "Por restricción de recursos, la muestra de entrenamiento se limitó a 1,762,141 filas estratificadas; validación y prueba se conservaron completas."
+    "Por restricción de recursos, se configuró un límite operativo de 1,762,141 filas estratificadas para el entrenamiento; este tamaño no se optimizó como hiperparámetro. Validación y prueba se conservaron completas.",
+    "La partición aleatoria por filas no separa días ni archivos de captura; los resultados estiman desempeño dentro de CIC-IDS2017 y no generalización a escenarios independientes."
   ]
 }

@@ -1,4 +1,4 @@
-"""Ejecuta una prueba offline de extremo a extremo en un sandbox local."""
+"""Ejecuta la prueba complementaria offline de la fase 6 en un sandbox local."""
 
 from __future__ import annotations
 

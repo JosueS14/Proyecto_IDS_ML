@@ -8,6 +8,8 @@ Las pruebas se ejecutan mediante `src/pruebas/06_validar_prototipo.py` y generan
 
 ## 2. Casos de prueba
 
+La tabla reúne los nueve casos de la batería principal y, al final, una prueba complementaria offline. Por ello, el informe automatizado registra nueve pruebas principales; la ejecución complementaria se documenta y contabiliza por separado en la sección 3.4.
+
 | Prueba | Objetivo | Resultado |
 | --- | --- | --- |
 | Carga del modelo y esquema | Verificar que el artefacto contiene las clases y 78 características esperadas. | PASÓ |
@@ -50,12 +52,12 @@ La inferencia sobre 1,000 filas se completó en aproximadamente 0.08 segundos de
 
 ### 3.4 Prueba complementaria offline en entorno controlado
 
-Se ejecutó `src/pruebas/07_prueba_entorno_controlado.py` como prueba funcional de extremo a extremo. La prueba extrajo del archivo `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` una muestra local de 20 flujos válidos: 10 benignos y 10 asociados a ataques. Para la inferencia se utilizaron las 78 características definidas por el modelo.
+Se ejecutó `src/pruebas/06_prueba_entorno_controlado.py` como prueba funcional de extremo a extremo. La prueba extrajo del archivo `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` una muestra local de 20 flujos válidos: 10 benignos y 10 asociados a ataques. Para la inferencia se utilizaron las 78 características definidas por el modelo.
 
 La prueba se reproduce desde la raíz del proyecto con:
 
 ```bash
-python src/pruebas/07_prueba_entorno_controlado.py
+python src/pruebas/06_prueba_entorno_controlado.py
 ```
 
 La ejecución se realizó en un sandbox lógico de archivos bajo `data/processed/prueba_laboratorio`. El flujo no abrió conexiones de red, no capturó ni inyectó paquetes y no interactuó con una red de producción. La entrada se conservó sin cambios, verificado mediante su huella SHA-256. Esta prueba verifica el procesamiento y la generación de archivos; **no constituye una evaluación del desempeño predictivo ni una prueba de generalización**, ya que la muestra proviene de CIC-IDS2017.
@@ -92,7 +94,7 @@ La validación comprobó las siguientes reglas:
 
 - `src/pruebas/06_validar_prototipo.py`: batería reproducible de pruebas.
 - `docs/resultados_validacion.json`: resultado de las pruebas.
-- `src/pruebas/07_prueba_entorno_controlado.py`: prueba complementaria offline de extremo a extremo.
+- `src/pruebas/06_prueba_entorno_controlado.py`: prueba complementaria offline de extremo a extremo.
 - `docs/resultados_prueba_laboratorio.json`: resultado y configuración de la prueba complementaria.
 - `data/processed/prueba_laboratorio/`: muestra de entrada y archivos de resultados y alertas generados localmente.
 - `thesis/06_pruebas_validacion.md`: documentación de la validación.
