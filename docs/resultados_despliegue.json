@@ -1,0 +1,61 @@
+{
+  "estado": "PASÓ",
+  "python": "3.14.6",
+  "plataforma": "Windows-11-10.0.26300-SP0",
+  "archivos": {
+    "modelo": {
+      "ruta": "data/processed/modelos/random_forest_seleccionado.joblib",
+      "existe": true
+    },
+    "metadatos": {
+      "ruta": "data/processed/dataset_cicids2017_preparado_metadatos.json",
+      "existe": true
+    },
+    "dependencias_runtime": {
+      "ruta": "requirements-runtime.txt",
+      "existe": true
+    },
+    "interfaz": {
+      "ruta": "src/prototipo/05_interfaz_tkinter.py",
+      "existe": true
+    },
+    "motor_inferencia": {
+      "ruta": "src/prototipo/inferencia_ids.py",
+      "existe": true
+    }
+  },
+  "paquetes": {
+    "pandas": "3.0.3",
+    "numpy": "2.4.6",
+    "sklearn": "1.9.0",
+    "joblib": "1.5.3",
+    "pyarrow": "23.0.1"
+  },
+  "modelo": {
+    "tipo": "RandomForestClassifier",
+    "caracteristicas": 78,
+    "clases": [
+      "BENIGN",
+      "MALICIOUS"
+    ]
+  },
+  "metadatos": {
+    "caracteristicas": 78,
+    "clases": [
+      "BENIGN",
+      "MALICIOUS"
+    ],
+    "salida": "data\\processed\\dataset_cicids2017_preparado.parquet"
+  },
+  "parquet": {
+    "disponible": true,
+    "columnas": 79,
+    "tiene_label": true
+  },
+  "errores": [],
+  "advertencias": [
+    "El artefacto fue validado con Python 3.13.x; el entorno actual usa Python 3.14.6",
+    "El artefacto fue validado con pandas 2.3.3; el entorno actual usa 3.0.3",
+    "El artefacto fue validado con sklearn 1.8.0; el entorno actual usa 1.9.0"
+  ]
+}

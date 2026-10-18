@@ -208,3 +208,20 @@ Revisar falsos positivos y mejorar la visualización de campos contextuales en l
 
 Para visualizar los valores originales de identificación y contexto se deben abrir los CSV de `data/raw`. Estos campos continuarán excluidos de las características utilizadas por el modelo.
 
+# Sesion 14
+## Objetivo
+
+Cerrar la fase 7 de despliegue y mantenimiento del prototipo IDS.
+
+## Resultados
+
+- Se documentó la instalación, operación, monitoreo, respaldo y reentrenamiento en `thesis/07_despliegue_mantenimiento.md`.
+- Se creó `requirements-runtime.txt` con las dependencias mínimas para ejecutar la interfaz y leer CSV o Parquet.
+- Se creó `src/pruebas/07_verificar_despliegue.py` para comprobar artefactos, esquema, dependencias y compatibilidad del Parquet preparado.
+- Se agregó el procedimiento de ejecución rápida al `README.md`.
+- El verificador genera `docs/resultados_despliegue.json` sin modificar los datos de entrada.
+
+## Decisión
+
+El despliegue queda limitado a ejecución local por lotes. El modelo no se actualiza automáticamente; cualquier reentrenamiento debe conservar el modelo anterior, repetir la validación y registrar la nueva versión antes de reemplazar el artefacto activo.
+

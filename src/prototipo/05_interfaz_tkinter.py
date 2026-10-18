@@ -17,7 +17,6 @@ LIMITE_PREVISUALIZACION = 10_000
 
 
 class Tooltip:
-    """Mostrar una descripción breve al pasar el cursor sobre un control."""
 
     def __init__(self, widget: tk.Widget, texto: str) -> None:
         self.widget = widget
@@ -73,6 +72,8 @@ class InterfazIDS:
         self.resultados: pd.DataFrame | None = None
         self.estado_var = tk.StringVar(value="LISTO PARA ANALIZAR")
         self.indicadores: dict[str, tk.StringVar] = {}
+        self.indicadores_pastel: dict[str, tk.StringVar] = {}
+        self.filas_previsualizacion = tk.StringVar(value="20")
 
         self._crear_estilos()
         self._crear_interfaz()
@@ -201,6 +202,26 @@ class InterfazIDS:
         )
         boton_abrir.pack(side="left", padx=3)
         Tooltip(boton_abrir, "Abrir archivo CSV o Parquet")
+        self.boton_previsualizar = ttk.Button(
+            barra,
+            text="Vista previa",
+            command=self.mostrar_previsualizacion,
+            state="disabled",
+            style="Secondary.TButton",
+        )
+        self.boton_previsualizar.pack(side="left", padx=3)
+        Tooltip(self.boton_previsualizar, "Mostrar filas originales del archivo")
+        ttk.Label(barra, text="Filas:", style="Section.TLabel").pack(
+            side="left", padx=(8, 3)
+        )
+        self.selector_previsualizacion = ttk.Combobox(
+            barra,
+            textvariable=self.filas_previsualizacion,
+            values=("20", "30"),
+            state="readonly",
+            width=4,
+        )
+        self.selector_previsualizacion.pack(side="left", padx=3)
         self.boton_analizar = ttk.Button(
             barra,
             text="Analizar flujos",
@@ -242,14 +263,18 @@ class InterfazIDS:
         )
         self.etiqueta_archivo.pack(fill="x")
 
-        tarjetas = tk.Frame(contenido, bg="#f3f6fb")
-        tarjetas.pack(fill="x", pady=(12, 14))
+        panel_resumen = tk.Frame(contenido, bg="#f3f6fb")
+        panel_resumen.pack(fill="x", pady=(12, 14))
+
+        tarjetas = tk.Frame(panel_resumen, bg="#f3f6fb")
+        tarjetas.pack(side="left", fill="both", expand=True)
         for columna in range(4):
             tarjetas.columnconfigure(columna, weight=1, uniform="tarjetas")
         self._crear_tarjeta(tarjetas, 0, "Flujos revisados", "total", "#4f46e5")
         self._crear_tarjeta(tarjetas, 1, "Tráfico benigno", "benign", "#0f9d78")
         self._crear_tarjeta(tarjetas, 2, "Amenazas detectadas", "malicious", "#e05252")
         self._crear_tarjeta(tarjetas, 3, "Datos con error", "errores", "#d97706")
+        self._crear_grafica_pastel(panel_resumen)
 
         panel_principal = ttk.PanedWindow(contenido, orient="vertical")
         panel_principal.pack(fill="both", expand=True)
@@ -378,6 +403,97 @@ class InterfazIDS:
             font=("Segoe UI", 20, "bold"),
         ).pack(anchor="w", pady=(2, 0))
 
+    def _crear_grafica_pastel(self, contenedor: tk.Frame) -> None:
+        panel = tk.Frame(
+            contenedor,
+            bg="#ffffff",
+            highlightbackground="#e2e8f0",
+            highlightthickness=1,
+            padx=10,
+            pady=8,
+        )
+        panel.pack(side="right", fill="y", padx=(12, 0))
+        tk.Label(
+            panel,
+            text="PORCENTAJE DE TRÁFICO",
+            bg="#ffffff",
+            fg="#64748b",
+            font=("Segoe UI", 8, "bold"),
+        ).pack(anchor="w")
+
+        fila_grafica = tk.Frame(panel, bg="#ffffff")
+        fila_grafica.pack(fill="both", expand=True, pady=(4, 0))
+        self.grafica_pastel = tk.Canvas(
+            fila_grafica,
+            width=122,
+            height=122,
+            bg="#ffffff",
+            highlightthickness=0,
+        )
+        self.grafica_pastel.pack(side="left", padx=(0, 8))
+
+        leyenda = tk.Frame(fila_grafica, bg="#ffffff")
+        leyenda.pack(side="left", anchor="center")
+        for clave, titulo, color in (
+            ("benign", "Benigno", "#0f9d78"),
+            ("malicious", "Malicioso", "#e05252"),
+            ("errores", "Error", "#d97706"),
+        ):
+            fila = tk.Frame(leyenda, bg="#ffffff")
+            fila.pack(anchor="w", pady=2)
+            tk.Label(fila, bg=color, width=2, height=1).pack(side="left", padx=(0, 5))
+            porcentaje = tk.StringVar(value=f"{titulo}: 0.0%")
+            self.indicadores_pastel[clave] = porcentaje
+            tk.Label(
+                fila,
+                textvariable=porcentaje,
+                bg="#ffffff",
+                fg="#334155",
+                font=("Segoe UI", 8),
+            ).pack(side="left")
+        self._actualizar_grafica_pastel({"benign": 0, "malicious": 0, "errores": 0})
+
+    def _actualizar_grafica_pastel(self, resumen: dict[str, int]) -> None:
+        segmentos = (
+            ("benign", "Benigno", "#0f9d78"),
+            ("malicious", "Malicioso", "#e05252"),
+            ("errores", "Error", "#d97706"),
+        )
+        valores = [max(0, int(resumen.get(clave, 0))) for clave, _, _ in segmentos]
+        total = sum(valores)
+        porcentaje_total = total or 1
+
+        for (clave, titulo, _), valor in zip(segmentos, valores):
+            self.indicadores_pastel[clave].set(
+                f"{titulo}: {valor / porcentaje_total * 100:.1f}%"
+            )
+
+        self.grafica_pastel.delete("all")
+        caja = (5, 5, 117, 117)
+        if total == 0:
+            self.grafica_pastel.create_oval(
+                caja, fill="#e2e8f0", outline="#ffffff", width=2
+            )
+            self.grafica_pastel.create_text(
+                61, 61, text="Sin datos", fill="#64748b", font=("Segoe UI", 8, "bold")
+            )
+            return
+
+        inicio = 90
+        for valor, (_, _, color) in zip(valores, segmentos):
+            if valor == 0:
+                continue
+            extension = -360 * valor / total
+            self.grafica_pastel.create_arc(
+                caja,
+                start=inicio,
+                extent=extension,
+                fill=color,
+                outline="#ffffff",
+                width=2,
+            )
+            inicio += extension
+
     def seleccionar_archivo(self) -> None:
         ruta = filedialog.askopenfilename(
             title="Seleccionar archivo de flujos",
@@ -386,10 +502,97 @@ class InterfazIDS:
         )
         if ruta:
             self.ruta_archivo = Path(ruta)
-            self.etiqueta_archivo.configure(text=f"Archivo seleccionado - {self.ruta_archivo}")
+            self.etiqueta_archivo.configure(
+                text=f"Archivo seleccionado - {self._ruta_mostrada()}"
+            )
             self.boton_analizar.configure(state="normal")
+            self.boton_previsualizar.configure(state="normal")
             self.estado_var.set("ARCHIVO CARGADO")
             self.barra_estado.configure(text="Archivo listo para analizar")
+
+    def _ruta_mostrada(self) -> str:
+        """Obtener una ruta segura para mostrar en la interfaz."""
+        if self.ruta_archivo is None:
+            return "Ningún archivo seleccionado"
+        try:
+            return self.ruta_archivo.relative_to(RAIZ_PROYECTO).as_posix()
+        except ValueError:
+            return self.ruta_archivo.name
+
+    def mostrar_previsualizacion(self) -> None:
+        if self.ruta_archivo is None:
+            return
+
+        try:
+            limite = int(self.filas_previsualizacion.get())
+            datos = self.motor.cargar_archivo(self.ruta_archivo, limite=limite)
+        except Exception as error:  # pragma: no cover - mostrado en la interfaz
+            messagebox.showerror("Error de vista previa", str(error))
+            return
+
+        ventana_previa = tk.Toplevel(self.ventana)
+        ventana_previa.title(f"Vista previa | {self.ruta_archivo.name}")
+        ventana_previa.geometry("1240x620")
+        ventana_previa.minsize(760, 360)
+        ventana_previa.configure(bg="#f3f6fb")
+
+        encabezado = tk.Frame(ventana_previa, bg="#172554", padx=18, pady=12)
+        encabezado.pack(fill="x")
+        tk.Label(
+            encabezado,
+            text="VISTA PREVIA DE LOS DATOS DE ENTRADA",
+            bg="#172554",
+            fg="#ffffff",
+            font=("Segoe UI", 11, "bold"),
+        ).pack(anchor="w")
+        tk.Label(
+            encabezado,
+            text=(
+                f"Fuente: {self._ruta_mostrada()}\n"
+                f"Se muestran las primeras {len(datos)} filas sin modificar."
+            ),
+            bg="#172554",
+            fg="#bfdbfe",
+            justify="left",
+            anchor="w",
+            font=("Segoe UI", 9),
+        ).pack(anchor="w", pady=(4, 0))
+
+        contenedor = ttk.Frame(ventana_previa, style="App.TFrame", padding=12)
+        contenedor.pack(fill="both", expand=True)
+        tabla_previa = ttk.Treeview(contenedor, show="headings")
+        columnas = [f"columna_{indice}" for indice in range(len(datos.columns))]
+        tabla_previa.configure(columns=columnas)
+        for identificador, nombre in zip(columnas, datos.columns):
+            tabla_previa.heading(identificador, text=str(nombre))
+            tabla_previa.column(identificador, width=130, minwidth=80, anchor="w")
+
+        for _, fila in datos.iterrows():
+            valores = ["" if pd.isna(valor) else str(valor) for valor in fila]
+            tabla_previa.insert("", "end", values=valores)
+
+        barra_vertical = ttk.Scrollbar(
+            contenedor, orient="vertical", command=tabla_previa.yview
+        )
+        barra_horizontal = ttk.Scrollbar(
+            contenedor, orient="horizontal", command=tabla_previa.xview
+        )
+        tabla_previa.configure(
+            yscrollcommand=barra_vertical.set,
+            xscrollcommand=barra_horizontal.set,
+        )
+        tabla_previa.grid(row=0, column=0, sticky="nsew")
+        barra_vertical.grid(row=0, column=1, sticky="ns")
+        barra_horizontal.grid(row=1, column=0, sticky="ew")
+        contenedor.rowconfigure(0, weight=1)
+        contenedor.columnconfigure(0, weight=1)
+
+        ttk.Button(
+            contenedor,
+            text="Cerrar",
+            command=ventana_previa.destroy,
+            style="Secondary.TButton",
+        ).grid(row=2, column=0, columnspan=2, sticky="e", pady=(10, 0))
 
     def analizar_archivo(self) -> None:
         if self.ruta_archivo is None:
@@ -445,6 +648,7 @@ class InterfazIDS:
             indicador = self.indicadores.get(clave)
             if indicador is not None:
                 indicador.set(f"{valor:,}")
+        self._actualizar_grafica_pastel(resumen)
 
     def rellenar_tabla(self, resultados: pd.DataFrame) -> None:
         for elemento in self.tabla.get_children():
@@ -520,6 +724,9 @@ class InterfazIDS:
         self.detalle.configure(state="disabled")
         for indicador in self.indicadores.values():
             indicador.set("0")
+        self._actualizar_grafica_pastel(
+            {"benign": 0, "malicious": 0, "errores": 0}
+        )
         self.estado_var.set("LISTO PARA ANALIZAR")
         self.barra_estado.configure(
             text="Listo | Total: 0 | Benigno: 0 | Malicioso: 0 | Errores: 0"
