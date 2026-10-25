@@ -1,5 +1,12 @@
 {
   "dataset": "data\\processed\\dataset_cicids2017_preparado.parquet",
+  "environment": {
+    "python": "3.13.2",
+    "numpy": "2.4.6",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.8.0",
+    "joblib": "1.5.3"
+  },
   "feature_count": 78,
   "training_parameters": {
     "n_estimators": 50,
@@ -8,26 +15,42 @@
     "n_jobs": 4
   },
   "split": {
-    "train_original": 2262141,
-    "train_used": 1762141,
-    "validation": 282768,
-    "test": 282768,
-    "strategy": "stratified_80_10_10",
-    "grouping": "row-wise after pooling all prepared files; no grouping by source file or capture day",
+    "train_original": 1666481,
+    "train_used": 1666481,
+    "validation": 458483,
+    "test": 702713,
+    "strategy": "fixed_capture_day_groups",
+    "grouping": {
+      "unit": "capture_day",
+      "train": [
+        "Monday-WorkingHours.pcap_ISCX.csv",
+        "Tuesday-WorkingHours.pcap_ISCX.csv",
+        "Wednesday-workingHours.pcap_ISCX.csv"
+      ],
+      "validation": [
+        "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv"
+      ],
+      "test": [
+        "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+        "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+        "Friday-WorkingHours-Morning.pcap_ISCX.csv"
+      ]
+    },
     "random_state": 42
   },
   "class_counts": {
     "train": {
-      "BENIGN": 1415310,
-      "MALICIOUS": 346831
+      "BENIGN": 1400927,
+      "MALICIOUS": 265554
     },
     "validation": {
-      "BENIGN": 227112,
-      "MALICIOUS": 55656
+      "BENIGN": 456267,
+      "MALICIOUS": 2216
     },
     "test": {
-      "BENIGN": 227112,
-      "MALICIOUS": 55656
+      "BENIGN": 413928,
+      "MALICIOUS": 288785
     }
   },
   "configurations": [
@@ -36,21 +59,21 @@
       "class_weight": null,
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 69.40376600000309,
+      "tiempo_entrenamiento_segundos": 45.935001700010616,
       "validacion": {
-        "accuracy": 0.9984085893736208,
-        "precision_malicious": 0.9964032658346221,
-        "recall_malicious": 0.9955081213166594,
-        "specificity_benign": 0.9991193772235725,
-        "f1_malicious": 0.9959554924412648,
-        "f1_macro": 0.9974824504299862,
-        "fpr": 0.0008806227764274895,
-        "average_precision": 0.9997505973924152,
-        "roc_auc": 0.9999366862903774,
-        "true_negatives": 226912,
-        "false_positives": 200,
-        "false_negatives": 250,
-        "true_positives": 55406
+        "accuracy": 0.994665014842426,
+        "precision_malicious": 0.13836477987421383,
+        "recall_malicious": 0.019855595667870037,
+        "specificity_benign": 0.9993994744305418,
+        "f1_malicious": 0.03472770323599053,
+        "f1_macro": 0.5160264093587568,
+        "fpr": 0.0006005255694582339,
+        "average_precision": 0.5170683439850271,
+        "roc_auc": 0.9681259282528372,
+        "true_negatives": 455993,
+        "false_positives": 274,
+        "false_negatives": 2172,
+        "true_positives": 44
       }
     },
     {
@@ -58,127 +81,127 @@
       "class_weight": "balanced",
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 62.244796100014355,
+      "tiempo_entrenamiento_segundos": 50.90640249999706,
       "validacion": {
-        "accuracy": 0.9986101680529621,
-        "precision_malicious": 0.9948068692584567,
-        "recall_malicious": 0.9981493459824637,
-        "specificity_benign": 0.9987230969741802,
-        "f1_malicious": 0.996475304711253,
-        "f1_macro": 0.9978048682433185,
-        "fpr": 0.0012769030258198597,
-        "average_precision": 0.9996911748844304,
-        "roc_auc": 0.9999264115668557,
-        "true_negatives": 226822,
-        "false_positives": 290,
-        "false_negatives": 103,
-        "true_positives": 55553
+        "accuracy": 0.9941764471092712,
+        "precision_malicious": 0.058365758754863814,
+        "recall_malicious": 0.013537906137184115,
+        "specificity_benign": 0.9989392176072344,
+        "f1_malicious": 0.02197802197802198,
+        "f1_macro": 0.5095287753386974,
+        "fpr": 0.0010607823927656394,
+        "average_precision": 0.3602044165092437,
+        "roc_auc": 0.9627508409577364,
+        "true_negatives": 455783,
+        "false_positives": 484,
+        "false_negatives": 2186,
+        "true_positives": 30
       }
     }
   ],
   "selection": {
     "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
-    "configuration": "balanceado",
-    "class_weight": "balanced",
-    "final_training_rows": 2044909,
-    "retraining_seconds": 74.16487320000306,
+    "configuration": "sin_balanceo",
+    "class_weight": null,
+    "final_training_rows": 2124964,
+    "retraining_seconds": 85.03247490001377,
     "final_test": {
-      "accuracy": 0.9986101680529621,
-      "precision_malicious": 0.9950373542110826,
-      "recall_malicious": 0.99791576829093,
-      "specificity_benign": 0.9987803374546479,
-      "f1_malicious": 0.9964744826101388,
-      "f1_macro": 0.9978044819743157,
-      "fpr": 0.001219662545352073,
-      "average_precision": 0.9996460598027597,
-      "roc_auc": 0.9998904939422522,
-      "true_negatives": 226835,
-      "false_positives": 277,
-      "false_negatives": 116,
-      "true_positives": 55540
+      "accuracy": 0.620073913532267,
+      "precision_malicious": 0.9933037734141706,
+      "recall_malicious": 0.07602195404885988,
+      "specificity_benign": 0.9996424498946677,
+      "f1_malicious": 0.14123459649325962,
+      "f1_macro": 0.448657733534911,
+      "fpr": 0.00035755010533232835,
+      "average_precision": 0.6934499267973507,
+      "roc_auc": 0.7289772973795619,
+      "true_negatives": 413780,
+      "false_positives": 148,
+      "false_negatives": 266831,
+      "true_positives": 21954
     },
     "model_path": "data\\processed\\modelos\\random_forest_seleccionado.joblib"
   },
   "top_feature_importances": [
     {
-      "feature": "Init_Win_bytes_forward",
-      "importance": 0.07994668695688613
-    },
-    {
       "feature": "Max Packet Length",
-      "importance": 0.07432493951205373
-    },
-    {
-      "feature": "Average Packet Size",
-      "importance": 0.0634193556855464
+      "importance": 0.08850697636139891
     },
     {
       "feature": "Packet Length Std",
-      "importance": 0.06318343971237239
-    },
-    {
-      "feature": "Min Packet Length",
-      "importance": 0.05019010393884091
-    },
-    {
-      "feature": "Init_Win_bytes_backward",
-      "importance": 0.04034591456839233
-    },
-    {
-      "feature": "Subflow Fwd Bytes",
-      "importance": 0.035296511959254394
+      "importance": 0.08496547845027567
     },
     {
       "feature": "Packet Length Variance",
-      "importance": 0.032976761994425265
+      "importance": 0.08268193327190325
     },
     {
-      "feature": "Bwd Packet Length Max",
-      "importance": 0.032259466373742746
-    },
-    {
-      "feature": "Fwd Packet Length Mean",
-      "importance": 0.029641765091672864
-    },
-    {
-      "feature": "Bwd Header Length",
-      "importance": 0.02592382718438029
+      "feature": "Init_Win_bytes_forward",
+      "importance": 0.07507279680945768
     },
     {
       "feature": "Avg Bwd Segment Size",
-      "importance": 0.02516588232512653
+      "importance": 0.06931774956813098
     },
     {
-      "feature": "Avg Fwd Segment Size",
-      "importance": 0.025039596080614714
+      "feature": "Bwd Packet Length Max",
+      "importance": 0.05349823667767359
     },
     {
-      "feature": "Fwd Header Length.1",
-      "importance": 0.024453102531331445
-    },
-    {
-      "feature": "Fwd Header Length",
-      "importance": 0.023210342037790876
-    },
-    {
-      "feature": "Fwd Packet Length Max",
-      "importance": 0.022255403701569653
+      "feature": "Idle Mean",
+      "importance": 0.03623706714865573
     },
     {
       "feature": "Bwd Packet Length Std",
-      "importance": 0.02206801858628426
+      "importance": 0.035572177936323
     },
     {
-      "feature": "Bwd Packet Length Min",
-      "importance": 0.02121691258992721
+      "feature": "Fwd IAT Max",
+      "importance": 0.026125511750472858
     },
     {
-      "feature": "Fwd Packet Length Min",
-      "importance": 0.019328847301718365
+      "feature": "Fwd Header Length.1",
+      "importance": 0.02335790713282301
     },
     {
       "feature": "Total Length of Bwd Packets",
-      "importance": 0.017831638463260052
+      "importance": 0.021394741787113262
+    },
+    {
+      "feature": "Average Packet Size",
+      "importance": 0.020170382623595152
+    },
+    {
+      "feature": "Idle Min",
+      "importance": 0.01906250414747787
+    },
+    {
+      "feature": "Init_Win_bytes_backward",
+      "importance": 0.017496360905502828
+    },
+    {
+      "feature": "Fwd IAT Mean",
+      "importance": 0.015704897734315656
+    },
+    {
+      "feature": "Bwd Packet Length Mean",
+      "importance": 0.015120976677328646
+    },
+    {
+      "feature": "Packet Length Mean",
+      "importance": 0.014819827091607025
+    },
+    {
+      "feature": "Fwd Header Length",
+      "importance": 0.014590781987247028
+    },
+    {
+      "feature": "Subflow Fwd Bytes",
+      "importance": 0.013629223721949081
+    },
+    {
+      "feature": "Flow IAT Mean",
+      "importance": 0.013366379205986907
     }
   ],
   "notes": [
@@ -187,6 +210,6 @@
     "Las configuraciones candidatas se evaluaron únicamente con validación; la prueba se evaluó una sola vez después de seleccionar y reentrenar el modelo.",
     "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
     "Por restricción de recursos, se configuró un límite operativo de 1,762,141 filas estratificadas para el entrenamiento; este tamaño no se optimizó como hiperparámetro. Validación y prueba se conservaron completas.",
-    "La partición aleatoria por filas no separa días ni archivos de captura; los resultados estiman desempeño dentro de CIC-IDS2017 y no generalización a escenarios independientes."
+    "La partición separa días completos de captura entre entrenamiento, validación y prueba; los resultados estiman generalización entre escenarios de CIC-IDS2017, no desempeño en redes reales."
   ]
 }

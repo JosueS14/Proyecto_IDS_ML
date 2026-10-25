@@ -9,7 +9,7 @@ Las decisiones adoptadas antes del entrenamiento fueron:
 - Clasificador principal: Random Forest.
 - Características: las 78 variables numéricas del dataset preparado.
 - Variable positiva: `MALICIOUS`.
-- División: estratificada 80 % entrenamiento, 10 % validación y 10 % prueba.
+- División: separación fija por día de captura; lunes-martes-miércoles para entrenamiento, jueves para validación y viernes para prueba.
 - Semilla: `random_state=42`.
 - Configuraciones: sin balanceo y con `class_weight="balanced"`.
 - Criterio de selección: mayor recall de `MALICIOUS` y, en caso de empate, menor FPR.
@@ -22,7 +22,7 @@ El procedimiento se implementó en `src/modelado/04_entrenar_random_forest.py`.
 1. Se carga el Parquet preparado y sus metadatos.
 2. Se valida que las 78 características coincidan exactamente con el esquema registrado.
 3. Se verifica que no existan valores faltantes, valores no finitos ni etiquetas desconocidas.
-4. Se realiza una división estratificada 80/10/10.
+4. Se separan los días completos mediante la procedencia conservada en `dataset_cicids2017_preparado_grupos.parquet`.
 5. Se entrena Random Forest sin balanceo.
 6. Se entrena Random Forest con `class_weight="balanced"`.
 7. Se comparan las configuraciones usando únicamente validación.
@@ -33,9 +33,9 @@ El procedimiento se implementó en `src/modelado/04_entrenar_random_forest.py`.
 
 ## 3. Restricción de recursos
 
-La partición inicial contiene 2,262,141 registros de entrenamiento, 282,768 de validación y 282,768 de prueba. Un entrenamiento con el conjunto completo excedió el tiempo disponible del entorno de laboratorio. Por este motivo, el script aplica al entrenamiento un límite operativo de 1,762,141 registros mediante muestreo estratificado con semilla 42; validación y prueba conservan todos sus registros. El tamaño del límite se eligió para hacer viable la ejecución en el entorno disponible y no se optimizó como hiperparámetro ni se comparó con otros tamaños de muestra.
+La partición por día contiene 1,666,481 registros de entrenamiento, 458,483 de validación y 702,713 de prueba. El entrenamiento no superó el límite operativo de 1,762,141 registros, por lo que no fue necesario submuestrear esta partición. La validación y la prueba conservan todos sus registros.
 
-La muestra conserva aproximadamente la distribución de clases del entrenamiento original. Una vez seleccionada la configuración con validación, el reentrenamiento final utiliza los 1,762,141 registros de entrenamiento muestreados más los 282,768 registros de validación, para un total de 2,044,909 registros. La prueba no se incorpora al reentrenamiento. El parámetro `max_samples=0.5` hace que cada árbol utilice una muestra de la mitad de las filas disponibles para ese ajuste; es un muestreo interno del bosque y no debe confundirse con el límite previo de filas de entrenamiento. No se generaron datos sintéticos, no se aplicó SMOTE y no se modificaron los archivos originales ni el dataset preparado.
+La configuración seleccionada se reentrenó con los 1,666,481 registros de entrenamiento más los 458,483 registros de validación, para un total de 2,124,964 registros. La prueba no se incorpora al reentrenamiento. El parámetro `max_samples=0.5` hace que cada árbol utilice una muestra de la mitad de las filas disponibles para ese ajuste. No se generaron datos sintéticos, no se aplicó SMOTE y no se modificaron los archivos originales ni el dataset preparado.
 
 Los parámetros utilizados fueron:
 
@@ -51,35 +51,35 @@ Los parámetros utilizados fueron:
 
 | Configuración | Accuracy | Precision `MALICIOUS` | Recall `MALICIOUS` | F1 macro | FPR |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| Sin balanceo | 0.998409 | 0.996403 | 0.995508 | 0.997482 | 0.000881 |
-| `class_weight="balanced"` | 0.998610 | 0.994807 | 0.998149 | 0.997805 | 0.001277 |
+| Sin balanceo | 0.994665 | 0.138365 | 0.019856 | 0.516026 | 0.000601 |
+| `class_weight="balanced"` | 0.994176 | 0.058366 | 0.013538 | 0.509529 | 0.001061 |
 
-La configuración balanceada fue seleccionada porque detectó una mayor proporción de tráfico malicioso. El incremento del FPR fue pequeño en términos absolutos y se consideró aceptable frente a la mejora del recall, de acuerdo con el criterio definido previamente.
+La configuración sin balanceo fue seleccionada porque obtuvo el mayor recall en el conjunto de validación del jueves. El resultado también muestra que la generalización entre días completos es considerablemente más difícil que la división aleatoria por fila utilizada anteriormente.
 
 ## 5. Evaluación final sobre prueba
 
-Después de seleccionar la configuración mediante validación, el modelo balanceado se reentrenó con entrenamiento más validación y se evaluó una sola vez sobre la partición de prueba reservada.
+Después de seleccionar la configuración mediante validación, la configuración sin balanceo se reentrenó con entrenamiento más validación y se evaluó una sola vez sobre la partición de prueba reservada.
 
 | Métrica | Resultado |
 | --- | ---: |
-| Accuracy | 0.998610 |
-| Precision `MALICIOUS` | 0.995037 |
-| Recall `MALICIOUS` | 0.997916 |
-| Especificidad `BENIGN` | 0.998780 |
-| F1-score `MALICIOUS` | 0.996474 |
-| F1-score macro | 0.997804 |
-| Tasa de falsos positivos | 0.001220 |
-| Average precision | 0.999646 |
-| ROC-AUC | 0.999890 |
+| Accuracy | 0.620074 |
+| Precision `MALICIOUS` | 0.993304 |
+| Recall `MALICIOUS` | 0.076022 |
+| Especificidad `BENIGN` | 0.999642 |
+| F1-score `MALICIOUS` | 0.141235 |
+| F1-score macro | 0.448658 |
+| Tasa de falsos positivos | 0.000358 |
+| Average precision | 0.693450 |
+| ROC-AUC | 0.728977 |
 
 La matriz de confusión final fue:
 
 | | Predicho `BENIGN` | Predicho `MALICIOUS` |
 | --- | ---: | ---: |
-| Real `BENIGN` | 226,835 | 277 |
-| Real `MALICIOUS` | 116 | 55,540 |
+| Real `BENIGN` | 413,780 | 148 |
+| Real `MALICIOUS` | 266,831 | 21,954 |
 
-Esto significa que el modelo detectó 55,540 de 55,656 registros maliciosos del conjunto de prueba y clasificó erróneamente 277 registros benignos como maliciosos.
+Esto significa que el modelo detectó 21,954 de 288,785 registros maliciosos del conjunto de prueba y clasificó erróneamente 148 registros benignos como maliciosos. La caída respecto a la evaluación aleatoria anterior evidencia que el modelo dependía en gran medida de patrones compartidos entre filas del mismo escenario.
 
 ## 6. Importancia de características
 
@@ -87,16 +87,16 @@ Las características con mayor importancia en el modelo final fueron:
 
 | Característica | Importancia aproximada |
 | --- | ---: |
-| `Init_Win_bytes_forward` | 0.079947 |
-| `Max Packet Length` | 0.074325 |
-| `Average Packet Size` | 0.063419 |
-| `Packet Length Std` | 0.063183 |
-| `Min Packet Length` | 0.050190 |
-| `Init_Win_bytes_backward` | 0.040346 |
-| `Subflow Fwd Bytes` | 0.035297 |
-| `Packet Length Variance` | 0.032977 |
-| `Bwd Packet Length Max` | 0.032259 |
-| `Fwd Packet Length Mean` | 0.029642 |
+| `Max Packet Length` | 0.088507 |
+| `Packet Length Std` | 0.084965 |
+| `Packet Length Variance` | 0.082682 |
+| `Init_Win_bytes_forward` | 0.075073 |
+| `Avg Bwd Segment Size` | 0.069318 |
+| `Bwd Packet Length Max` | 0.053498 |
+| `Idle Mean` | 0.036237 |
+| `Bwd Packet Length Std` | 0.035572 |
+| `Fwd IAT Max` | 0.026126 |
+| `Fwd Header Length.1` | 0.023358 |
 
 La importancia de características se utilizará como elemento interpretativo y no como criterio para eliminar variables en esta fase. Una selección reducida de características requeriría un experimento separado.
 
@@ -104,19 +104,26 @@ La importancia de características se utilizará como elemento interpretativo y 
 
 - `src/modelado/04_entrenar_random_forest.py`: procedimiento reproducible de modelado.
 - `docs/resultados_modelado.json`: métricas, particiones, parámetros, selección e importancia de características.
-- `data/processed/modelos/random_forest_seleccionado.joblib`: modelo balanceado persistido.
+- `data/processed/dataset_cicids2017_preparado_grupos.parquet`: procedencia utilizada para separar escenarios.
+- `data/processed/modelos/random_forest_seleccionado.joblib`: modelo sin balanceo persistido.
+- `src/modelado/04b_analisis_por_ataque.py`: análisis complementario de recall por tipo de ataque. Resultado: `docs/resultados_recall_por_ataque.json`.
+- `src/modelado/04c_validacion_por_dia.py`: leave-one-day-out con ambas configuraciones. Implementado, pendiente de ejecución; `docs/resultados_validacion_por_dia.json` no existe, por lo que sus resultados no se reportan.
+- `src/modelado/04d_analisis_umbral.py`: análisis complementario de selección anidada del umbral. Resultado: `docs/resultados_umbral_por_dia.json`.
+- `src/modelado/04e_validacion_multisemilla.py`: análisis complementario con cinco semillas. Resultado: `docs/resultados_multisemilla.json`.
 
 El modelo persistido contiene el clasificador, el orden de las características, la columna objetivo, la clase positiva y la semilla utilizada. La integración con el módulo de inferencia se realizará en la fase 5.
 
 ## 8. Interpretación y limitaciones
 
-Los resultados muestran un desempeño elevado sobre CIC-IDS2017, pero no deben interpretarse como garantía de funcionamiento en redes reales. El dataset fue generado en un entorno controlado y la evaluación utiliza una muestra de entrenamiento limitada por recursos.
+Los resultados muestran que la separación por día reduce considerablemente el desempeño respecto a una división aleatoria por fila. Esto no debe ocultarse mediante la métrica de accuracy: el recall de `MALICIOUS` en la prueba fue 0.076022. El dataset fue generado en un entorno controlado y la evaluación no comparte días de captura entre particiones.
+
+El resultado de prueba también depende del orden de las filas de entrenamiento y de la semilla. Con el mismo conjunto de datos, el recall del viernes varía entre 0.085 y 0.282 (sección 10.3). El valor 0.076022 de la sección 5 es una ejecución dentro de esa distribución y no debe presentarse como el desempeño representativo.
 
 La tasa de falsos positivos debe analizarse junto con el volumen real de tráfico antes de valorar una operación continua. Además, las métricas no demuestran detección de ataques zero-day ni sustituyen una validación con tráfico independiente del dataset.
 
 ## 9. Cierre de la fase
 
-La prueba se reservó para la evaluación final y no intervino en la selección de la configuración. Sin embargo, la división fue aleatoria y estratificada por fila sobre los archivos ya integrados, no por día ni por archivo de captura. Por ello, estas métricas describen el desempeño sobre una partición retenida del mismo conjunto CIC-IDS2017; no demuestran generalización a capturas, redes o escenarios independientes. La elevada puntuación debe interpretarse con esta limitación y no como evidencia de detección de ataques nuevos.
+La prueba se reservó para la evaluación final y no intervino en la selección de la configuración. La separación se realizó por días completos: entrenamiento con lunes, martes y miércoles; validación con jueves; y prueba con viernes. Por ello, estas métricas ofrecen una estimación más exigente de transferencia entre escenarios de CIC-IDS2017, pero no demuestran generalización a redes reales ni detección de ataques zero-day. La baja sensibilidad observada en la prueba debe considerarse un resultado de la evaluación, no ocultarse mediante la exactitud.
 
 La fase 4 queda cerrada porque:
 
@@ -127,3 +134,53 @@ La fase 4 queda cerrada porque:
 5. Se persistió el modelo seleccionado para su integración posterior.
 
 La siguiente etapa será la **fase 5. Integración del prototipo**, donde se implementarán la carga del modelo, la validación de entradas, la inferencia por lotes y el registro de alertas.
+
+## 10. Análisis complementarios
+
+Los análisis de esta sección se ejecutaron después de cerrar la fase 4 para caracterizar la generalización del modelo. Usan la misma configuración sin balanceo y el mismo esquema de 78 características. Ninguno cambia el modelo oficial ni la selección de la fase 4.
+
+### 10.1 Recall por tipo de ataque (prueba: viernes, modelo oficial)
+
+| Etiqueta original | Registros | Clasificados como `MALICIOUS` | Tasa |
+| --- | ---: | ---: | ---: |
+| Bot | 1,956 | 0 | 0.0 % |
+| DDoS | 128,025 | 21,876 | 17.1 % |
+| PortScan | 158,804 | 78 | 0.05 % |
+| BENIGN (falsos positivos) | 413,928 | 148 | 0.036 % |
+
+### 10.2 Umbral de decisión (leave-one-day-out con selección anidada)
+
+El umbral se eligió solo con predicciones fuera de bolsa sobre los días de entrenamiento, con FPR máximo de 0.1 %, y se evaluó en el día de prueba.
+
+| Día de prueba | Umbral elegido | Recall (0.5) | Recall (elegido) | FPR (0.5) | FPR (elegido) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Martes | 0.620 | 0.0001 | 0.0001 | 0.00107 | 0.00037 |
+| Miércoles | 0.369 | 0.0064 | 0.0137 | 0.00004 | 0.00013 |
+| Jueves | 0.559 | 0.0068 | 0.0050 | 0.00279 | 0.00269 |
+| Viernes | 0.520 | 0.2786 | 0.2781 | 0.00034 | 0.00032 |
+| **Media ± desv.** | | 0.073 ± 0.137 | 0.074 ± 0.136 | 0.00106 | 0.00088 |
+
+La selección del umbral no mejora de forma consistente el recall. Los umbrales elegidos varían entre 0.37 y 0.62, por lo que no se puede fijar un umbral que funcione entre días. Se mantiene el umbral de 0.5 como referencia oficial.
+
+### 10.3 Variabilidad por semilla y orden de entrenamiento
+
+Se ejecutó leave-one-day-out con cinco semillas (42, 1, 2, 3 y 4). Cada semilla cambia el submuestreo estratificado del entrenamiento, el orden de las filas y el `random_state` del Random Forest. Se usó umbral 0.5.
+
+| Día de prueba | Recall (media ± desv.) | Rango de recall | FPR (media) |
+| --- | ---: | ---: | ---: |
+| Martes | 0.0001 ± 0.0000 | 0.0001 – 0.0001 | 0.00159 |
+| Miércoles | 0.0063 ± 0.0011 | 0.0050 – 0.0077 | 0.00005 |
+| Jueves | 0.0191 ± 0.0168 | 0.0045 – 0.0469 | 0.00278 |
+| Viernes | 0.2318 ± 0.0844 | 0.0849 – 0.2819 | 0.00037 |
+| **Global** | **0.064 ± 0.107** | | **0.00119** |
+
+El recall es muy variable entre días y semillas, mientras que el FPR es estable. Esta es la estimación de generalización que debe presentarse como resultado principal.
+
+Se verificó la causa de la variabilidad. Con los mismos datos, el viernes obtuvo recall 0.278 con el orden de filas del Parquet y 0.076 con el orden de concatenación usado en la fase 4 (lunes-martes-miércoles seguido de jueves). Un control con todas las filas de entrenamiento, sin submuestreo, dio 0.278; por tanto, el submuestreo no explica la diferencia.
+
+### 10.4 Conclusión de los análisis complementarios
+
+- La baja sensibilidad ante tipos de ataque no vistos en el entrenamiento es el hallazgo principal.
+- Ajustar el umbral no compensa esa limitación.
+- El valor oficial de 0.076 debe interpretarse dentro de la distribución de 10.3.
+- Una evaluación definitiva requiere reportar media y desviación sobre varias semillas, y evitar elegir el modelo o el umbral con el conjunto de prueba.

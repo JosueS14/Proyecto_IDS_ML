@@ -1,0 +1,600 @@
+{
+  "estrategia": "leave-one-day-out con selección anidada del umbral",
+  "fpr_maximo_para_seleccion": 0.001,
+  "configuracion": "sin_balanceo",
+  "nota": "El umbral se elige solo con predicciones fuera de bolsa sobre los días de entrenamiento. El barrido en el día de prueba es exploratorio y no se usa para elegir umbrales.",
+  "resumen_umbral_0_5": {
+    "recall_malicious_media": 0.07296232288507028,
+    "recall_malicious_desv": 0.13710110769272024,
+    "fpr_media": 0.0010580725483952213,
+    "fpr_desv": 0.0012308390083609465
+  },
+  "resumen_umbral_elegido": {
+    "recall_malicious_media": 0.07421666859430626,
+    "recall_malicious_desv": 0.13605058184116084,
+    "fpr_media": 0.0008765328178320487,
+    "fpr_desv": 0.0012144632737982565
+  },
+  "folds": [
+    {
+      "dia_prueba": "martes",
+      "dias_validacion_interna": [
+        "miércoles",
+        "jueves",
+        "viernes"
+      ],
+      "filas_entrenamiento": 1762141,
+      "muestreo_entrenamiento": 1762141,
+      "tiempo_entrenamiento_segundos": 55.85069749993272,
+      "umbral_elegido": 0.62,
+      "referencia_umbral_0_5": {
+        "umbral": 0.5,
+        "recall_malicious": 0.00014459224985540774,
+        "fpr": 0.0010652858092351017,
+        "precision_malicious": 0.004329004329004329,
+        "true_positives": 2,
+        "false_negatives": 13830,
+        "false_positives": 460,
+        "true_negatives": 431349
+      },
+      "umbral_elegido_metricas": {
+        "umbral": 0.62,
+        "recall_malicious": 7.229612492770387e-05,
+        "fpr": 0.00036590251708510014,
+        "precision_malicious": 0.006289308176100629,
+        "true_positives": 1,
+        "false_negatives": 13831,
+        "false_positives": 158,
+        "true_negatives": 431651
+      },
+      "roc_auc": 0.7875252694971582,
+      "average_precision": 0.08571851966612154,
+      "por_etiqueta_umbral_elegido": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 431809,
+          "clasificados_malicious": 158,
+          "tasa": 0.00036590251708510014
+        },
+        {
+          "etiqueta_original": "FTP-Patator",
+          "registros": 7935,
+          "clasificados_malicious": 1,
+          "tasa": 0.0001260239445494644
+        },
+        {
+          "etiqueta_original": "SSH-Patator",
+          "registros": 5897,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        }
+      ],
+      "barrido_exploratorio_no_usado_para_elegir": [
+        {
+          "umbral": 0.5,
+          "recall_malicious": 0.00014459224985540774,
+          "fpr": 0.0010652858092351017,
+          "precision_malicious": 0.004329004329004329,
+          "true_positives": 2,
+          "false_negatives": 13830,
+          "false_positives": 460,
+          "true_negatives": 431349
+        },
+        {
+          "umbral": 0.3,
+          "recall_malicious": 0.0014459224985540775,
+          "fpr": 0.00594938966070647,
+          "precision_malicious": 0.00772499034376207,
+          "true_positives": 20,
+          "false_negatives": 13812,
+          "false_positives": 2569,
+          "true_negatives": 429240
+        },
+        {
+          "umbral": 0.2,
+          "recall_malicious": 0.002891844997108155,
+          "fpr": 0.01071075406024423,
+          "precision_malicious": 0.00857449088960343,
+          "true_positives": 40,
+          "false_negatives": 13792,
+          "false_positives": 4625,
+          "true_negatives": 427184
+        },
+        {
+          "umbral": 0.1,
+          "recall_malicious": 0.019158473105841525,
+          "fpr": 0.02341081357729922,
+          "precision_malicious": 0.025544630807788703,
+          "true_positives": 265,
+          "false_negatives": 13567,
+          "false_positives": 10109,
+          "true_negatives": 421700
+        },
+        {
+          "umbral": 0.05,
+          "recall_malicious": 0.1359167148640833,
+          "fpr": 0.041664254334671115,
+          "precision_malicious": 0.09461023602234411,
+          "true_positives": 1880,
+          "false_negatives": 11952,
+          "false_positives": 17991,
+          "true_negatives": 413818
+        },
+        {
+          "umbral": 0.02,
+          "recall_malicious": 0.43703007518796994,
+          "fpr": 0.14524708841177464,
+          "precision_malicious": 0.08790937118259555,
+          "true_positives": 6045,
+          "false_negatives": 7787,
+          "false_positives": 62719,
+          "true_negatives": 369090
+        },
+        {
+          "umbral": 0.01,
+          "recall_malicious": 0.4392712550607287,
+          "fpr": 0.16060804661320166,
+          "precision_malicious": 0.08055364055788301,
+          "true_positives": 6076,
+          "false_negatives": 7756,
+          "false_positives": 69352,
+          "true_negatives": 362457
+        },
+        {
+          "umbral": 0.005,
+          "recall_malicious": 0.4592972816657027,
+          "fpr": 0.1653022516899833,
+          "precision_malicious": 0.08172953223897494,
+          "true_positives": 6353,
+          "false_negatives": 7479,
+          "false_positives": 71379,
+          "true_negatives": 360430
+        }
+      ]
+    },
+    {
+      "dia_prueba": "miércoles",
+      "dias_validacion_interna": [
+        "martes",
+        "jueves",
+        "viernes"
+      ],
+      "filas_entrenamiento": 1762141,
+      "muestreo_entrenamiento": 1762141,
+      "tiempo_entrenamiento_segundos": 41.97137559996918,
+      "umbral_elegido": 0.36949832775919733,
+      "referencia_umbral_0_5": {
+        "umbral": 0.5,
+        "recall_malicious": 0.0063721089138017335,
+        "fpr": 4.093998198640793e-05,
+        "precision_malicious": 0.9889025893958077,
+        "true_positives": 1604,
+        "false_negatives": 250118,
+        "false_positives": 18,
+        "true_negatives": 439650
+      },
+      "umbral_elegido_metricas": {
+        "umbral": 0.36949832775919733,
+        "recall_malicious": 0.013713541128705476,
+        "fpr": 0.00012509438940291312,
+        "precision_malicious": 0.9843170801254634,
+        "true_positives": 3452,
+        "false_negatives": 248270,
+        "false_positives": 55,
+        "true_negatives": 439613
+      },
+      "roc_auc": 0.8878522014850643,
+      "average_precision": 0.8598111604958051,
+      "por_etiqueta_umbral_elegido": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 439668,
+          "clasificados_malicious": 55,
+          "tasa": 0.00012509438940291312
+        },
+        {
+          "etiqueta_original": "DoS GoldenEye",
+          "registros": 10293,
+          "clasificados_malicious": 67,
+          "tasa": 0.006509278150199164
+        },
+        {
+          "etiqueta_original": "DoS Hulk",
+          "registros": 230123,
+          "clasificados_malicious": 2264,
+          "tasa": 0.009838216953542237
+        },
+        {
+          "etiqueta_original": "DoS Slowhttptest",
+          "registros": 5499,
+          "clasificados_malicious": 83,
+          "tasa": 0.015093653391525732
+        },
+        {
+          "etiqueta_original": "DoS slowloris",
+          "registros": 5796,
+          "clasificados_malicious": 1038,
+          "tasa": 0.17908902691511386
+        },
+        {
+          "etiqueta_original": "Heartbleed",
+          "registros": 11,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        }
+      ],
+      "barrido_exploratorio_no_usado_para_elegir": [
+        {
+          "umbral": 0.5,
+          "recall_malicious": 0.0063721089138017335,
+          "fpr": 4.093998198640793e-05,
+          "precision_malicious": 0.9889025893958077,
+          "true_positives": 1604,
+          "false_negatives": 250118,
+          "false_positives": 18,
+          "true_negatives": 439650
+        },
+        {
+          "umbral": 0.3,
+          "recall_malicious": 0.018448923812777587,
+          "fpr": 0.00026838432635534085,
+          "precision_malicious": 0.9752204955900882,
+          "true_positives": 4644,
+          "false_negatives": 247078,
+          "false_positives": 118,
+          "true_negatives": 439550
+        },
+        {
+          "umbral": 0.2,
+          "recall_malicious": 0.038177036572091434,
+          "fpr": 0.0010735373054213634,
+          "precision_malicious": 0.9531838920849038,
+          "true_positives": 9610,
+          "false_negatives": 242112,
+          "false_positives": 472,
+          "true_negatives": 439196
+        },
+        {
+          "umbral": 0.1,
+          "recall_malicious": 0.4535837153685415,
+          "fpr": 0.0018422991893883567,
+          "precision_malicious": 0.9929557254298312,
+          "true_positives": 114177,
+          "false_negatives": 137545,
+          "false_positives": 810,
+          "true_negatives": 438858
+        },
+        {
+          "umbral": 0.05,
+          "recall_malicious": 0.6280341011115437,
+          "fpr": 0.0038301627591728303,
+          "precision_malicious": 0.9894601124087774,
+          "true_positives": 158090,
+          "false_negatives": 93632,
+          "false_positives": 1684,
+          "true_negatives": 437984
+        },
+        {
+          "umbral": 0.02,
+          "recall_malicious": 0.7269011051874688,
+          "fpr": 0.015261515507155399,
+          "precision_malicious": 0.964625936411035,
+          "true_positives": 182977,
+          "false_negatives": 68745,
+          "false_positives": 6710,
+          "true_negatives": 432958
+        },
+        {
+          "umbral": 0.01,
+          "recall_malicious": 0.7269169957333884,
+          "fpr": 0.021843754833192317,
+          "precision_malicious": 0.9501311109380274,
+          "true_positives": 182981,
+          "false_negatives": 68741,
+          "false_positives": 9604,
+          "true_negatives": 430064
+        },
+        {
+          "umbral": 0.005,
+          "recall_malicious": 0.7269368589157881,
+          "fpr": 0.030636753186495263,
+          "precision_malicious": 0.9314350287087185,
+          "true_positives": 182986,
+          "false_negatives": 68736,
+          "false_positives": 13470,
+          "true_negatives": 426198
+        }
+      ]
+    },
+    {
+      "dia_prueba": "jueves",
+      "dias_validacion_interna": [
+        "martes",
+        "miércoles",
+        "viernes"
+      ],
+      "filas_entrenamiento": 1762141,
+      "muestreo_entrenamiento": 1762141,
+      "tiempo_entrenamiento_segundos": 50.12866260006558,
+      "umbral_elegido": 0.5590909090909091,
+      "referencia_umbral_0_5": {
+        "umbral": 0.5,
+        "recall_malicious": 0.006768953068592058,
+        "fpr": 0.0027878413297477136,
+        "precision_malicious": 0.011655011655011656,
+        "true_positives": 15,
+        "false_negatives": 2201,
+        "false_positives": 1272,
+        "true_negatives": 454995
+      },
+      "umbral_elegido_metricas": {
+        "umbral": 0.5590909090909091,
+        "recall_malicious": 0.004963898916967509,
+        "fpr": 0.0026914065667690192,
+        "precision_malicious": 0.00887812752219532,
+        "true_positives": 11,
+        "false_negatives": 2205,
+        "false_positives": 1228,
+        "true_negatives": 455039
+      },
+      "roc_auc": 0.9090713055395656,
+      "average_precision": 0.03449378132410202,
+      "por_etiqueta_umbral_elegido": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 456267,
+          "clasificados_malicious": 1228,
+          "tasa": 0.0026914065667690192
+        },
+        {
+          "etiqueta_original": "Infiltration",
+          "registros": 36,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        },
+        {
+          "etiqueta_original": "Web Attack – Brute Force",
+          "registros": 1507,
+          "clasificados_malicious": 7,
+          "tasa": 0.0046449900464499
+        },
+        {
+          "etiqueta_original": "Web Attack – Sql Injection",
+          "registros": 21,
+          "clasificados_malicious": 1,
+          "tasa": 0.047619047619047616
+        },
+        {
+          "etiqueta_original": "Web Attack – XSS",
+          "registros": 652,
+          "clasificados_malicious": 3,
+          "tasa": 0.004601226993865031
+        }
+      ],
+      "barrido_exploratorio_no_usado_para_elegir": [
+        {
+          "umbral": 0.5,
+          "recall_malicious": 0.006768953068592058,
+          "fpr": 0.0027878413297477136,
+          "precision_malicious": 0.011655011655011656,
+          "true_positives": 15,
+          "false_negatives": 2201,
+          "false_positives": 1272,
+          "true_negatives": 454995
+        },
+        {
+          "umbral": 0.3,
+          "recall_malicious": 0.21435018050541516,
+          "fpr": 0.07073489864487241,
+          "precision_malicious": 0.014504259672051056,
+          "true_positives": 475,
+          "false_negatives": 1741,
+          "false_positives": 32274,
+          "true_negatives": 423993
+        },
+        {
+          "umbral": 0.2,
+          "recall_malicious": 0.7946750902527075,
+          "fpr": 0.07340438822005536,
+          "precision_malicious": 0.049953195472725725,
+          "true_positives": 1761,
+          "false_negatives": 455,
+          "false_positives": 33492,
+          "true_negatives": 422775
+        },
+        {
+          "umbral": 0.1,
+          "recall_malicious": 0.8352888086642599,
+          "fpr": 0.14328671589222977,
+          "precision_malicious": 0.027533170702683407,
+          "true_positives": 1851,
+          "false_negatives": 365,
+          "false_positives": 65377,
+          "true_negatives": 390890
+        },
+        {
+          "umbral": 0.05,
+          "recall_malicious": 0.8691335740072202,
+          "fpr": 0.14857528596194772,
+          "precision_malicious": 0.027626369843364508,
+          "true_positives": 1926,
+          "false_negatives": 290,
+          "false_positives": 67790,
+          "true_negatives": 388477
+        },
+        {
+          "umbral": 0.02,
+          "recall_malicious": 0.9305054151624549,
+          "fpr": 0.1660255946627742,
+          "precision_malicious": 0.026499087567789858,
+          "true_positives": 2062,
+          "false_negatives": 154,
+          "false_positives": 75752,
+          "true_negatives": 380515
+        },
+        {
+          "umbral": 0.01,
+          "recall_malicious": 0.9341155234657039,
+          "fpr": 0.173025881775364,
+          "precision_malicious": 0.025550508541522663,
+          "true_positives": 2070,
+          "false_negatives": 146,
+          "false_positives": 78946,
+          "true_negatives": 377321
+        },
+        {
+          "umbral": 0.005,
+          "recall_malicious": 0.9381768953068592,
+          "fpr": 0.18526871327534097,
+          "precision_malicious": 0.024003879414854927,
+          "true_positives": 2079,
+          "false_negatives": 137,
+          "false_positives": 84532,
+          "true_negatives": 371735
+        }
+      ]
+    },
+    {
+      "dia_prueba": "viernes",
+      "dias_validacion_interna": [
+        "martes",
+        "miércoles",
+        "jueves"
+      ],
+      "filas_entrenamiento": 1762141,
+      "muestreo_entrenamiento": 1762141,
+      "tiempo_entrenamiento_segundos": 67.31231780000962,
+      "umbral_elegido": 0.52,
+      "referencia_umbral_0_5": {
+        "umbral": 0.5,
+        "recall_malicious": 0.2785636373080319,
+        "fpr": 0.0003382230726116619,
+        "precision_malicious": 0.998262703977167,
+        "true_positives": 80445,
+        "false_negatives": 208340,
+        "false_positives": 140,
+        "true_negatives": 413788
+      },
+      "umbral_elegido_metricas": {
+        "umbral": 0.52,
+        "recall_malicious": 0.2781169382066243,
+        "fpr": 0.00032372779807116216,
+        "precision_malicious": 0.9983343691733996,
+        "true_positives": 80316,
+        "false_negatives": 208469,
+        "false_positives": 134,
+        "true_negatives": 413794
+      },
+      "roc_auc": 0.839949796494062,
+      "average_precision": 0.8000283349409152,
+      "por_etiqueta_umbral_elegido": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 413928,
+          "clasificados_malicious": 134,
+          "tasa": 0.00032372779807116216
+        },
+        {
+          "etiqueta_original": "Bot",
+          "registros": 1956,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        },
+        {
+          "etiqueta_original": "DDoS",
+          "registros": 128025,
+          "clasificados_malicious": 80166,
+          "tasa": 0.6261745752782659
+        },
+        {
+          "etiqueta_original": "PortScan",
+          "registros": 158804,
+          "clasificados_malicious": 150,
+          "tasa": 0.0009445605904133397
+        }
+      ],
+      "barrido_exploratorio_no_usado_para_elegir": [
+        {
+          "umbral": 0.5,
+          "recall_malicious": 0.2785636373080319,
+          "fpr": 0.0003382230726116619,
+          "precision_malicious": 0.998262703977167,
+          "true_positives": 80445,
+          "false_negatives": 208340,
+          "false_positives": 140,
+          "true_negatives": 413788
+        },
+        {
+          "umbral": 0.3,
+          "recall_malicious": 0.28224457641498,
+          "fpr": 0.0007489225179258228,
+          "precision_malicious": 0.9962111026913393,
+          "true_positives": 81508,
+          "false_negatives": 207277,
+          "false_positives": 310,
+          "true_negatives": 413618
+        },
+        {
+          "umbral": 0.2,
+          "recall_malicious": 0.282441955087695,
+          "fpr": 0.0020124272820393886,
+          "precision_malicious": 0.9898905313235759,
+          "true_positives": 81565,
+          "false_negatives": 207220,
+          "false_positives": 833,
+          "true_negatives": 413095
+        },
+        {
+          "umbral": 0.1,
+          "recall_malicious": 0.28413871911629757,
+          "fpr": 0.010407607120078854,
+          "precision_malicious": 0.9501175271817792,
+          "true_positives": 82055,
+          "false_negatives": 206730,
+          "false_positives": 4308,
+          "true_negatives": 409620
+        },
+        {
+          "umbral": 0.05,
+          "recall_malicious": 0.28570043457935834,
+          "fpr": 0.02244110086778377,
+          "precision_malicious": 0.898807124571055,
+          "true_positives": 82506,
+          "false_negatives": 206279,
+          "false_positives": 9289,
+          "true_negatives": 404639
+        },
+        {
+          "umbral": 0.02,
+          "recall_malicious": 0.3555378568831484,
+          "fpr": 0.06028826269302874,
+          "precision_malicious": 0.8044723377915678,
+          "true_positives": 102674,
+          "false_negatives": 186111,
+          "false_positives": 24955,
+          "true_negatives": 388973
+        },
+        {
+          "umbral": 0.01,
+          "recall_malicious": 0.3555378568831484,
+          "fpr": 0.06678456156626274,
+          "precision_malicious": 0.787872742061726,
+          "true_positives": 102674,
+          "false_negatives": 186111,
+          "false_positives": 27644,
+          "true_negatives": 386284
+        },
+        {
+          "umbral": 0.005,
+          "recall_malicious": 0.3761483456550721,
+          "fpr": 0.07456127635724087,
+          "precision_malicious": 0.7787424097957545,
+          "true_positives": 108626,
+          "false_negatives": 180159,
+          "false_positives": 30863,
+          "true_negatives": 383065
+        }
+      ]
+    }
+  ]
+}

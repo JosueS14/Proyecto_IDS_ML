@@ -5,12 +5,14 @@ from __future__ import annotations
 import gc
 import json
 from pathlib import Path
+import sys
 from time import perf_counter
 from typing import Any, Literal
 
 import joblib
 import numpy as np
 import pandas as pd
+import sklearn
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     accuracy_score,
@@ -32,6 +34,9 @@ RUTA_DATASET_PREPARADO = (
 RUTA_METADATOS = (
     DIRECTORIO_DATOS_PROCESADOS / "dataset_cicids2017_preparado_metadatos.json"
 )
+RUTA_GRUPOS = (
+    DIRECTORIO_DATOS_PROCESADOS / "dataset_cicids2017_preparado_grupos.parquet"
+)
 DIRECTORIO_MODELOS = DIRECTORIO_DATOS_PROCESADOS / "modelos"
 RUTA_RESULTADOS = RAIZ_PROYECTO / "docs" / "resultados_modelado.json"
 RANDOM_STATE = 42
@@ -44,23 +49,50 @@ COLUMNA_OBJETIVO = "Label"
 CLASE_BENIGNA = "BENIGN"
 CLASE_MALICIOSA = "MALICIOUS"
 
+ARCHIVOS_ENTRENAMIENTO = {
+    "Monday-WorkingHours.pcap_ISCX.csv",
+    "Tuesday-WorkingHours.pcap_ISCX.csv",
+    "Wednesday-workingHours.pcap_ISCX.csv",
+}
+ARCHIVOS_VALIDACION = {
+    "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+    "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+}
+ARCHIVOS_PRUEBA = {
+    "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+}
 
-def cargar_datos() -> tuple[pd.DataFrame, pd.Series, list[str]]:
+
+def cargar_datos() -> tuple[pd.DataFrame, pd.Series, pd.Series, list[str]]:
     if not RUTA_DATASET_PREPARADO.exists():
         raise FileNotFoundError(
             f"No existe el dataset preparado: {RUTA_DATASET_PREPARADO}"
         )
     if not RUTA_METADATOS.exists():
         raise FileNotFoundError(f"No existen los metadatos: {RUTA_METADATOS}")
+    if not RUTA_GRUPOS.exists():
+        raise FileNotFoundError(
+            f"No existe la procedencia de filas: {RUTA_GRUPOS}. "
+            "Ejecute primero 03_preparar_dataset.py."
+        )
 
     metadatos = json.loads(RUTA_METADATOS.read_text(encoding="utf-8"))
     columnas_caracteristicas = metadatos["feature_columns"]
     dataset = pd.read_parquet(RUTA_DATASET_PREPARADO)
+    grupos = pd.read_parquet(RUTA_GRUPOS)
 
     columnas_esperadas = columnas_caracteristicas + [COLUMNA_OBJETIVO]
     if dataset.columns.tolist() != columnas_esperadas:
         raise ValueError(
             "El esquema del dataset preparado no coincide con los metadatos."
+        )
+    if grupos.columns.tolist() != ["source_file", "label_original"]:
+        raise ValueError("El esquema de procedencia no coincide con lo esperado.")
+    if len(grupos) != len(dataset):
+        raise ValueError(
+            "La cantidad de grupos no coincide con la cantidad de filas preparadas."
         )
 
     if dataset[columnas_caracteristicas].isna().any().any():
@@ -74,29 +106,38 @@ def cargar_datos() -> tuple[pd.DataFrame, pd.Series, list[str]]:
 
     caracteristicas = dataset[columnas_caracteristicas]
     objetivo = dataset[COLUMNA_OBJETIVO]
-    return caracteristicas, objetivo, columnas_caracteristicas
+    return caracteristicas, objetivo, grupos["source_file"], columnas_caracteristicas
 
 
 def dividir_datos(
-    caracteristicas: pd.DataFrame, objetivo: pd.Series
+    caracteristicas: pd.DataFrame,
+    objetivo: pd.Series,
+    grupos: pd.Series,
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.Series]:
-    """Crear particiones estratificadas 80/10/10 con semilla fija."""
+    """Separar días completos para evitar mezclar escenarios de captura."""
     indices = np.arange(len(objetivo))
-    indices_entrenamiento_validacion, indices_prueba = train_test_split(
-        indices,
-        test_size=0.10,
-        stratify=objetivo,
-        random_state=RANDOM_STATE,
+    grupos = grupos.reset_index(drop=True)
+    grupos_esperados = (
+        ARCHIVOS_ENTRENAMIENTO | ARCHIVOS_VALIDACION | ARCHIVOS_PRUEBA
     )
-    objetivo_entrenamiento_validacion = objetivo.iloc[
-        indices_entrenamiento_validacion
-    ]
-    indices_entrenamiento, indices_validacion = train_test_split(
-        indices_entrenamiento_validacion,
-        test_size=1 / 9,
-        stratify=objetivo_entrenamiento_validacion,
-        random_state=RANDOM_STATE,
-    )
+    if set(grupos.unique()) != grupos_esperados:
+        raise ValueError("La procedencia contiene archivos no contemplados.")
+
+    indices_entrenamiento = indices[grupos.isin(ARCHIVOS_ENTRENAMIENTO)]
+    indices_validacion = indices[grupos.isin(ARCHIVOS_VALIDACION)]
+    indices_prueba = indices[grupos.isin(ARCHIVOS_PRUEBA)]
+    for nombre, indices_particion in (
+        ("entrenamiento", indices_entrenamiento),
+        ("validación", indices_validacion),
+        ("prueba", indices_prueba),
+    ):
+        if len(indices_particion) == 0:
+            raise ValueError(f"La partición {nombre} quedó vacía.")
+        clases = set(objetivo.iloc[indices_particion].unique())
+        if clases != {CLASE_BENIGNA, CLASE_MALICIOSA}:
+            raise ValueError(
+                f"La partición {nombre} no contiene ambas clases: {sorted(clases)}"
+            )
 
     return (
         caracteristicas.iloc[indices_entrenamiento].copy(),
@@ -249,9 +290,9 @@ def seleccionar_configuracion(resultados: list[dict[str, Any]]) -> dict[str, Any
 
 
 def main() -> None:
-    caracteristicas, objetivo, columnas_caracteristicas = cargar_datos()
-    datos_particionados = dividir_datos(caracteristicas, objetivo)
-    del caracteristicas, objetivo
+    caracteristicas, objetivo, grupos, columnas_caracteristicas = cargar_datos()
+    datos_particionados = dividir_datos(caracteristicas, objetivo, grupos)
+    del caracteristicas, objetivo, grupos
     gc.collect()
 
     (
@@ -368,6 +409,13 @@ def main() -> None:
     )
     resultados_salida = {
         "dataset": str(RUTA_DATASET_PREPARADO.relative_to(RAIZ_PROYECTO)),
+        "environment": {
+            "python": sys.version.split()[0],
+            "numpy": np.__version__,
+            "pandas": pd.__version__,
+            "scikit_learn": sklearn.__version__,
+            "joblib": joblib.__version__,
+        },
         "feature_count": len(columnas_caracteristicas),
         "training_parameters": {
             "n_estimators": N_ESTIMADORES,
@@ -380,8 +428,13 @@ def main() -> None:
             "train_used": len(objetivo_entrenamiento),
             "validation": len(objetivo_validacion),
             "test": len(objetivo_prueba),
-            "strategy": "stratified_80_10_10",
-            "grouping": "row-wise after pooling all prepared files; no grouping by source file or capture day",
+            "strategy": "fixed_capture_day_groups",
+            "grouping": {
+                "unit": "capture_day",
+                "train": sorted(ARCHIVOS_ENTRENAMIENTO),
+                "validation": sorted(ARCHIVOS_VALIDACION),
+                "test": sorted(ARCHIVOS_PRUEBA),
+            },
             "random_state": RANDOM_STATE,
         },
         "class_counts": {
@@ -409,7 +462,7 @@ def main() -> None:
             "Las configuraciones candidatas se evaluaron únicamente con validación; la prueba se evaluó una sola vez después de seleccionar y reentrenar el modelo.",
             "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
             "Por restricción de recursos, se configuró un límite operativo de 1,762,141 filas estratificadas para el entrenamiento; este tamaño no se optimizó como hiperparámetro. Validación y prueba se conservaron completas.",
-            "La partición aleatoria por filas no separa días ni archivos de captura; los resultados estiman desempeño dentro de CIC-IDS2017 y no generalización a escenarios independientes.",
+            "La partición separa días completos de captura entre entrenamiento, validación y prueba; los resultados estiman generalización entre escenarios de CIC-IDS2017, no desempeño en redes reales.",
         ],
     }
     RUTA_RESULTADOS.write_text(

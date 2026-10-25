@@ -65,10 +65,11 @@ La ejecución se realizó en un sandbox lógico de archivos bajo `data/processed
 Resultados de la ejecución:
 
 - 20 flujos analizados y 0 errores de datos.
-- 10 predicciones `BENIGN` y 10 predicciones `MALICIOUS`.
-- 10 alertas generadas, correspondientes a las predicciones `MALICIOUS`.
+- 16 predicciones `BENIGN` y 4 predicciones `MALICIOUS`.
+- 4 alertas generadas, correspondientes a las predicciones `MALICIOUS`.
+- De los 10 flujos reales asociados a ataques, 4 fueron detectados. Esta muestra refleja la baja sensibilidad del modelo ante DDoS en un día no visto durante el entrenamiento.
 - Los archivos de resultados y alertas se guardaron por separado.
-- La inferencia tardó aproximadamente 0.040 segundos; el tiempo total de la prueba fue aproximadamente 0.44 segundos en el entorno utilizado.
+- La inferencia tardó aproximadamente 0.05 segundos; el tiempo total de la prueba fue aproximadamente 1.80 segundos en el entorno utilizado.
 
 Los tiempos son observaciones de una ejecución y pueden variar según el equipo. La prueba tampoco verifica visualmente la interacción con la ventana Tkinter; esa comprobación continúa siendo manual.
 
