@@ -173,7 +173,7 @@ python src/modelado/04e_validacion_multisemilla.py
 - `04b`: recall por tipo de ataque, en `docs/resultados_recall_por_ataque.json`. Usa el modelo persistido.
 - `04d`: selección anidada del umbral, en `docs/resultados_umbral_por_dia.json`. Requiere aproximadamente 16 ajustes del Random Forest.
 - `04e`: leave-one-day-out con cinco semillas, en `docs/resultados_multisemilla.json`. Requiere 20 ajustes del Random Forest.
-- `04c` (`src/modelado/04c_validacion_por_dia.py`) está implementado, pero no se ha ejecutado y no tiene resultados publicados.
+- `04c` (`src/modelado/04c_validacion_por_dia.py`): leave-one-day-out con ambas configuraciones, en `docs/resultados_validacion_por_dia.json`. Requiere 8 ajustes del Random Forest.
 
 Los resultados de `04d` y `04e` dependen del orden de las filas y de la semilla. Deben interpretarse junto con su desviación.
 

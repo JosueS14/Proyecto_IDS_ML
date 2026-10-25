@@ -311,3 +311,20 @@ Cuantificar la variabilidad del resultado por semilla y por orden de entrenamien
 
 Presentar la tabla multi-semilla como resultado principal de generalización. El resultado oficial de 0.076 se reporta como una ejecución dentro de esa distribución. Los artefactos oficiales no se modifican.
 
+# Sesion 19
+## Objetivo
+
+Ejecutar la validación leave-one-day-out con ambas configuraciones (`04c_validacion_por_dia.py`), pendiente desde la sesión 18.
+
+## Resultados
+
+- Resultados en `docs/resultados_validacion_por_dia.json`.
+- Sin balanceo: recall medio 0.0728 ± 0.1370; FPR medio 0.00105 ± 0.00123.
+- Balanceado: recall medio 0.0723 ± 0.0929; FPR medio 0.00177 ± 0.00156.
+- Balanceado obtiene recall 0.2013 en jueves, pero 0.0789 en viernes (ROC-AUC 0.584).
+- Miércoles y viernes (sin balanceo) difieren ligeramente de 04d: 0.0060 frente a 0.0064, y 0.2781 frente a 0.2786. Causa no identificada; no altera las conclusiones.
+
+## Decisión
+
+Se mantiene la configuración sin balanceo: igual recall que la balanceada y menor FPR. La sección 10.5 de `thesis/04_desarrollo_modelo.md` documenta la tabla completa.
+
