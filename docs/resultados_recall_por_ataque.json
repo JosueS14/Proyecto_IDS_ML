@@ -1,0 +1,40 @@
+{
+  "modelo": "data\\processed\\modelos\\random_forest_seleccionado.joblib",
+  "particion": "prueba por día (viernes)",
+  "archivos": [
+    "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "Friday-WorkingHours-Morning.pcap_ISCX.csv"
+  ],
+  "nota": "Tasa de detección = proporción de registros de cada etiqueta original clasificados como MALICIOUS. Para BENIGN, la tasa es la tasa de falsos positivos.",
+  "por_etiqueta": [
+    {
+      "etiqueta_original": "Bot",
+      "registros": 1956,
+      "predichos_malicious": 0,
+      "tasa_deteccion": 0.0,
+      "probabilidad_media": 0.00020771113291988405
+    },
+    {
+      "etiqueta_original": "DDoS",
+      "registros": 128025,
+      "predichos_malicious": 21876,
+      "tasa_deteccion": 0.1708728763913298,
+      "probabilidad_media": 0.3029641297440295
+    },
+    {
+      "etiqueta_original": "PortScan",
+      "registros": 158804,
+      "predichos_malicious": 78,
+      "tasa_deteccion": 0.0004911715070149366,
+      "probabilidad_media": 0.0016607104632795143
+    },
+    {
+      "etiqueta_original": "BENIGN",
+      "registros": 413928,
+      "predichos_malicious": 148,
+      "tasa_deteccion": 0.00035755010533232835,
+      "probabilidad_media": 0.0038616153375723864
+    }
+  ]
+}

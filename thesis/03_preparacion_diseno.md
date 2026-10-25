@@ -49,10 +49,10 @@ Exclusión de identificadores y contexto no generalizable
 Recodificación BENIGN/MALICIOUS y eliminación de duplicados
           |
           v
-Dataset Parquet preparado + metadatos del esquema
+Dataset Parquet preparado + metadatos + procedencia de grupos
 ```
 
-El resultado principal es `data/processed/dataset_cicids2017_preparado.parquet`. El esquema y los contadores de filas se almacenan en `data/processed/dataset_cicids2017_preparado_metadatos.json`.
+El resultado principal es `data/processed/dataset_cicids2017_preparado.parquet`. El esquema y los contadores de filas se almacenan en `data/processed/dataset_cicids2017_preparado_metadatos.json`. La procedencia de cada fila se conserva, en el mismo orden, en `data/processed/dataset_cicids2017_preparado_grupos.parquet`; esta información se utiliza únicamente para separar escenarios durante el modelado y no se entrega como característica al clasificador.
 
 ## 4. Esquema de salida
 
@@ -143,7 +143,9 @@ Se implementará en la fase 5. Registrará como mínimo la fecha de análisis, l
 
 La partición de entrenamiento, validación y prueba se realizó después de generar el dataset preparado. El conjunto de prueba se mantuvo separado de la selección de configuración y del ajuste del modelo.
 
-La estrategia implementada fue una partición aleatoria, estratificada y reproducible por fila, con proporciones 80/10/10 y semilla 42. Los ocho archivos se integraron antes de dividirlos; no se conservaron grupos de origen para separar por día o archivo. En consecuencia, flujos del mismo día o escenario de captura pueden quedar distribuidos entre entrenamiento, validación y prueba. El conjunto de prueba es una partición reservada de CIC-IDS2017, pero no una validación externa independiente del escenario de captura. Esta limitación se considerará al interpretar las métricas.
+La estrategia implementada utiliza una partición fija por día de captura. Los ocho archivos se integraron para preparar el conjunto, pero la procedencia de cada fila se conserva en un artefacto auxiliar. De esta manera no se mezclan filas del mismo día y escenario entre entrenamiento, validación y prueba.
+
+La partición utiliza los archivos de lunes, martes y miércoles para entrenamiento, los archivos del jueves para validación y los archivos del viernes para prueba. En la ejecución oficial de la fase 4 no fue necesario submuestrear el entrenamiento (1,666,481 filas en la partición por día). Los análisis complementarios de la fase 4 sí aplican un submuestreo estratificado de 1,762,141 filas, que conserva la separación por día. La prueba es reservada y más exigente, pero sigue perteneciendo al mismo dataset y no constituye una validación externa de una red real.
 
 No se aplicó balanceo sintético. La configuración `class_weight="balanced"` del clasificador modifica los pesos de las clases durante el ajuste, sin alterar la composición de validación ni de prueba. Cualquier técnica de remuestreo que se incorpore posteriormente deberá aplicarse únicamente al entrenamiento.
 
@@ -152,6 +154,7 @@ No se aplicó balanceo sintético. La configuración `class_weight="balanced"` d
 - `src/data/03_preparar_dataset.py`: pipeline reproducible de preparación.
 - `data/processed/dataset_cicids2017_preparado.parquet`: salida local derivada, no versionada.
 - `data/processed/dataset_cicids2017_preparado_metadatos.json`: esquema, decisiones y contadores de preparación.
+- `data/processed/dataset_cicids2017_preparado_grupos.parquet`: procedencia de cada fila para la partición por día de captura.
 - `thesis/03_preparacion_diseno.md`: descripción de las transformaciones y del diseño lógico.
 
 ## 10. Criterios de aceptación
@@ -164,14 +167,17 @@ La fase se considera técnicamente aceptable cuando:
 4. Las etiquetas de salida son exclusivamente `BENIGN` y `MALICIOUS`.
 5. Los metadatos registran archivos de entrada, columnas excluidas, orden de características y filas eliminadas.
 6. La eliminación de duplicados se aplica entre bloques y archivos, no solo dentro de un bloque aislado.
-7. El esquema puede ser validado antes de usarlo en entrenamiento o inferencia.
+7. La procedencia de cada fila coincide con el orden del dataset preparado.
+8. El esquema puede ser validado antes de usarlo en entrenamiento o inferencia.
 
 La fase 3 no incluye todavía entrenamiento, ajuste de hiperparámetros, selección de modelo, evaluación estadística ni alertas operativas. Esas actividades se realizarán en las fases 4, 5 y 6.
 
-## 11. Pendientes para la fase 4
+## 11. Pendientes para la fase 4 (estado al cierre)
+
+Estado: la partición por día, la comparación de configuraciones y la evaluación final se realizaron en la fase 4. No se midió de forma separada el efecto de la preparación sobre cada clase. Los modelos de referencia distintos de Random Forest no se implementaron. El tratamiento del desbalance se limitó a `class_weight` dentro del clasificador.
 
 - Medir el efecto de la preparación sobre cada clase.
-- Definir la partición reproducible de entrenamiento, validación y prueba.
+- Definir la partición reproducible de entrenamiento, validación y prueba por día de captura.
 - Evaluar si el tratamiento del desbalance es necesario.
 - Entrenar Random Forest y modelos de referencia.
 - Comparar configuraciones sin utilizar el conjunto de prueba para el ajuste.

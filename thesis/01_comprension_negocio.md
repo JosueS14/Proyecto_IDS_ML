@@ -45,7 +45,7 @@ Implementar y evaluar un prototipo de sistema de detección de intrusiones en re
 - Modo inicial de operación: procesamiento por lotes mediante archivos preparados.
 - Entrada prevista: registros tabulares con las características esperadas por el modelo.
 - Salida prevista: clase predicha, probabilidad estimada por el clasificador cuando esté disponible y registro de eventos maliciosos. La probabilidad no se interpretará como confianza calibrada, ya que no se realizó calibración probabilística.
-- Evaluación: partición de prueba reservada, no utilizada para seleccionar o ajustar el modelo, y métricas definidas en este documento. La separación será por fila y no por escenario de captura.
+- Evaluación: partición de prueba reservada, no utilizada para seleccionar o ajustar el modelo, y métricas definidas en este documento. La separación principal será por día de captura para evitar mezclar escenarios relacionados.
 - Entorno de ejecución: laboratorio controlado y aislado.
 
 ### 4.2 Fuera del alcance de la primera versión
@@ -148,7 +148,7 @@ No se fija en esta fase un umbral numérico de accuracy, recall o FPR. Ese umbra
 | ID | Tipo | Descripción | Tratamiento previsto |
 | --- | --- | --- | --- |
 | R-001 | Riesgo | El desbalance puede inflar la accuracy y ocultar ataques minoritarios. | Reportar métricas por clase, F1 macro cuando corresponda y matriz de confusión. |
-| R-002 | Riesgo | Puede existir fuga de información por identificadores, marcas temporales o flujos relacionados entre particiones. | Excluir identificadores del modelo y documentar que la partición implementada es aleatoria y estratificada por fila, sin separar por archivo o día de captura. |
+| R-002 | Riesgo | Puede existir fuga de información por identificadores, marcas temporales o flujos relacionados entre particiones. | Excluir identificadores del modelo y separar archivos completos de captura entre entrenamiento, validación y prueba. |
 | R-003 | Riesgo | El dataset experimental puede no representar una red real. | Limitar las conclusiones al entorno controlado y declarar la limitación. |
 | R-004 | Riesgo | La extracción desde paquetes en tiempo real puede no reproducir las características de CICFlowMeter. | Mantener el modo por lotes como alcance inicial. |
 | R-005 | Restricción | El volumen de datos puede superar la memoria o el tiempo disponibles. | Medir recursos y documentar cualquier muestreo o procesamiento por partes. |

@@ -11,6 +11,11 @@
   ],
   "input_encoding": "cp1252",
   "output": "data\\processed\\dataset_cicids2017_preparado.parquet",
+  "group_output": "data\\processed\\dataset_cicids2017_preparado_grupos.parquet",
+  "group_columns": [
+    "source_file",
+    "label_original"
+  ],
   "target_column": "Label",
   "target_classes": [
     "BENIGN",

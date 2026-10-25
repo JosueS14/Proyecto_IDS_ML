@@ -20,7 +20,7 @@ Comprendo la diferiencia entre Flow, un Feature y un Label.
 Realizar uns inspeccion inicial al archivo Monday-WorkingHours del cnjunto de datos CIC-IDS2017.
 
 ## Resultados
-- El archivo contiene 519,918 Flows.
+- El archivo contiene 529,918 Flows.
 - Se identificaron 85 columnas.
 - Existen 45 columnas de tipo float64.
 - Existen 35 columnas de tipo int64.
@@ -131,6 +131,10 @@ Entrenar y evaluar Random Forest con las decisiones definidas para la fase 4.
 - La matriz de confusión final registró 226,835 verdaderos negativos, 277 falsos positivos, 116 falsos negativos y 55,540 verdaderos positivos.
 - Se persistió el modelo en `data/processed/modelos/random_forest_seleccionado.joblib`.
 
+Estos resultados corresponden a la partición aleatoria por fila utilizada originalmente y quedan
+conservados como antecedente histórico. Fueron sustituidos como resultados principales por la
+evaluación por día de captura documentada en la sesión 15.
+
 ## Restricción
 
 El entrenamiento completo superó el tiempo disponible del entorno. Se utilizó una muestra estratificada de 1,762,141 registros únicamente para entrenar; la validación y la prueba conservaron todos sus registros.
@@ -224,4 +228,86 @@ Cerrar la fase 7 de despliegue y mantenimiento del prototipo IDS.
 ## Decisión
 
 El despliegue queda limitado a ejecución local por lotes. El modelo no se actualiza automáticamente; cualquier reentrenamiento debe conservar el modelo anterior, repetir la validación y registrar la nueva versión antes de reemplazar el artefacto activo.
+
+# Sesion 15
+## Objetivo
+
+Eliminar la fuga de escenario causada por la partición aleatoria por fila.
+
+## Resultados
+
+- El pipeline conserva la procedencia de cada fila en `data/processed/dataset_cicids2017_preparado_grupos.parquet`.
+- La procedencia no se utiliza como característica del modelo.
+- Se separaron días completos entre entrenamiento, validación y prueba.
+- El entrenamiento utiliza lunes, martes y miércoles; la validación utiliza jueves y la prueba utiliza viernes.
+- Se reentrenaron las dos configuraciones de Random Forest con la nueva partición.
+- La configuración sin balanceo fue seleccionada por validación con recall `0.019856`.
+- La prueba final obtuvo recall `0.076022`, lo que evidencia una generalización limitada hacia escenarios de ataque no presentes en el entrenamiento.
+
+## Decisión
+
+Las métricas anteriores basadas en una partición aleatoria por fila dejan de ser las métricas principales. La evaluación por día de captura se conserva como resultado válido para analizar transferencia entre escenarios de CIC-IDS2017 y no se interpreta como detección de zero-day ni como desempeño en redes reales.
+
+Nota posterior (sesiones 17 y 18): el valor 0.076022 depende del orden de las filas de entrenamiento. Con el mismo modelo y los mismos datos, el viernes puede obtener recall entre 0.085 y 0.282 según la semilla y el orden. Por ello, 0.076022 se conserva como una ejecución oficial y no como el valor representativo.
+
+# Sesion 16
+## Objetivo
+
+Calcular el recall por tipo de ataque sobre la partición de prueba por día, sin reentrenar el modelo.
+
+## Resultados
+
+- `src/modelado/04b_analisis_por_ataque.py` usa el artefacto persistido y la partición de 04.
+- Resultados en `docs/resultados_recall_por_ataque.json` (prueba: viernes):
+  - Bot: 0 de 1,956 detectados.
+  - DDoS: 21,876 de 128,025 detectados (17.1 %).
+  - PortScan: 78 de 158,804 detectados (0.05 %).
+  - BENIGN: 148 falsos positivos de 413,928 (FPR 0.036 %).
+
+## Decisión
+
+La baja sensibilidad se concentra en tipos de ataque distintos de los presentes en el entrenamiento. El análisis no modifica el modelo oficial.
+
+# Sesion 17
+## Objetivo
+
+Evaluar si elegir el umbral de decisión mejora el recall sin aumentar los falsos positivos.
+
+## Resultados
+
+- `src/modelado/04d_analisis_umbral.py` aplica selección anidada: el umbral se elige con predicciones fuera de bolsa sobre los días de entrenamiento, con FPR máximo de 0.1 %, y se evalúa en el día de prueba.
+- Umbrales elegidos: martes 0.620, miércoles 0.369, jueves 0.559 y viernes 0.520.
+- Recall medio con umbral 0.5: 0.073 ± 0.137. Con umbral elegido: 0.074 ± 0.136.
+- FPR medio con umbral 0.5: 0.00106. Con umbral elegido: 0.00088.
+- El barrido exploratorio muestra recall alto en miércoles y jueves con umbrales bajos, pero esos umbrales no se pueden identificar de forma fiable con la selección interna.
+- Se detectó sensibilidad al orden de las filas: el fold de viernes da recall 0.278 con el orden del Parquet y 0.076 con el orden de `04_entrenar_random_forest.py` (Mon-Wed + Thu). Un control con todas las filas de entrenamiento, sin submuestreo, dio 0.278; por tanto, la diferencia proviene del orden y no del submuestreo.
+- Resultados en `docs/resultados_umbral_por_dia.json`.
+
+## Decisión
+
+No se cambia el umbral oficial de 0.5. El umbral elegido en validación no mejora de forma consistente el recall.
+
+# Sesion 18
+## Objetivo
+
+Cuantificar la variabilidad del resultado por semilla y por orden de entrenamiento.
+
+## Resultados
+
+- `src/modelado/04e_validacion_multisemilla.py` ejecuta leave-one-day-out con 5 semillas (42, 1, 2, 3, 4). Cada semilla cambia el submuestreo estratificado, el orden de entrenamiento y el `random_state` del Random Forest.
+- Recall por día (media ± desviación; rango):
+  - Martes: 0.0001 ± 0.0000.
+  - Miércoles: 0.0063 ± 0.0011; rango 0.0050 - 0.0077.
+  - Jueves: 0.0191 ± 0.0168; rango 0.0045 - 0.0469.
+  - Viernes: 0.2318 ± 0.0844; rango 0.0849 - 0.2819.
+- Global: recall 0.064 ± 0.107; FPR 0.0012 ± 0.0011.
+- Resultados en `docs/resultados_multisemilla.json`.
+
+## Estado pendiente
+
+- `src/modelado/04c_validacion_por_dia.py` está implementado, pero no se ha ejecutado: `docs/resultados_validacion_por_dia.json` no existe. Sus resultados no se reportan.
+
+## Decisión
+
+Presentar la tabla multi-semilla como resultado principal de generalización. El resultado oficial de 0.076 se reporta como una ejecución dentro de esa distribución. Los artefactos oficiales no se modifican.
 

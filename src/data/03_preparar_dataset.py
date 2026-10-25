@@ -29,6 +29,9 @@ RUTA_DATASET_PREPARADO = (
 RUTA_METADATOS = (
     DIRECTORIO_DATOS_PROCESADOS / "dataset_cicids2017_preparado_metadatos.json"
 )
+RUTA_GRUPOS = (
+    DIRECTORIO_DATOS_PROCESADOS / "dataset_cicids2017_preparado_grupos.parquet"
+)
 TAMANO_BLOQUE = 100_000
 
 COLUMNA_OBJETIVO = "Label"
@@ -56,7 +59,7 @@ def preparar_bloque(
     columnas_caracteristicas: list[str],
     contadores: Counter[str],
     huellas_vistas: set[int],
-) -> pd.DataFrame:
+) -> tuple[pd.DataFrame, pd.Series]:
     contadores["rows_read"] += len(bloque)
     bloque.columns = bloque.columns.str.strip()
 
@@ -95,9 +98,11 @@ def preparar_bloque(
     huellas_vistas.update(int(valor) for valor in huellas_conservadas)
     contadores["duplicate_rows_removed"] += int(filas_duplicadas.sum())
     bloque = bloque.loc[~filas_duplicadas]
-    return bloque[columnas_caracteristicas + [COLUMNA_OBJETIVO]].reset_index(
+    etiquetas_originales = etiquetas.loc[bloque.index].reset_index(drop=True)
+    preparado = bloque[columnas_caracteristicas + [COLUMNA_OBJETIVO]].reset_index(
         drop=True
     )
+    return preparado, etiquetas_originales
 
 
 def preparar_dataset() -> dict[str, Any]:
@@ -112,12 +117,15 @@ def preparar_dataset() -> dict[str, Any]:
         RUTA_DATASET_PREPARADO.unlink()
     if RUTA_METADATOS.exists():
         RUTA_METADATOS.unlink()
+    if RUTA_GRUPOS.exists():
+        RUTA_GRUPOS.unlink()
 
     columnas_caracteristicas: list[str] | None = None
     conteo_etiquetas: Counter[str] = Counter()
     contadores: Counter[str] = Counter()
     huellas_vistas: set[int] = set()
     escritor: parquet_api.ParquetWriter | None = None
+    escritor_grupos: parquet_api.ParquetWriter | None = None
 
     try:
         for archivo in archivos:
@@ -153,7 +161,7 @@ def preparar_dataset() -> dict[str, Any]:
                         "revise las columnas de entrada"
                     )
 
-                preparado = preparar_bloque(
+                preparado, etiquetas_originales = preparar_bloque(
                     bloque, columnas_caracteristicas, contadores, huellas_vistas
                 )
                 if preparado.empty:
@@ -169,10 +177,23 @@ def preparar_dataset() -> dict[str, Any]:
                         RUTA_DATASET_PREPARADO, tabla.schema
                     )
                 escritor.write_table(tabla)
+                grupos = pa.Table.from_pydict(
+                    {
+                        "source_file": [archivo.name] * len(preparado),
+                        "label_original": etiquetas_originales.astype(str).tolist(),
+                    }
+                )
+                if escritor_grupos is None:
+                    escritor_grupos = parquet_api.ParquetWriter(
+                        RUTA_GRUPOS, grupos.schema
+                    )
+                escritor_grupos.write_table(grupos)
                 contadores["rows_written"] += len(preparado)
     finally:
         if escritor is not None:
             escritor.close()
+        if escritor_grupos is not None:
+            escritor_grupos.close()
 
     if columnas_caracteristicas is None:
         raise ValueError("No se encontraron columnas para preparar")
@@ -181,6 +202,8 @@ def preparar_dataset() -> dict[str, Any]:
         "input_files": [archivo.name for archivo in archivos],
         "input_encoding": "cp1252",
         "output": str(RUTA_DATASET_PREPARADO.relative_to(RAIZ_PROYECTO)),
+        "group_output": str(RUTA_GRUPOS.relative_to(RAIZ_PROYECTO)),
+        "group_columns": ["source_file", "label_original"],
         "target_column": COLUMNA_OBJETIVO,
         "target_classes": ["BENIGN", "MALICIOUS"],
         "feature_columns": columnas_caracteristicas,

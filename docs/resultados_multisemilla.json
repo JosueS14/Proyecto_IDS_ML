@@ -1,0 +1,373 @@
+{
+  "estrategia": "leave-one-day-out repetido con varias semillas",
+  "configuracion": "sin_balanceo, umbral 0.5 (sin selección de umbral)",
+  "semillas": [
+    42,
+    1,
+    2,
+    3,
+    4
+  ],
+  "nota": "Cada semilla cambia el submuestreo, el orden de entrenamiento y el random_state del Random Forest. No sustituye los resultados oficiales de docs/resultados_modelado.json.",
+  "resumen_global": {
+    "recall_malicious": {
+      "media": 0.06433333224145618,
+      "desv": 0.10700634404321017,
+      "minimo": 7.229612492770387e-05,
+      "maximo": 0.2818913724743321
+    },
+    "fpr": {
+      "media": 0.0011949133144689666,
+      "desv": 0.0011299094296119744,
+      "minimo": 2.729332132427195e-05,
+      "maximo": 0.002811950020492387
+    },
+    "average_precision": {
+      "media": 0.4470604180410948,
+      "desv": 0.33555668276437683,
+      "minimo": 0.030548817492727677,
+      "maximo": 0.9115943156906486
+    },
+    "roc_auc": {
+      "media": 0.8188380500347086,
+      "desv": 0.12581879002882781,
+      "minimo": 0.5652620578867353,
+      "maximo": 0.9576544812228709
+    }
+  },
+  "resumen_por_dia": {
+    "martes": {
+      "recall_malicious": {
+        "media": 7.229612492770387e-05,
+        "desv": 0.0,
+        "minimo": 7.229612492770387e-05,
+        "maximo": 7.229612492770387e-05
+      },
+      "fpr": {
+        "media": 0.001588665358989739,
+        "desv": 0.0004995881950699886,
+        "minimo": 0.0009911789703317903,
+        "maximo": 0.002172256715353316
+      },
+      "average_precision": {
+        "media": 0.11066732039834923,
+        "desv": 0.01892917289069455,
+        "minimo": 0.09204490975080033,
+        "maximo": 0.14195499977022102
+      },
+      "roc_auc": {
+        "media": 0.82878254998544,
+        "desv": 0.024492504472641577,
+        "minimo": 0.8074872226947382,
+        "maximo": 0.8703103032912792
+      }
+    },
+    "miércoles": {
+      "recall_malicious": {
+        "media": 0.0063307934944105,
+        "desv": 0.0011296113418503546,
+        "minimo": 0.005001549328227171,
+        "maximo": 0.007691024225137255
+      },
+      "fpr": {
+        "media": 4.912797838368951e-05,
+        "desv": 1.596976780802056e-05,
+        "minimo": 2.729332132427195e-05,
+        "maximo": 6.368441642330122e-05
+      },
+      "average_precision": {
+        "media": 0.8581273094058949,
+        "desv": 0.032264224033415896,
+        "minimo": 0.8287561230298867,
+        "maximo": 0.9115943156906486
+      },
+      "roc_auc": {
+        "media": 0.8841365781036661,
+        "desv": 0.03078464643267447,
+        "minimo": 0.8582687125831859,
+        "maximo": 0.9361853667606622
+      }
+    },
+    "jueves": {
+      "recall_malicious": {
+        "media": 0.019133574007220218,
+        "desv": 0.016783727990653377,
+        "minimo": 0.004512635379061372,
+        "maximo": 0.04693140794223827
+      },
+      "fpr": {
+        "media": 0.0027751294746277944,
+        "desv": 2.4960364834639148e-05,
+        "minimo": 0.0027505824440514,
+        "maximo": 0.002811950020492387
+      },
+      "average_precision": {
+        "media": 0.1559334660303841,
+        "desv": 0.11446065697376653,
+        "minimo": 0.030548817492727677,
+        "maximo": 0.30243380124910524
+      },
+      "roc_auc": {
+        "media": 0.9355498520013604,
+        "desv": 0.02178107198966704,
+        "minimo": 0.9024101462884813,
+        "maximo": 0.9576544812228709
+      }
+    },
+    "viernes": {
+      "recall_malicious": {
+        "media": 0.23179666533926624,
+        "desv": 0.08444097162148688,
+        "minimo": 0.08493169659088942,
+        "maximo": 0.2818913724743321
+      },
+      "fpr": {
+        "media": 0.0003667304458746449,
+        "desv": 1.7116976463460653e-05,
+        "minimo": 0.0003382230726116619,
+        "maximo": 0.00038412477532324464
+      },
+      "average_precision": {
+        "media": 0.6635135763297513,
+        "desv": 0.05623484347631645,
+        "minimo": 0.6066636923949293,
+        "maximo": 0.7453123839546878
+      },
+      "roc_auc": {
+        "media": 0.6268832200483677,
+        "desv": 0.06806900845008286,
+        "minimo": 0.5652620578867353,
+        "maximo": 0.7412441853717563
+      }
+    }
+  },
+  "promedio_por_semilla": [
+    {
+      "semilla": 42,
+      "recall_malicious_promedio_dias": 0.0749140884326613,
+      "fpr_promedio_dias": 0.0012076713779287898
+    },
+    {
+      "semilla": 1,
+      "recall_malicious_promedio_dias": 0.08203363843498503,
+      "fpr_promedio_dias": 0.0013028777619315671
+    },
+    {
+      "semilla": 2,
+      "recall_malicious_promedio_dias": 0.06122262369037158,
+      "fpr_promedio_dias": 0.0010972233370119251
+    },
+    {
+      "semilla": 3,
+      "recall_malicious_promedio_dias": 0.07524646547426574,
+      "fpr_promedio_dias": 0.0013327270061225215
+    },
+    {
+      "semilla": 4,
+      "recall_malicious_promedio_dias": 0.02824984517499716,
+      "fpr_promedio_dias": 0.001034067089350031
+    }
+  ],
+  "ejecuciones": [
+    {
+      "semilla": 42,
+      "dia_prueba": "martes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 7.229612492770387e-05,
+      "fpr": 0.0016257187784413942,
+      "roc_auc": 0.8198227285636075,
+      "average_precision": 0.10186321622363106,
+      "accuracy": 0.9673885481811593
+    },
+    {
+      "semilla": 42,
+      "dia_prueba": "miércoles",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.007313623759544259,
+      "fpr": 6.368441642330122e-05,
+      "roc_auc": 0.9361853667606622,
+      "average_precision": 0.9115943156906486,
+      "accuracy": 0.6385411996123751
+    },
+    {
+      "semilla": 42,
+      "dia_prueba": "jueves",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.010379061371841155,
+      "fpr": 0.00275715754152722,
+      "roc_auc": 0.9526263608720966,
+      "average_precision": 0.23990836478000932,
+      "accuracy": 0.9924730033610842
+    },
+    {
+      "semilla": 42,
+      "dia_prueba": "viernes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.2818913724743321,
+      "fpr": 0.00038412477532324464,
+      "roc_auc": 0.5877596656381444,
+      "average_precision": 0.6503609060518705,
+      "accuracy": 0.7046617893791634
+    },
+    {
+      "semilla": 1,
+      "dia_prueba": "martes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 7.229612492770387e-05,
+      "fpr": 0.0019638312309377525,
+      "roc_auc": 0.8703103032912792,
+      "average_precision": 0.14195499977022102,
+      "accuracy": 0.9670609302106404
+    },
+    {
+      "semilla": 1,
+      "dia_prueba": "miércoles",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.005001549328227171,
+      "fpr": 6.368441642330122e-05,
+      "roc_auc": 0.8815316565828264,
+      "average_precision": 0.8558480462582739,
+      "accuracy": 0.6376994171162441
+    },
+    {
+      "semilla": 1,
+      "dia_prueba": "jueves",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.04693140794223827,
+      "fpr": 0.002811950020492387,
+      "roc_auc": 0.9576544812228709,
+      "average_precision": 0.30243380124910524,
+      "accuracy": 0.992595145294373
+    },
+    {
+      "semilla": 1,
+      "dia_prueba": "viernes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.27612930034454697,
+      "fpr": 0.0003720453798728281,
+      "roc_auc": 0.6159152876878009,
+      "average_precision": 0.622374083885076,
+      "accuracy": 0.7023009393593117
+    },
+    {
+      "semilla": 2,
+      "dia_prueba": "martes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 7.229612492770387e-05,
+      "fpr": 0.0011903410998844396,
+      "roc_auc": 0.8169144086644268,
+      "average_precision": 0.11209640628732255,
+      "accuracy": 0.9678104124171699
+    },
+    {
+      "semilla": 2,
+      "dia_prueba": "miércoles",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.005764295532373015,
+      "fpr": 3.8665538542718595e-05,
+      "roc_auc": 0.8582687125831859,
+      "average_precision": 0.8287561230298867,
+      "accuracy": 0.6379930285367159
+    },
+    {
+      "semilla": 2,
+      "dia_prueba": "jueves",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.004512635379061372,
+      "fpr": 0.0027878413297477136,
+      "roc_auc": 0.933217994472788,
+      "average_precision": 0.13977162063839857,
+      "accuracy": 0.9924141135003915
+    },
+    {
+      "semilla": 2,
+      "dia_prueba": "viernes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.23454126772512424,
+      "fpr": 0.0003720453798728281,
+      "roc_auc": 0.5652620578867353,
+      "average_precision": 0.6066636923949293,
+      "accuracy": 0.6852100359606269
+    },
+    {
+      "semilla": 3,
+      "dia_prueba": "martes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 7.229612492770387e-05,
+      "fpr": 0.002172256715353316,
+      "roc_auc": 0.8293780867131478,
+      "average_precision": 0.09204490975080033,
+      "accuracy": 0.9668589739274438
+    },
+    {
+      "semilla": 3,
+      "dia_prueba": "miércoles",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.007691024225137255,
+      "fpr": 5.2312199204854574e-05,
+      "roc_auc": 0.8643530968702408,
+      "average_precision": 0.8372351153412457,
+      "accuracy": 0.6386858357800952
+    },
+    {
+      "semilla": 3,
+      "dia_prueba": "jueves",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.011732851985559567,
+      "fpr": 0.0027681160373202534,
+      "roc_auc": 0.9024101462884813,
+      "average_precision": 0.030548817492727677,
+      "accuracy": 0.9924686411491811
+    },
+    {
+      "semilla": 3,
+      "dia_prueba": "viernes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.28148968956143844,
+      "fpr": 0.0003382230726116619,
+      "roc_auc": 0.6242349036574022,
+      "average_precision": 0.6928568153621928,
+      "accuracy": 0.7045237529403896
+    },
+    {
+      "semilla": 4,
+      "dia_prueba": "martes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 7.229612492770387e-05,
+      "fpr": 0.0009911789703317903,
+      "roc_auc": 0.8074872226947382,
+      "average_precision": 0.10537706995977122,
+      "accuracy": 0.9680033928655577
+    },
+    {
+      "semilla": 4,
+      "dia_prueba": "miércoles",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.0058834746267708024,
+      "fpr": 2.729332132427195e-05,
+      "roc_auc": 0.8803440577214154,
+      "average_precision": 0.8572029467094197,
+      "accuracy": 0.638043651195418
+    },
+    {
+      "semilla": 4,
+      "dia_prueba": "jueves",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.02211191335740072,
+      "fpr": 0.0027505824440514,
+      "roc_auc": 0.9318402771505655,
+      "average_precision": 0.06700472599167982,
+      "accuracy": 0.9925362554336802
+    },
+    {
+      "semilla": 4,
+      "dia_prueba": "viernes",
+      "filas_entrenamiento": 1762141,
+      "recall_malicious": 0.08493169659088942,
+      "fpr": 0.0003672136216926615,
+      "roc_auc": 0.7412441853717563,
+      "average_precision": 0.7453123839546878,
+      "accuracy": 0.623729744575666
+    }
+  ]
+}

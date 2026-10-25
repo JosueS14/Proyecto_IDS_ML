@@ -32,6 +32,10 @@ Los archivos originales de CIC-IDS2017 no son necesarios para ejecutar la infere
 cuando ya se dispone del modelo persistido. Se conservan por separado para reproducir
 las fases de comprensión, preparación y entrenamiento.
 
+La reconstrucción de esos archivos, del dataset preparado y del modelo se documenta en
+`docs/reconstruccion_dataset.md`. Esta guía incluye la fuente oficial, los ocho nombres de
+archivo esperados y el orden de ejecución de los scripts.
+
 ## 3. Instalación
 
 ### 3.1 Requisitos
@@ -117,7 +121,7 @@ mantenimiento. Deben registrarse como mínimo:
 - Tiempo de carga, preparación e inferencia.
 - Versión del modelo y del esquema utilizado.
 
-Se debe comparar el comportamiento de los nuevos lotes con la línea base de la fase 4.
+Se debe comparar el comportamiento de los nuevos lotes con la línea base de la fase 4. La línea base debe incluir la media y la desviación de recall y FPR por día, obtenidas con varias semillas (`docs/resultados_multisemilla.json`), y no únicamente el valor de una ejecución (0.076022), que depende del orden de entrenamiento.
 Una revisión de mantenimiento se activa cuando aumenta la proporción de errores, cambia
 la distribución de clases, se eleva la tasa de falsos positivos o aparecen características
 que no pertenecen al esquema registrado.
@@ -132,7 +136,7 @@ procedimiento:
 3. Confirmar que el orden y la cantidad de características sean compatibles.
 4. Separar entrenamiento, validación y prueba sin reutilizar la prueba para seleccionar el
    modelo.
-5. Entrenar y comparar las configuraciones definidas.
+5. Entrenar y comparar las configuraciones definidas, repitiendo la evaluación con varias semillas y reportando media y desviación. El umbral de decisión solo se modifica si la selección con validación es estable entre días.
 6. Evaluar la configuración seleccionada sobre la prueba reservada.
 7. Ejecutar las pruebas de integración y el verificador de despliegue.
 8. Guardar el modelo nuevo con su esquema, métricas, fecha y versión.
