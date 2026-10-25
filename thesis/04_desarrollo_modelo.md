@@ -107,7 +107,7 @@ La importancia de características se utilizará como elemento interpretativo y 
 - `data/processed/dataset_cicids2017_preparado_grupos.parquet`: procedencia utilizada para separar escenarios.
 - `data/processed/modelos/random_forest_seleccionado.joblib`: modelo sin balanceo persistido.
 - `src/modelado/04b_analisis_por_ataque.py`: análisis complementario de recall por tipo de ataque. Resultado: `docs/resultados_recall_por_ataque.json`.
-- `src/modelado/04c_validacion_por_dia.py`: leave-one-day-out con ambas configuraciones. Implementado, pendiente de ejecución; `docs/resultados_validacion_por_dia.json` no existe, por lo que sus resultados no se reportan.
+- `src/modelado/04c_validacion_por_dia.py`: leave-one-day-out con ambas configuraciones. Ejecutado; resultados en `docs/resultados_validacion_por_dia.json` (sección 10.5).
 - `src/modelado/04d_analisis_umbral.py`: análisis complementario de selección anidada del umbral. Resultado: `docs/resultados_umbral_por_dia.json`.
 - `src/modelado/04e_validacion_multisemilla.py`: análisis complementario con cinco semillas. Resultado: `docs/resultados_multisemilla.json`.
 
@@ -184,3 +184,22 @@ Se verificó la causa de la variabilidad. Con los mismos datos, el viernes obtuv
 - Ajustar el umbral no compensa esa limitación.
 - El valor oficial de 0.076 debe interpretarse dentro de la distribución de 10.3.
 - Una evaluación definitiva requiere reportar media y desviación sobre varias semillas, y evitar elegir el modelo o el umbral con el conjunto de prueba.
+
+### 10.5 Validación con ambas configuraciones (leave-one-day-out, 04c)
+
+| Día | Configuración | Recall | FPR | ROC-AUC | Average precision |
+| --- | --- | ---: | ---: | ---: | ---: |
+| Martes | sin balanceo | 0.0001 | 0.0011 | 0.7875 | 0.0857 |
+| Martes | balanceado | 0.0001 | 0.0030 | 0.9007 | 0.1620 |
+| Miércoles | sin balanceo | 0.0060 | 0.0000 | 0.8879 | 0.8598 |
+| Miércoles | balanceado | 0.0088 | 0.0001 | 0.8836 | 0.8506 |
+| Jueves | sin balanceo | 0.0068 | 0.0028 | 0.9091 | 0.0345 |
+| Jueves | balanceado | 0.2013 | 0.0032 | 0.9618 | 0.2996 |
+| Viernes | sin balanceo | 0.2781 | 0.0003 | 0.8399 | 0.8000 |
+| Viernes | balanceado | 0.0789 | 0.0007 | 0.5840 | 0.6271 |
+| Media ± desv. | sin balanceo | 0.0728 ± 0.1370 | 0.00105 ± 0.00123 | | |
+| Media ± desv. | balanceado | 0.0723 ± 0.0929 | 0.00177 ± 0.00156 | | |
+
+La configuración balanceada no mejora el recall medio frente a la configuración sin balanceo y aumenta el FPR de 0.00105 a 0.00177. Su mejor resultado, en jueves (recall 0.2013), no se repite en viernes (recall 0.0789, ROC-AUC 0.584). La configuración sin balanceo se mantiene como la elegida: igual recall y menor FPR.
+
+Los valores de miércoles y viernes difieren ligeramente de los de la sección 10.2 (0.0060 frente a 0.0064, y 0.2781 frente a 0.2786). La causa no se identificó y no altera las conclusiones.

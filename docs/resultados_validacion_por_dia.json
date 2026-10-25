@@ -1,0 +1,484 @@
+{
+  "estrategia": "leave-one-day-out sobre martes, miércoles, jueves y viernes",
+  "lunes_siempre_en_entrenamiento": [
+    "Monday-WorkingHours.pcap_ISCX.csv"
+  ],
+  "parametros": {
+    "n_estimators": 50,
+    "max_depth": 20,
+    "max_samples_per_tree": 0.5,
+    "random_state": 42,
+    "limite_entrenamiento": 1762141
+  },
+  "nota": "Ninguna configuración se selecciona con estos resultados. Recall por etiqueta = proporción de registros de cada etiqueta original clasificados como MALICIOUS.",
+  "resumen": {
+    "sin_balanceo": {
+      "recall_malicious_media": 0.07275527828782395,
+      "recall_malicious_desv": 0.1369580411245914,
+      "fpr_media": 0.0010546091391396384,
+      "fpr_desv": 0.0012314551063705036
+    },
+    "balanceado": {
+      "recall_malicious_media": 0.07228022460599431,
+      "recall_malicious_desv": 0.09294094842550975,
+      "fpr_media": 0.00176977771789932,
+      "fpr_desv": 0.001561465022521629
+    }
+  },
+  "folds": [
+    {
+      "dia_prueba": "martes",
+      "archivos_prueba": [
+        "Tuesday-WorkingHours.pcap_ISCX.csv"
+      ],
+      "configuracion": "sin_balanceo",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2382036,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 445641,
+      "tiempo_entrenamiento_segundos": 70.63818950008135,
+      "metricas": {
+        "accuracy": 0.967945049939301,
+        "precision_malicious": 0.00437636761487965,
+        "recall_malicious": 0.00014459224985540774,
+        "specificity_benign": 0.9989462933843435,
+        "f1_malicious": 0.00027993561480859405,
+        "f1_macro": 0.4919956610683539,
+        "fpr": 0.0010537066156564591,
+        "average_precision": 0.08571851966612154,
+        "roc_auc": 0.7875252694971584,
+        "true_negatives": 431354,
+        "false_positives": 455,
+        "false_negatives": 13830,
+        "true_positives": 2
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 431809,
+          "clasificados_malicious": 455,
+          "tasa": 0.0010537066156564591
+        },
+        {
+          "etiqueta_original": "FTP-Patator",
+          "registros": 7935,
+          "clasificados_malicious": 1,
+          "tasa": 0.0001260239445494644
+        },
+        {
+          "etiqueta_original": "SSH-Patator",
+          "registros": 5897,
+          "clasificados_malicious": 1,
+          "tasa": 0.00016957775139901646
+        }
+      ]
+    },
+    {
+      "dia_prueba": "martes",
+      "archivos_prueba": [
+        "Tuesday-WorkingHours.pcap_ISCX.csv"
+      ],
+      "configuracion": "balanceado",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2382036,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 445641,
+      "tiempo_entrenamiento_segundos": 69.38336960005108,
+      "metricas": {
+        "accuracy": 0.9660331971250401,
+        "precision_malicious": 0.0015278838808250573,
+        "recall_malicious": 0.00014459224985540774,
+        "specificity_benign": 0.9969731987985428,
+        "f1_malicious": 0.0002641833432402087,
+        "f1_macro": 0.4914936419243762,
+        "fpr": 0.0030268012014571257,
+        "average_precision": 0.161996475892418,
+        "roc_auc": 0.9006899868000006,
+        "true_negatives": 430502,
+        "false_positives": 1307,
+        "false_negatives": 13830,
+        "true_positives": 2
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 431809,
+          "clasificados_malicious": 1307,
+          "tasa": 0.0030268012014571257
+        },
+        {
+          "etiqueta_original": "FTP-Patator",
+          "registros": 7935,
+          "clasificados_malicious": 1,
+          "tasa": 0.0001260239445494644
+        },
+        {
+          "etiqueta_original": "SSH-Patator",
+          "registros": 5897,
+          "clasificados_malicious": 1,
+          "tasa": 0.00016957775139901646
+        }
+      ]
+    },
+    {
+      "dia_prueba": "miércoles",
+      "archivos_prueba": [
+        "Wednesday-workingHours.pcap_ISCX.csv"
+      ],
+      "configuracion": "sin_balanceo",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2136287,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 691390,
+      "tiempo_entrenamiento_segundos": 51.871457999921404,
+      "metricas": {
+        "accuracy": 0.6380653466205759,
+        "precision_malicious": 0.9888010540184453,
+        "recall_malicious": 0.005962927356369328,
+        "specificity_benign": 0.9999613344614573,
+        "f1_malicious": 0.011854367398515243,
+        "f1_macro": 0.39515731277835175,
+        "fpr": 3.8665538542718595e-05,
+        "average_precision": 0.8598111604971814,
+        "roc_auc": 0.8878522014850643,
+        "true_negatives": 439651,
+        "false_positives": 17,
+        "false_negatives": 250221,
+        "true_positives": 1501
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 439668,
+          "clasificados_malicious": 17,
+          "tasa": 3.8665538542718595e-05
+        },
+        {
+          "etiqueta_original": "DoS GoldenEye",
+          "registros": 10293,
+          "clasificados_malicious": 2,
+          "tasa": 0.0001943068104537064
+        },
+        {
+          "etiqueta_original": "DoS Hulk",
+          "registros": 230123,
+          "clasificados_malicious": 1465,
+          "tasa": 0.006366160705361915
+        },
+        {
+          "etiqueta_original": "DoS Slowhttptest",
+          "registros": 5499,
+          "clasificados_malicious": 32,
+          "tasa": 0.005819239861793053
+        },
+        {
+          "etiqueta_original": "DoS slowloris",
+          "registros": 5796,
+          "clasificados_malicious": 2,
+          "tasa": 0.0003450655624568668
+        },
+        {
+          "etiqueta_original": "Heartbleed",
+          "registros": 11,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        }
+      ]
+    },
+    {
+      "dia_prueba": "miércoles",
+      "archivos_prueba": [
+        "Wednesday-workingHours.pcap_ISCX.csv"
+      ],
+      "configuracion": "balanceado",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2136287,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 691390,
+      "tiempo_entrenamiento_segundos": 59.73628129996359,
+      "metricas": {
+        "accuracy": 0.6390286234975918,
+        "precision_malicious": 0.9714912280701754,
+        "recall_malicious": 0.008799389803036683,
+        "specificity_benign": 0.9998521611761602,
+        "f1_malicious": 0.017440807552696436,
+        "f1_macro": 0.3981707651405846,
+        "fpr": 0.0001478388238398064,
+        "average_precision": 0.8506322724523665,
+        "roc_auc": 0.883614598650753,
+        "true_negatives": 439603,
+        "false_positives": 65,
+        "false_negatives": 249507,
+        "true_positives": 2215
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 439668,
+          "clasificados_malicious": 65,
+          "tasa": 0.0001478388238398064
+        },
+        {
+          "etiqueta_original": "DoS GoldenEye",
+          "registros": 10293,
+          "clasificados_malicious": 127,
+          "tasa": 0.012338482463810356
+        },
+        {
+          "etiqueta_original": "DoS Hulk",
+          "registros": 230123,
+          "clasificados_malicious": 2084,
+          "tasa": 0.009056026559709373
+        },
+        {
+          "etiqueta_original": "DoS Slowhttptest",
+          "registros": 5499,
+          "clasificados_malicious": 2,
+          "tasa": 0.0003637024913620658
+        },
+        {
+          "etiqueta_original": "DoS slowloris",
+          "registros": 5796,
+          "clasificados_malicious": 2,
+          "tasa": 0.0003450655624568668
+        },
+        {
+          "etiqueta_original": "Heartbleed",
+          "registros": 11,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        }
+      ]
+    },
+    {
+      "dia_prueba": "jueves",
+      "archivos_prueba": [
+        "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv"
+      ],
+      "configuracion": "sin_balanceo",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2369194,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 458483,
+      "tiempo_entrenamiento_segundos": 60.139189400011674,
+      "metricas": {
+        "accuracy": 0.9924250190301495,
+        "precision_malicious": 0.011655011655011656,
+        "recall_malicious": 0.006768953068592058,
+        "specificity_benign": 0.9972121586702523,
+        "f1_malicious": 0.008564087924636025,
+        "f1_macro": 0.5023810364776142,
+        "fpr": 0.0027878413297477136,
+        "average_precision": 0.03449378132410202,
+        "roc_auc": 0.9090713055395656,
+        "true_negatives": 454995,
+        "false_positives": 1272,
+        "false_negatives": 2201,
+        "true_positives": 15
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 456267,
+          "clasificados_malicious": 1272,
+          "tasa": 0.0027878413297477136
+        },
+        {
+          "etiqueta_original": "Infiltration",
+          "registros": 36,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        },
+        {
+          "etiqueta_original": "Web Attack – Brute Force",
+          "registros": 1507,
+          "clasificados_malicious": 9,
+          "tasa": 0.005972130059721301
+        },
+        {
+          "etiqueta_original": "Web Attack – Sql Injection",
+          "registros": 21,
+          "clasificados_malicious": 1,
+          "tasa": 0.047619047619047616
+        },
+        {
+          "etiqueta_original": "Web Attack – XSS",
+          "registros": 652,
+          "clasificados_malicious": 5,
+          "tasa": 0.007668711656441718
+        }
+      ]
+    },
+    {
+      "dia_prueba": "jueves",
+      "archivos_prueba": [
+        "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv"
+      ],
+      "configuracion": "balanceado",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2369194,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 458483,
+      "tiempo_entrenamiento_segundos": 63.992573100025766,
+      "metricas": {
+        "accuracy": 0.9929702955180454,
+        "precision_malicious": 0.23486045286993154,
+        "recall_malicious": 0.20126353790613719,
+        "specificity_benign": 0.9968154611225445,
+        "f1_malicious": 0.21676792223572297,
+        "f1_macro": 0.6066186127751418,
+        "fpr": 0.003184538877455525,
+        "average_precision": 0.2996454937038154,
+        "roc_auc": 0.9618240157911845,
+        "true_negatives": 454814,
+        "false_positives": 1453,
+        "false_negatives": 1770,
+        "true_positives": 446
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 456267,
+          "clasificados_malicious": 1453,
+          "tasa": 0.003184538877455525
+        },
+        {
+          "etiqueta_original": "Infiltration",
+          "registros": 36,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        },
+        {
+          "etiqueta_original": "Web Attack – Brute Force",
+          "registros": 1507,
+          "clasificados_malicious": 295,
+          "tasa": 0.1957531519575315
+        },
+        {
+          "etiqueta_original": "Web Attack – Sql Injection",
+          "registros": 21,
+          "clasificados_malicious": 2,
+          "tasa": 0.09523809523809523
+        },
+        {
+          "etiqueta_original": "Web Attack – XSS",
+          "registros": 652,
+          "clasificados_malicious": 149,
+          "tasa": 0.2285276073619632
+        }
+      ]
+    },
+    {
+      "dia_prueba": "viernes",
+      "archivos_prueba": [
+        "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+        "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+        "Friday-WorkingHours-Morning.pcap_ISCX.csv"
+      ],
+      "configuracion": "sin_balanceo",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2124964,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 702713,
+      "tiempo_entrenamiento_segundos": 65.60593560000416,
+      "metricas": {
+        "accuracy": 0.7031490807769317,
+        "precision_malicious": 0.998260091469477,
+        "recall_malicious": 0.278144640476479,
+        "specificity_benign": 0.9996617769273883,
+        "f1_malicious": 0.4350668519075204,
+        "f1_macro": 0.6168744651777538,
+        "fpr": 0.0003382230726116619,
+        "average_precision": 0.8000283349418853,
+        "roc_auc": 0.8399497964940619,
+        "true_negatives": 413788,
+        "false_positives": 140,
+        "false_negatives": 208461,
+        "true_positives": 80324
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 413928,
+          "clasificados_malicious": 140,
+          "tasa": 0.0003382230726116619
+        },
+        {
+          "etiqueta_original": "Bot",
+          "registros": 1956,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        },
+        {
+          "etiqueta_original": "DDoS",
+          "registros": 128025,
+          "clasificados_malicious": 80174,
+          "tasa": 0.6262370630736185
+        },
+        {
+          "etiqueta_original": "PortScan",
+          "registros": 158804,
+          "clasificados_malicious": 150,
+          "tasa": 0.0009445605904133397
+        }
+      ]
+    },
+    {
+      "dia_prueba": "viernes",
+      "archivos_prueba": [
+        "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+        "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+        "Friday-WorkingHours-Morning.pcap_ISCX.csv"
+      ],
+      "configuracion": "balanceado",
+      "filas_entrenamiento": 1762141,
+      "filas_entrenamiento_originales": 2124964,
+      "muestreo_entrenamiento": 1762141,
+      "filas_prueba": 702713,
+      "tiempo_entrenamiento_segundos": 61.32632180000655,
+      "metricas": {
+        "accuracy": 0.6210487069401022,
+        "precision_malicious": 0.9870923030276779,
+        "recall_malicious": 0.07891337846494798,
+        "specificity_benign": 0.9992800680311552,
+        "f1_malicious": 0.1461432895546891,
+        "f1_macro": 0.45131542606295094,
+        "fpr": 0.0007199319688448232,
+        "average_precision": 0.6271424055233067,
+        "roc_auc": 0.5839914853421687,
+        "true_negatives": 413630,
+        "false_positives": 298,
+        "false_negatives": 265996,
+        "true_positives": 22789
+      },
+      "por_etiqueta": [
+        {
+          "etiqueta_original": "BENIGN",
+          "registros": 413928,
+          "clasificados_malicious": 298,
+          "tasa": 0.0007199319688448232
+        },
+        {
+          "etiqueta_original": "Bot",
+          "registros": 1956,
+          "clasificados_malicious": 0,
+          "tasa": 0.0
+        },
+        {
+          "etiqueta_original": "DDoS",
+          "registros": 128025,
+          "clasificados_malicious": 22665,
+          "tasa": 0.1770357352079672
+        },
+        {
+          "etiqueta_original": "PortScan",
+          "registros": 158804,
+          "clasificados_malicious": 124,
+          "tasa": 0.0007808367547416942
+        }
+      ]
+    }
+  ]
+}
