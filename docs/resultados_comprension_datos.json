@@ -107,16 +107,16 @@
       },
       "observed_dtypes": {
         "Flow ID": [
-          "object"
+          "str"
         ],
         "Source IP": [
-          "object"
+          "str"
         ],
         "Source Port": [
           "int64"
         ],
         "Destination IP": [
-          "object"
+          "str"
         ],
         "Destination Port": [
           "int64"
@@ -125,7 +125,7 @@
           "int64"
         ],
         "Timestamp": [
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "int64"
@@ -359,11 +359,11 @@
           "int64"
         ],
         "Label": [
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
-        "object": 5,
+        "str": 5,
         "int64": 56,
         "float64": 24
       },
@@ -798,16 +798,16 @@
       },
       "observed_dtypes": {
         "Flow ID": [
-          "object"
+          "str"
         ],
         "Source IP": [
-          "object"
+          "str"
         ],
         "Source Port": [
           "int64"
         ],
         "Destination IP": [
-          "object"
+          "str"
         ],
         "Destination Port": [
           "int64"
@@ -816,7 +816,7 @@
           "int64"
         ],
         "Timestamp": [
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "int64"
@@ -1051,11 +1051,11 @@
           "float64"
         ],
         "Label": [
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
-        "object": 5,
+        "str": 5,
         "int64": 44,
         "float64": 35
       },
@@ -1490,16 +1490,16 @@
       },
       "observed_dtypes": {
         "Flow ID": [
-          "object"
+          "str"
         ],
         "Source IP": [
-          "object"
+          "str"
         ],
         "Source Port": [
           "int64"
         ],
         "Destination IP": [
-          "object"
+          "str"
         ],
         "Destination Port": [
           "int64"
@@ -1508,7 +1508,7 @@
           "int64"
         ],
         "Timestamp": [
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "int64"
@@ -1742,11 +1742,11 @@
           "float64"
         ],
         "Label": [
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
-        "object": 5,
+        "str": 5,
         "int64": 43,
         "float64": 37
       },
@@ -2180,16 +2180,16 @@
       },
       "observed_dtypes": {
         "Flow ID": [
-          "object"
+          "str"
         ],
         "Source IP": [
-          "object"
+          "str"
         ],
         "Source Port": [
           "int64"
         ],
         "Destination IP": [
-          "object"
+          "str"
         ],
         "Destination Port": [
           "int64"
@@ -2198,7 +2198,7 @@
           "int64"
         ],
         "Timestamp": [
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "int64"
@@ -2432,11 +2432,11 @@
           "float64"
         ],
         "Label": [
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
-        "object": 5,
+        "str": 5,
         "int64": 35,
         "float64": 45
       },
@@ -2871,16 +2871,16 @@
       },
       "observed_dtypes": {
         "Flow ID": [
-          "object"
+          "str"
         ],
         "Source IP": [
-          "object"
+          "str"
         ],
         "Source Port": [
           "int64"
         ],
         "Destination IP": [
-          "object"
+          "str"
         ],
         "Destination Port": [
           "int64"
@@ -2889,7 +2889,7 @@
           "int64"
         ],
         "Timestamp": [
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "int64"
@@ -3124,11 +3124,11 @@
           "float64"
         ],
         "Label": [
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
-        "object": 5,
+        "str": 5,
         "int64": 42,
         "float64": 37
       },
@@ -3650,11 +3650,11 @@
       "observed_dtypes": {
         "Flow ID": [
           "float64",
-          "object"
+          "str"
         ],
         "Source IP": [
           "float64",
-          "object"
+          "str"
         ],
         "Source Port": [
           "float64",
@@ -3662,7 +3662,7 @@
         ],
         "Destination IP": [
           "float64",
-          "object"
+          "str"
         ],
         "Destination Port": [
           "float64",
@@ -3674,7 +3674,7 @@
         ],
         "Timestamp": [
           "float64",
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "float64",
@@ -3949,7 +3949,7 @@
         ],
         "Label": [
           "float64",
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
@@ -4387,16 +4387,16 @@
       },
       "observed_dtypes": {
         "Flow ID": [
-          "object"
+          "str"
         ],
         "Source IP": [
-          "object"
+          "str"
         ],
         "Source Port": [
           "int64"
         ],
         "Destination IP": [
-          "object"
+          "str"
         ],
         "Destination Port": [
           "int64"
@@ -4405,7 +4405,7 @@
           "int64"
         ],
         "Timestamp": [
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "int64"
@@ -4640,11 +4640,11 @@
           "float64"
         ],
         "Label": [
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
-        "object": 5,
+        "str": 5,
         "int64": 43,
         "float64": 36
       },
@@ -5083,16 +5083,16 @@
       },
       "observed_dtypes": {
         "Flow ID": [
-          "object"
+          "str"
         ],
         "Source IP": [
-          "object"
+          "str"
         ],
         "Source Port": [
           "int64"
         ],
         "Destination IP": [
-          "object"
+          "str"
         ],
         "Destination Port": [
           "int64"
@@ -5101,7 +5101,7 @@
           "int64"
         ],
         "Timestamp": [
-          "object"
+          "str"
         ],
         "Flow Duration": [
           "int64"
@@ -5336,11 +5336,11 @@
           "float64"
         ],
         "Label": [
-          "object"
+          "str"
         ]
       },
       "dtype_counts": {
-        "object": 5,
+        "str": 5,
         "int64": 43,
         "float64": 36
       },
@@ -5874,16 +5874,16 @@
     ],
     "observed_dtypes": {
       "Flow ID": [
-        "object"
+        "str"
       ],
       "Source IP": [
-        "object"
+        "str"
       ],
       "Source Port": [
         "int64"
       ],
       "Destination IP": [
-        "object"
+        "str"
       ],
       "Destination Port": [
         "int64"
@@ -5892,7 +5892,7 @@
         "int64"
       ],
       "Timestamp": [
-        "object"
+        "str"
       ],
       "Flow Duration": [
         "int64"
@@ -6126,11 +6126,11 @@
         "int64"
       ],
       "Label": [
-        "object"
+        "str"
       ]
     },
     "dtype_counts": {
-      "object": 5,
+      "str": 5,
       "int64": 56,
       "float64": 24
     },

@@ -13,28 +13,28 @@
       "registros": 1956,
       "predichos_malicious": 0,
       "tasa_deteccion": 0.0,
-      "probabilidad_media": 0.00020771113291988405
+      "probabilidad_media": 0.0008047699377557826
     },
     {
       "etiqueta_original": "DDoS",
       "registros": 128025,
-      "predichos_malicious": 21876,
-      "tasa_deteccion": 0.1708728763913298,
-      "probabilidad_media": 0.3029641297440295
+      "predichos_malicious": 75263,
+      "tasa_deteccion": 0.5878773677016208,
+      "probabilidad_media": 0.375127286938934
     },
     {
       "etiqueta_original": "PortScan",
       "registros": 158804,
-      "predichos_malicious": 78,
-      "tasa_deteccion": 0.0004911715070149366,
-      "probabilidad_media": 0.0016607104632795143
+      "predichos_malicious": 125,
+      "tasa_deteccion": 0.0007871338253444498,
+      "probabilidad_media": 0.007081023821678979
     },
     {
       "etiqueta_original": "BENIGN",
       "registros": 413928,
-      "predichos_malicious": 148,
-      "tasa_deteccion": 0.00035755010533232835,
-      "probabilidad_media": 0.0038616153375723864
+      "predichos_malicious": 298,
+      "tasa_deteccion": 0.0007199319688448232,
+      "probabilidad_media": 0.005807212069041332
     }
   ]
 }

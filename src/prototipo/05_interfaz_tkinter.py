@@ -483,7 +483,7 @@ class InterfazIDS:
         for valor, (_, _, color) in zip(valores, segmentos):
             if valor == 0:
                 continue
-            extension = -360 * valor / total
+            extension = 360 * valor / total
             self.grafica_pastel.create_arc(
                 caja,
                 start=inicio,
@@ -491,6 +491,7 @@ class InterfazIDS:
                 fill=color,
                 outline="#ffffff",
                 width=2,
+                style=tk.PIESLICE,
             )
             inicio += extension
 

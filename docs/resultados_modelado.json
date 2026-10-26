@@ -1,10 +1,10 @@
 {
   "dataset": "data\\processed\\dataset_cicids2017_preparado.parquet",
   "environment": {
-    "python": "3.13.2",
+    "python": "3.14.6",
     "numpy": "2.4.6",
-    "pandas": "2.3.3",
-    "scikit_learn": "1.8.0",
+    "pandas": "3.0.3",
+    "scikit_learn": "1.9.0",
     "joblib": "1.5.3"
   },
   "feature_count": 78,
@@ -59,7 +59,7 @@
       "class_weight": null,
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 45.935001700010616,
+      "tiempo_entrenamiento_segundos": 48.011325799976476,
       "validacion": {
         "accuracy": 0.994665014842426,
         "precision_malicious": 0.13836477987421383,
@@ -69,7 +69,7 @@
         "f1_macro": 0.5160264093587568,
         "fpr": 0.0006005255694582339,
         "average_precision": 0.5170683439850271,
-        "roc_auc": 0.9681259282528372,
+        "roc_auc": 0.9681259238021845,
         "true_negatives": 455993,
         "false_positives": 274,
         "false_negatives": 2172,
@@ -81,127 +81,127 @@
       "class_weight": "balanced",
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 50.90640249999706,
+      "tiempo_entrenamiento_segundos": 46.711056599975564,
       "validacion": {
-        "accuracy": 0.9941764471092712,
-        "precision_malicious": 0.058365758754863814,
-        "recall_malicious": 0.013537906137184115,
-        "specificity_benign": 0.9989392176072344,
-        "f1_malicious": 0.02197802197802198,
-        "f1_macro": 0.5095287753386974,
-        "fpr": 0.0010607823927656394,
-        "average_precision": 0.3602044165092437,
-        "roc_auc": 0.9627508409577364,
-        "true_negatives": 455783,
-        "false_positives": 484,
-        "false_negatives": 2186,
-        "true_positives": 30
+        "accuracy": 0.9943465733734947,
+        "precision_malicious": 0.25263157894736843,
+        "recall_malicious": 0.08664259927797834,
+        "specificity_benign": 0.9987551148779114,
+        "f1_malicious": 0.12903225806451613,
+        "f1_macro": 0.5630981704112665,
+        "fpr": 0.0012448851220886016,
+        "average_precision": 0.4508564421678133,
+        "roc_auc": 0.9818824998985844,
+        "true_negatives": 455699,
+        "false_positives": 568,
+        "false_negatives": 2024,
+        "true_positives": 192
       }
     }
   ],
   "selection": {
     "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
-    "configuration": "sin_balanceo",
-    "class_weight": null,
+    "configuration": "balanceado",
+    "class_weight": "balanced",
     "final_training_rows": 2124964,
-    "retraining_seconds": 85.03247490001377,
+    "retraining_seconds": 65.41596949996892,
     "final_test": {
-      "accuracy": 0.620073913532267,
-      "precision_malicious": 0.9933037734141706,
-      "recall_malicious": 0.07602195404885988,
-      "specificity_benign": 0.9996424498946677,
-      "f1_malicious": 0.14123459649325962,
-      "f1_macro": 0.448657733534911,
-      "fpr": 0.00035755010533232835,
-      "average_precision": 0.6934499267973507,
-      "roc_auc": 0.7289772973795619,
-      "true_negatives": 413780,
-      "false_positives": 148,
-      "false_negatives": 266831,
-      "true_positives": 21954
+      "accuracy": 0.6959000331572064,
+      "precision_malicious": 0.996062680020083,
+      "recall_malicious": 0.2610523399761068,
+      "specificity_benign": 0.9992800680311552,
+      "f1_malicious": 0.4136844906727833,
+      "f1_macro": 0.6041985191426561,
+      "fpr": 0.0007199319688448232,
+      "average_precision": 0.6895928638183638,
+      "roc_auc": 0.5973817747544432,
+      "true_negatives": 413630,
+      "false_positives": 298,
+      "false_negatives": 213397,
+      "true_positives": 75388
     },
     "model_path": "data\\processed\\modelos\\random_forest_seleccionado.joblib"
   },
   "top_feature_importances": [
     {
-      "feature": "Max Packet Length",
-      "importance": 0.08850697636139891
+      "feature": "Bwd Packets/s",
+      "importance": 0.10701562189304602
     },
     {
       "feature": "Packet Length Std",
-      "importance": 0.08496547845027567
+      "importance": 0.07685248468741777
     },
     {
-      "feature": "Packet Length Variance",
-      "importance": 0.08268193327190325
-    },
-    {
-      "feature": "Init_Win_bytes_forward",
-      "importance": 0.07507279680945768
-    },
-    {
-      "feature": "Avg Bwd Segment Size",
-      "importance": 0.06931774956813098
+      "feature": "Max Packet Length",
+      "importance": 0.07296093650911505
     },
     {
       "feature": "Bwd Packet Length Max",
-      "importance": 0.05349823667767359
+      "importance": 0.050026047493625374
     },
     {
-      "feature": "Idle Mean",
-      "importance": 0.03623706714865573
+      "feature": "Avg Bwd Segment Size",
+      "importance": 0.04951257329166128
     },
     {
-      "feature": "Bwd Packet Length Std",
-      "importance": 0.035572177936323
+      "feature": "Packet Length Variance",
+      "importance": 0.047960773253252625
     },
     {
-      "feature": "Fwd IAT Max",
-      "importance": 0.026125511750472858
-    },
-    {
-      "feature": "Fwd Header Length.1",
-      "importance": 0.02335790713282301
+      "feature": "Init_Win_bytes_forward",
+      "importance": 0.04704456946967637
     },
     {
       "feature": "Total Length of Bwd Packets",
-      "importance": 0.021394741787113262
+      "importance": 0.035322392434840214
+    },
+    {
+      "feature": "Bwd Packet Length Std",
+      "importance": 0.0318358767030726
     },
     {
       "feature": "Average Packet Size",
-      "importance": 0.020170382623595152
-    },
-    {
-      "feature": "Idle Min",
-      "importance": 0.01906250414747787
-    },
-    {
-      "feature": "Init_Win_bytes_backward",
-      "importance": 0.017496360905502828
-    },
-    {
-      "feature": "Fwd IAT Mean",
-      "importance": 0.015704897734315656
-    },
-    {
-      "feature": "Bwd Packet Length Mean",
-      "importance": 0.015120976677328646
+      "importance": 0.03090132102565091
     },
     {
       "feature": "Packet Length Mean",
-      "importance": 0.014819827091607025
+      "importance": 0.03032591695847746
     },
     {
       "feature": "Fwd Header Length",
-      "importance": 0.014590781987247028
+      "importance": 0.026817969372659917
     },
     {
-      "feature": "Subflow Fwd Bytes",
-      "importance": 0.013629223721949081
+      "feature": "Fwd Header Length.1",
+      "importance": 0.02655911203551044
     },
     {
-      "feature": "Flow IAT Mean",
-      "importance": 0.013366379205986907
+      "feature": "Init_Win_bytes_backward",
+      "importance": 0.024794519212534217
+    },
+    {
+      "feature": "Bwd Packet Length Mean",
+      "importance": 0.023778414711209415
+    },
+    {
+      "feature": "Min Packet Length",
+      "importance": 0.023176567084648242
+    },
+    {
+      "feature": "Fwd Packet Length Mean",
+      "importance": 0.02046136663291564
+    },
+    {
+      "feature": "Flow Bytes/s",
+      "importance": 0.017635108427874815
+    },
+    {
+      "feature": "Fwd Packet Length Min",
+      "importance": 0.014365363678162782
+    },
+    {
+      "feature": "Fwd IAT Max",
+      "importance": 0.013320342883679266
     }
   ],
   "notes": [
