@@ -11,11 +11,11 @@
     "red_de_produccion": false
   },
   "versiones": {
-    "python": "3.13.2",
-    "pandas": "2.3.3",
-    "scikit_learn": "1.8.0"
+    "python": "3.14.6",
+    "pandas": "3.0.3",
+    "scikit_learn": "1.9.0"
   },
-  "duracion_inferencia_segundos": 0.05410950002260506,
+  "duracion_inferencia_segundos": 0.06026920001022518,
   "muestra": {
     "archivo_fuente": "data\\raw\\Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
     "registros_por_clase_real": {
@@ -25,10 +25,10 @@
     "total_registros": 20,
     "caracteristicas": 78,
     "predicciones": {
-      "BENIGN": 16,
-      "MALICIOUS": 4
+      "BENIGN": 11,
+      "MALICIOUS": 9
     },
-    "alertas_generadas": 4,
+    "alertas_generadas": 9,
     "errores_de_datos": 0
   },
   "verificaciones": {
@@ -44,5 +44,5 @@
     "alertas": "data\\processed\\prueba_laboratorio\\alertas_ids.csv"
   },
   "huella_sha256_entrada": "7ca1c025f91417536ac22fcd740bb160029cc2dfedc4f544a89c02cd43c6d44a",
-  "duracion_total_segundos": 1.798280299990438
+  "duracion_total_segundos": 0.6394395000534132
 }

@@ -64,7 +64,7 @@ def crear_muestra_controlada(
         encoding="cp1252",
         low_memory=False,
         chunksize=TAMANO_BLOQUE,
-        usecols=lambda nombre: nombre.strip() in columnas_requeridas,
+        usecols=lambda nombre: str(nombre).strip() in columnas_requeridas,
     )
 
     for bloque in bloques:

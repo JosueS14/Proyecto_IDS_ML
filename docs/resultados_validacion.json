@@ -7,7 +7,7 @@
     {
       "prueba": "Carga del modelo y esquema",
       "estado": "PASÓ",
-      "duracion_segundos": 1.1200085282325745e-05,
+      "duracion_segundos": 1.880002673715353e-05,
       "detalle": {
         "clases": [
           "BENIGN",
@@ -19,7 +19,7 @@
     {
       "prueba": "Inferencia con Parquet preparado",
       "estado": "PASÓ",
-      "duracion_segundos": 6.829609799897298,
+      "duracion_segundos": 1.8972106999717653,
       "detalle": {
         "total": 200,
         "benign": 199,
@@ -30,7 +30,7 @@
     {
       "prueba": "Inferencia con CSV original",
       "estado": "PASÓ",
-      "duracion_segundos": 0.10720820003189147,
+      "duracion_segundos": 0.08209239994175732,
       "detalle": {
         "total": 200,
         "benign": 192,
@@ -41,13 +41,13 @@
     {
       "prueba": "Rechazo de esquema inválido",
       "estado": "PASÓ",
-      "duracion_segundos": 1.9029636998893693,
+      "duracion_segundos": 1.181735199992545,
       "detalle": "Faltan características requeridas por el modelo: ['Protocol']"
     },
     {
       "prueba": "Manejo de valores inválidos",
       "estado": "PASÓ",
-      "duracion_segundos": 1.5519869999261573,
+      "duracion_segundos": 1.4007806999143213,
       "detalle": {
         "total": 5,
         "benign": 4,
@@ -58,7 +58,7 @@
     {
       "prueba": "Consistencia de alertas",
       "estado": "PASÓ",
-      "duracion_segundos": 0.06526649999432266,
+      "duracion_segundos": 0.09078640001825988,
       "detalle": {
         "alertas": 0,
         "benignos": 491
@@ -67,7 +67,7 @@
     {
       "prueba": "Filtro de la interfaz",
       "estado": "PASÓ",
-      "duracion_segundos": 0.00252470001578331,
+      "duracion_segundos": 0.001843899954110384,
       "detalle": {
         "coincidencias": 1
       }
@@ -75,16 +75,16 @@
     {
       "prueba": "Inferencia de un lote de 1,000 filas",
       "estado": "PASÓ",
-      "duracion_segundos": 0.9395107999444008,
+      "duracion_segundos": 1.3105011000297964,
       "detalle": {
         "filas": 1000,
-        "segundos": 0.04706619994249195
+        "segundos": 0.05357170000206679
       }
     },
     {
       "prueba": "Compilación de componentes",
       "estado": "PASÓ",
-      "duracion_segundos": 0.03780309995636344,
+      "duracion_segundos": 0.027893400052562356,
       "detalle": {
         "inferencia": "src\\prototipo\\inferencia_ids.py",
         "interfaz": "src\\prototipo\\05_interfaz_tkinter.py"
