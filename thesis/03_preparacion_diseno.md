@@ -141,11 +141,22 @@ Se implementará en la fase 5. Registrará como mínimo la fecha de análisis, l
 
 ## 8. Partición y prevención de fuga
 
-La partición de entrenamiento, validación y prueba se realizó después de generar el dataset preparado. El conjunto de prueba se mantuvo separado de la selección de configuración y del ajuste del modelo.
+La partición de entrenamiento, validación y prueba se realiza después de generar el
+dataset preparado. La prueba se mantiene separada de la selección de configuración y
+del ajuste del modelo.
 
-La estrategia implementada utiliza una partición fija por día de captura. Los ocho archivos se integraron para preparar el conjunto, pero la procedencia de cada fila se conserva en un artefacto auxiliar. De esta manera no se mezclan filas del mismo día y escenario entre entrenamiento, validación y prueba.
+La partición principal agrupa filas con vectores idénticos de las 78 características y
+asigna cada grupo completo a entrenamiento, validación o prueba. Las etiquetas originales
+se usan para que las categorías de ataque estén representadas en las tres particiones
+cuando hay suficientes grupos. La procedencia por archivo se conserva para analizar el
+desempeño por escenario.
 
-La partición utiliza los archivos de lunes, martes y miércoles para entrenamiento, los archivos del jueves para validación y los archivos del viernes para prueba. En la ejecución oficial de la fase 4 no fue necesario submuestrear el entrenamiento (1,666,481 filas en la partición por día). Los análisis complementarios de la fase 4 sí aplican un submuestreo estratificado de 1,762,141 filas, que conserva la separación por día. La prueba es reservada y más exigente, pero sigue perteneciendo al mismo dataset y no constituye una validación externa de una red real.
+La partición principal usa aproximadamente 80/10/10: 2,272,892 filas de entrenamiento
+antes del límite, 279,147 de validación y 275,638 de prueba. Por recursos, se muestrea
+entrenamiento a 1,762,141 filas estratificando por etiqueta original. La comprobación
+adicional leave-one-day-out mantiene días completos fuera del entrenamiento para medir
+transferencia a escenarios no vistos. Ambas evaluaciones responden a objetivos distintos;
+ninguna constituye una validación externa en una red real.
 
 No se aplicó balanceo sintético. La configuración `class_weight="balanced"` del clasificador modifica los pesos de las clases durante el ajuste, sin alterar la composición de validación ni de prueba. Cualquier técnica de remuestreo que se incorpore posteriormente deberá aplicarse únicamente al entrenamiento.
 
@@ -154,7 +165,7 @@ No se aplicó balanceo sintético. La configuración `class_weight="balanced"` d
 - `src/data/03_preparar_dataset.py`: pipeline reproducible de preparación.
 - `data/processed/dataset_cicids2017_preparado.parquet`: salida local derivada, no versionada.
 - `data/processed/dataset_cicids2017_preparado_metadatos.json`: esquema, decisiones y contadores de preparación.
-- `data/processed/dataset_cicids2017_preparado_grupos.parquet`: procedencia de cada fila para la partición por día de captura.
+- `data/processed/dataset_cicids2017_preparado_grupos.parquet`: procedencia y etiqueta original de cada fila.
 - `thesis/03_preparacion_diseno.md`: descripción de las transformaciones y del diseño lógico.
 
 ## 10. Criterios de aceptación
@@ -174,10 +185,10 @@ La fase 3 no incluye todavía entrenamiento, ajuste de hiperparámetros, selecci
 
 ## 11. Pendientes para la fase 4 (estado al cierre)
 
-Estado: la partición por día, la comparación de configuraciones y la evaluación final se realizaron en la fase 4. No se midió de forma separada el efecto de la preparación sobre cada clase. Los modelos de referencia distintos de Random Forest no se implementaron. El tratamiento del desbalance se limitó a `class_weight` dentro del clasificador.
+Estado: la partición agrupada por vector de características, la comparación de configuraciones y la evaluación final se realizaron en la fase 4. También se conservaron análisis complementarios por día. Los modelos de referencia distintos de Random Forest no se implementaron. El tratamiento del desbalance se limitó a `class_weight` y al submuestreo estratificado del entrenamiento.
 
 - Medir el efecto de la preparación sobre cada clase.
-- Definir la partición reproducible de entrenamiento, validación y prueba por día de captura.
+- Mantener la partición reproducible por vectores idénticos y evaluar por separado la transferencia entre días.
 - Evaluar si el tratamiento del desbalance es necesario.
 - Entrenar Random Forest y modelos de referencia.
 - Comparar configuraciones sin utilizar el conjunto de prueba para el ajuste.

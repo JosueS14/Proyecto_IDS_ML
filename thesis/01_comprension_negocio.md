@@ -45,7 +45,7 @@ Implementar y evaluar un prototipo de sistema de detección de intrusiones en re
 - Modo inicial de operación: procesamiento por lotes mediante archivos preparados.
 - Entrada prevista: registros tabulares con las características esperadas por el modelo.
 - Salida prevista: clase predicha, probabilidad estimada por el clasificador cuando esté disponible y registro de eventos maliciosos. La probabilidad no se interpretará como confianza calibrada, ya que no se realizó calibración probabilística.
-- Evaluación: partición de prueba reservada, no utilizada para seleccionar o ajustar el modelo, y métricas definidas en este documento. La separación principal será por día de captura para evitar mezclar escenarios relacionados.
+- Evaluación: partición de prueba reservada, no utilizada para seleccionar o ajustar el modelo. La partición principal mantiene vectores idénticos de características en un solo conjunto; se añade una evaluación por día completo para medir transferencia entre escenarios.
 - Entorno de ejecución: laboratorio controlado y aislado.
 
 ### 4.2 Fuera del alcance de la primera versión
