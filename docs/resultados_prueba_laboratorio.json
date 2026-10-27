@@ -11,11 +11,11 @@
     "red_de_produccion": false
   },
   "versiones": {
-    "python": "3.14.6",
-    "pandas": "3.0.3",
-    "scikit_learn": "1.9.0"
+    "python": "3.13.2",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.8.0"
   },
-  "duracion_inferencia_segundos": 0.04112229999736883,
+  "duracion_inferencia_segundos": 0.041386500000953674,
   "muestra": {
     "archivo_fuente": "data\\raw\\Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
     "registros_por_clase_real": {
@@ -39,10 +39,10 @@
     "evaluacion_de_desempeno_predictivo": false
   },
   "artefactos": {
-    "entrada": "data\\processed\\prueba_laboratorio\\flujos_prueba_offline.csv",
+    "entrada": "data\\flujos_prueba_offline.csv",
     "resultados": "data\\processed\\prueba_laboratorio\\resultado_inferencia.csv",
     "alertas": "data\\processed\\prueba_laboratorio\\alertas_ids.csv"
   },
   "huella_sha256_entrada": "7ca1c025f91417536ac22fcd740bb160029cc2dfedc4f544a89c02cd43c6d44a",
-  "duracion_total_segundos": 0.5166648000013083
+  "duracion_total_segundos": 1.8935098000001744
 }

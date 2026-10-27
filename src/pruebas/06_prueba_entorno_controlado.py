@@ -33,6 +33,7 @@ RUTA_FUENTE = (
     / "raw"
     / "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv"
 )
+RUTA_ENTRADA = RAIZ_PROYECTO / "data" / "flujos_prueba_offline.csv"
 RUTA_SANDBOX = RAIZ_PROYECTO / "data" / "processed" / "prueba_laboratorio"
 RUTA_INFORME = RAIZ_PROYECTO / "docs" / "resultados_prueba_laboratorio.json"
 REGISTROS_POR_CLASE = 10
@@ -146,7 +147,7 @@ def main() -> None:
             )
 
         RUTA_SANDBOX.mkdir(parents=True, exist_ok=True)
-        ruta_entrada = RUTA_SANDBOX / "flujos_prueba_offline.csv"
+        ruta_entrada = RUTA_ENTRADA
         ruta_resultados = RUTA_SANDBOX / "resultado_inferencia.csv"
         ruta_alertas = RUTA_SANDBOX / "alertas_ids.csv"
 

@@ -18,107 +18,107 @@
     {
       "etiqueta_original": "Bot",
       "registros": 210,
-      "predichos_malicious": 127,
-      "tasa_deteccion": 0.6047619047619047,
-      "probabilidad_media": 0.5817660258958007
+      "predichos_malicious": 139,
+      "tasa_deteccion": 0.6619047619047619,
+      "probabilidad_media": 0.6548530609314193
     },
     {
       "etiqueta_original": "DDoS",
       "registros": 12775,
-      "predichos_malicious": 12769,
-      "tasa_deteccion": 0.9995303326810177,
-      "probabilidad_media": 0.9991053428923155
+      "predichos_malicious": 12771,
+      "tasa_deteccion": 0.9996868884540118,
+      "probabilidad_media": 0.9992858582892423
     },
     {
       "etiqueta_original": "DoS GoldenEye",
       "registros": 994,
-      "predichos_malicious": 992,
-      "tasa_deteccion": 0.9979879275653923,
-      "probabilidad_media": 0.9892027020538976
+      "predichos_malicious": 993,
+      "tasa_deteccion": 0.9989939637826962,
+      "probabilidad_media": 0.9928189713723997
     },
     {
       "etiqueta_original": "DoS Hulk",
       "registros": 19536,
-      "predichos_malicious": 19461,
-      "tasa_deteccion": 0.9961609336609336,
-      "probabilidad_media": 0.980055410647075
+      "predichos_malicious": 19469,
+      "tasa_deteccion": 0.9965704340704341,
+      "probabilidad_media": 0.9792564021706712
     },
     {
       "etiqueta_original": "DoS Slowhttptest",
       "registros": 546,
-      "predichos_malicious": 544,
-      "tasa_deteccion": 0.9963369963369964,
-      "probabilidad_media": 0.9770000626418445
+      "predichos_malicious": 545,
+      "tasa_deteccion": 0.9981684981684982,
+      "probabilidad_media": 0.9827565648852156
     },
     {
       "etiqueta_original": "DoS slowloris",
       "registros": 413,
       "predichos_malicious": 412,
       "tasa_deteccion": 0.9975786924939467,
-      "probabilidad_media": 0.994992468302294
+      "probabilidad_media": 0.9958696590743916
     },
     {
       "etiqueta_original": "FTP-Patator",
       "registros": 779,
       "predichos_malicious": 778,
       "tasa_deteccion": 0.9987163029525032,
-      "probabilidad_media": 0.9965670457703051
+      "probabilidad_media": 0.9964413077560486
     },
     {
       "etiqueta_original": "Heartbleed",
       "registros": 1,
       "predichos_malicious": 1,
       "tasa_deteccion": 1.0,
-      "probabilidad_media": 0.9
+      "probabilidad_media": 0.98
     },
     {
       "etiqueta_original": "Infiltration",
       "registros": 4,
       "predichos_malicious": 3,
       "tasa_deteccion": 0.75,
-      "probabilidad_media": 0.4700091186986829
+      "probabilidad_media": 0.5506249999999999
     },
     {
       "etiqueta_original": "PortScan",
       "registros": 13969,
       "predichos_malicious": 13967,
       "tasa_deteccion": 0.9998568258286206,
-      "probabilidad_media": 0.9950278894958648
+      "probabilidad_media": 0.9966441038714688
     },
     {
       "etiqueta_original": "SSH-Patator",
       "registros": 507,
-      "predichos_malicious": 498,
-      "tasa_deteccion": 0.9822485207100592,
-      "probabilidad_media": 0.8805826523281527
+      "predichos_malicious": 503,
+      "tasa_deteccion": 0.9921104536489151,
+      "probabilidad_media": 0.8957543060722241
     },
     {
       "etiqueta_original": "Web Attack – Brute Force",
       "registros": 142,
-      "predichos_malicious": 127,
-      "tasa_deteccion": 0.8943661971830986,
-      "probabilidad_media": 0.8779140496498795
+      "predichos_malicious": 132,
+      "tasa_deteccion": 0.9295774647887324,
+      "probabilidad_media": 0.8920414956249745
     },
     {
       "etiqueta_original": "Web Attack – Sql Injection",
       "registros": 2,
-      "predichos_malicious": 0,
-      "tasa_deteccion": 0.0,
-      "probabilidad_media": 0.22895638179554084
+      "predichos_malicious": 1,
+      "tasa_deteccion": 0.5,
+      "probabilidad_media": 0.3892832125184335
     },
     {
       "etiqueta_original": "Web Attack – XSS",
       "registros": 63,
       "predichos_malicious": 63,
       "tasa_deteccion": 1.0,
-      "probabilidad_media": 0.9780921760680652
+      "probabilidad_media": 0.9709994643766079
     },
     {
       "etiqueta_original": "BENIGN",
       "registros": 225697,
-      "predichos_malicious": 357,
-      "tasa_deteccion": 0.0015817667049185411,
-      "probabilidad_media": 0.004698513222552776
+      "predichos_malicious": 398,
+      "tasa_deteccion": 0.0017634261864357967,
+      "probabilidad_media": 0.005054032512724878
     }
   ]
 }

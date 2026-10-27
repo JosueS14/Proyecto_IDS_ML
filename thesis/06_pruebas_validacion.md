@@ -60,7 +60,7 @@ La prueba se reproduce desde la raíz del proyecto con:
 python src/pruebas/06_prueba_entorno_controlado.py
 ```
 
-La ejecución se realizó en un sandbox lógico de archivos bajo `data/processed/prueba_laboratorio`. El flujo no abrió conexiones de red, no capturó ni inyectó paquetes y no interactuó con una red de producción. La entrada se conservó sin cambios, verificado mediante su huella SHA-256. Esta prueba verifica el procesamiento y la generación de archivos; **no constituye una evaluación del desempeño predictivo ni una prueba de generalización**, ya que la muestra proviene de CIC-IDS2017.
+La entrada está disponible en `data/flujos_prueba_offline.csv`; los resultados y las alertas de la ejecución se guardan en `data/processed/prueba_laboratorio`. El flujo no abrió conexiones de red, no capturó ni inyectó paquetes y no interactuó con una red de producción. La entrada se conservó sin cambios, verificado mediante su huella SHA-256. Esta prueba verifica el procesamiento y la generación de archivos; **no constituye una evaluación del desempeño predictivo ni una prueba de generalización**, ya que la muestra proviene de CIC-IDS2017.
 
 Resultados de la ejecución:
 
@@ -69,7 +69,7 @@ Resultados de la ejecución:
 - 10 alertas generadas, correspondientes a las predicciones `MALICIOUS`.
 - En esta muestra pequeña, los 10 flujos asociados a ataques fueron detectados. Este resultado es solo una comprobación funcional del flujo y no constituye una estimación del desempeño predictivo.
 - Los archivos de resultados y alertas se guardaron por separado.
-- La inferencia tardó aproximadamente 0.05 segundos; el tiempo total de la prueba fue aproximadamente 1.80 segundos en el entorno utilizado.
+- La inferencia tardó aproximadamente 0.04 segundos; el tiempo total de la prueba fue aproximadamente 1.89 segundos en el entorno utilizado.
 
 Los tiempos son observaciones de una ejecución y pueden variar según el equipo. La prueba tampoco verifica visualmente la interacción con la ventana Tkinter; esa comprobación continúa siendo manual.
 
@@ -97,7 +97,8 @@ La validación comprobó las siguientes reglas:
 - `docs/resultados_validacion.json`: resultado de las pruebas.
 - `src/pruebas/06_prueba_entorno_controlado.py`: prueba complementaria offline de extremo a extremo.
 - `docs/resultados_prueba_laboratorio.json`: resultado y configuración de la prueba complementaria.
-- `data/processed/prueba_laboratorio/`: muestra de entrada y archivos de resultados y alertas generados localmente.
+- `data/flujos_prueba_offline.csv`: muestra de entrada de 20 flujos para la prueba complementaria.
+- `data/processed/prueba_laboratorio/`: resultados y alertas generados localmente por la prueba.
 - `thesis/06_pruebas_validacion.md`: documentación de la validación.
 
 Con estas pruebas se cierra la **fase 6. Pruebas y validación**. La siguiente etapa será la **fase 7. Despliegue y mantenimiento**, donde se prepararán la guía de uso, instalación, monitoreo y actualización del modelo.
