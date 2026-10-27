@@ -17,6 +17,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.metrics import (
     accuracy_score,
     average_precision_score,
+    balanced_accuracy_score,
     confusion_matrix,
     f1_score,
     precision_score,
@@ -42,6 +43,7 @@ RUTA_RESULTADOS = RAIZ_PROYECTO / "docs" / "resultados_modelado.json"
 RANDOM_STATE = 42
 N_ESTIMADORES = 50
 MAX_FILAS_ENTRENAMIENTO = 1_762_141
+NUM_PARTICIONES_HASH = 10
 MAX_PROFUNDIDAD = 20
 MAX_MUESTRAS_POR_ARBOL = 0.5
 N_JOBS = 4
@@ -49,6 +51,7 @@ COLUMNA_OBJETIVO = "Label"
 CLASE_BENIGNA = "BENIGN"
 CLASE_MALICIOSA = "MALICIOUS"
 
+# Se conservan para los análisis complementarios por día (04c/04d/04e).
 ARCHIVOS_ENTRENAMIENTO = {
     "Monday-WorkingHours.pcap_ISCX.csv",
     "Tuesday-WorkingHours.pcap_ISCX.csv",
@@ -65,7 +68,9 @@ ARCHIVOS_PRUEBA = {
 }
 
 
-def cargar_datos() -> tuple[pd.DataFrame, pd.Series, pd.Series, list[str]]:
+def cargar_datos(
+    incluir_etiquetas_originales: bool = False,
+) -> tuple[pd.DataFrame, ...]:
     if not RUTA_DATASET_PREPARADO.exists():
         raise FileNotFoundError(
             f"No existe el dataset preparado: {RUTA_DATASET_PREPARADO}"
@@ -106,67 +111,148 @@ def cargar_datos() -> tuple[pd.DataFrame, pd.Series, pd.Series, list[str]]:
 
     caracteristicas = dataset[columnas_caracteristicas]
     objetivo = dataset[COLUMNA_OBJETIVO]
-    return caracteristicas, objetivo, grupos["source_file"], columnas_caracteristicas
+    salida_base = (
+        caracteristicas.reset_index(drop=True),
+        objetivo.reset_index(drop=True),
+        grupos["source_file"].reset_index(drop=True),
+    )
+    if incluir_etiquetas_originales:
+        return (
+            *salida_base,
+            grupos["label_original"].astype("string").reset_index(drop=True),
+            columnas_caracteristicas,
+        )
+    return (*salida_base, columnas_caracteristicas)
 
 
 def dividir_datos(
     caracteristicas: pd.DataFrame,
-    objetivo: pd.Series,
-    grupos: pd.Series,
-) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame, pd.Series, pd.Series, pd.Series]:
-    """Separar días completos para evitar mezclar escenarios de captura."""
-    indices = np.arange(len(objetivo))
-    grupos = grupos.reset_index(drop=True)
-    grupos_esperados = (
-        ARCHIVOS_ENTRENAMIENTO | ARCHIVOS_VALIDACION | ARCHIVOS_PRUEBA
-    )
-    if set(grupos.unique()) != grupos_esperados:
-        raise ValueError("La procedencia contiene archivos no contemplados.")
+    etiquetas_originales: pd.Series,
+) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
+    """Crear particiones estratificadas sin separar vectores de entrada idénticos.
 
-    indices_entrenamiento = indices[grupos.isin(ARCHIVOS_ENTRENAMIENTO)]
-    indices_validacion = indices[grupos.isin(ARCHIVOS_VALIDACION)]
-    indices_prueba = indices[grupos.isin(ARCHIVOS_PRUEBA)]
-    for nombre, indices_particion in (
-        ("entrenamiento", indices_entrenamiento),
-        ("validación", indices_validacion),
-        ("prueba", indices_prueba),
-    ):
-        if len(indices_particion) == 0:
-            raise ValueError(f"La partición {nombre} quedó vacía.")
-        clases = set(objetivo.iloc[indices_particion].unique())
-        if clases != {CLASE_BENIGNA, CLASE_MALICIOSA}:
-            raise ValueError(
-                f"La partición {nombre} no contiene ambas clases: {sorted(clases)}"
+    Cada vector de las 78 características se asigna a uno de diez pliegues mediante
+    un hash estable. Se eligen dos pliegues distintos para validación y prueba
+    procurando que todas las etiquetas originales estén representadas en ambos.
+    Los pliegues restantes forman entrenamiento.
+    """
+    etiquetas_originales = etiquetas_originales.reset_index(drop=True).astype("string")
+    if len(caracteristicas) != len(etiquetas_originales):
+        raise ValueError("Las características y etiquetas no tienen la misma longitud.")
+
+    hashes_flujo = pd.util.hash_pandas_object(
+        caracteristicas, index=False
+    ).to_numpy(dtype=np.uint64)
+    pliegues = hashes_flujo % NUM_PARTICIONES_HASH
+    tabla = pd.crosstab(
+        pd.Series(pliegues, name="fold"),
+        etiquetas_originales,
+    ).reindex(index=range(NUM_PARTICIONES_HASH), fill_value=0)
+    totales_etiqueta = tabla.sum(axis=0)
+    fracciones_objetivo = {"train": 0.8, "validation": 0.1, "test": 0.1}
+
+    candidatos: list[tuple[float, int, int]] = []
+    for pliegue_validacion in range(NUM_PARTICIONES_HASH):
+        for pliegue_prueba in range(NUM_PARTICIONES_HASH):
+            if pliegue_validacion == pliegue_prueba:
+                continue
+            conteos = {
+                "validation": tabla.loc[pliegue_validacion],
+                "test": tabla.loc[pliegue_prueba],
+                "train": totales_etiqueta
+                - tabla.loc[pliegue_validacion]
+                - tabla.loc[pliegue_prueba],
+            }
+            if any((serie <= 0).any() for serie in conteos.values()):
+                continue
+
+            puntuacion = 0.0
+            for nombre, conteo in conteos.items():
+                fraccion = fracciones_objetivo[nombre]
+                proporcion_por_etiqueta = conteo / totales_etiqueta
+                puntuacion += float(
+                    (((proporcion_por_etiqueta - fraccion) / fraccion) ** 2).mean()
+                )
+            candidatos.append(
+                (puntuacion, pliegue_validacion, pliegue_prueba)
             )
 
-    return (
-        caracteristicas.iloc[indices_entrenamiento].copy(),
-        caracteristicas.iloc[indices_validacion].copy(),
-        caracteristicas.iloc[indices_prueba].copy(),
-        objetivo.iloc[indices_entrenamiento].copy(),
-        objetivo.iloc[indices_validacion].copy(),
-        objetivo.iloc[indices_prueba].copy(),
+    if not candidatos:
+        raise ValueError(
+            "No se pudieron representar todas las etiquetas originales en "
+            "entrenamiento, validación y prueba sin dividir vectores idénticos."
+        )
+
+    _, pliegue_validacion, pliegue_prueba = min(candidatos)
+    mascaras = {
+        "train": (pliegues != pliegue_validacion) & (pliegues != pliegue_prueba),
+        "validation": pliegues == pliegue_validacion,
+        "test": pliegues == pliegue_prueba,
+    }
+    indices = {
+        nombre: np.flatnonzero(mascara)
+        for nombre, mascara in mascaras.items()
+    }
+
+    filas_ambiguas = pd.DataFrame(
+        {"hash": hashes_flujo, "etiqueta": etiquetas_originales}
+    ).drop_duplicates()
+    etiquetas_por_hash = filas_ambiguas.groupby("hash")["etiqueta"].nunique()
+    hashes_ambiguos = set(etiquetas_por_hash[etiquetas_por_hash > 1].index.tolist())
+    vectores_unicos = int(np.unique(hashes_flujo).size)
+    metadatos_particion = {
+        "strategy": "stratified_hash_group_split_by_feature_vector",
+        "group_unit": "identical_78_feature_vector",
+        "hash_folds": NUM_PARTICIONES_HASH,
+        "validation_fold": int(pliegue_validacion),
+        "test_fold": int(pliegue_prueba),
+        "unique_feature_vectors": vectores_unicos,
+        "duplicate_feature_rows": int(len(hashes_flujo) - vectores_unicos),
+        "identical_feature_vectors_cross_partition": 0,
+        "conflicting_label_feature_groups": len(hashes_ambiguos),
+        "rows_with_conflicting_feature_labels": int(
+            pd.Series(hashes_flujo).isin(hashes_ambiguos).sum()
+        ),
+        "label_counts_by_partition": {
+            nombre: etiquetas_originales.iloc[idx].value_counts().sort_index().to_dict()
+            for nombre, idx in indices.items()
+        },
+    }
+    return indices, metadatos_particion
+
+
+def seleccionar_indices_muestra(
+    objetivo: pd.Series,
+    etiquetas_estratificacion: pd.Series | None = None,
+) -> tuple[np.ndarray, int | None]:
+    """Submuestrear entrenamiento, preservando las etiquetas originales."""
+    if len(objetivo) <= MAX_FILAS_ENTRENAMIENTO:
+        return np.arange(len(objetivo)), None
+
+    indices = np.arange(len(objetivo))
+    estratos = (
+        etiquetas_estratificacion
+        if etiquetas_estratificacion is not None
+        else objetivo
     )
+    indices_muestra, _ = train_test_split(
+        indices,
+        train_size=MAX_FILAS_ENTRENAMIENTO,
+        stratify=estratos,
+        random_state=RANDOM_STATE,
+    )
+    return indices_muestra, MAX_FILAS_ENTRENAMIENTO
 
 
 def limitar_entrenamiento(
     caracteristicas: pd.DataFrame, objetivo: pd.Series
 ) -> tuple[pd.DataFrame, pd.Series, int | None]:
-    """Aplicar una muestra estratificada solo al conjunto de entrenamiento."""
-    if len(objetivo) <= MAX_FILAS_ENTRENAMIENTO:
-        return caracteristicas, objetivo, None
-
-    indices = np.arange(len(objetivo))
-    indices_muestra, _ = train_test_split(
-        indices,
-        train_size=MAX_FILAS_ENTRENAMIENTO,
-        stratify=objetivo,
-        random_state=RANDOM_STATE,
-    )
+    """Compatibilidad para los análisis complementarios por día."""
+    indices_muestra, filas_muestra = seleccionar_indices_muestra(objetivo)
     return (
         caracteristicas.iloc[indices_muestra].copy(),
         objetivo.iloc[indices_muestra].copy(),
-        MAX_FILAS_ENTRENAMIENTO,
+        filas_muestra,
     )
 
 
@@ -194,6 +280,9 @@ def evaluar_modelo(
 
     return {
         "accuracy": float(accuracy_score(objetivo, predicciones)),
+        "balanced_accuracy": float(
+            balanced_accuracy_score(objetivo, predicciones)
+        ),
         "precision_malicious": float(
             precision_score(
                 objetivo,
@@ -279,36 +368,84 @@ def entrenar_configuracion(
 
 
 def seleccionar_configuracion(resultados: list[dict[str, Any]]) -> dict[str, Any]:
-    """Elegir por mayor recall de ataque y, en empate, menor FPR."""
+    """Balancear detección de ataques y conservación del tráfico benigno."""
     return max(
         resultados,
         key=lambda resultado: (
+            resultado["validacion"]["balanced_accuracy"],
             resultado["validacion"]["recall_malicious"],
             -resultado["validacion"]["fpr"],
         ),
     )
 
 
+def evaluar_por_etiqueta_original(
+    modelo: RandomForestClassifier,
+    caracteristicas: pd.DataFrame,
+    etiquetas_originales: pd.Series,
+) -> list[dict[str, Any]]:
+    """Desglosar detección por ataque original; BENIGN informa el FPR."""
+    predicciones = pd.Series(modelo.predict(caracteristicas)).reset_index(drop=True)
+    probabilidades = modelo.predict_proba(caracteristicas)[
+        :, list(modelo.classes_).index(CLASE_MALICIOSA)
+    ]
+    etiquetas_originales = etiquetas_originales.reset_index(drop=True)
+    detalle: list[dict[str, Any]] = []
+    for etiqueta in sorted(etiquetas_originales.unique()):
+        indices = np.flatnonzero(etiquetas_originales.eq(etiqueta).to_numpy())
+        predichos_maliciosos = int(
+            predicciones.iloc[indices].eq(CLASE_MALICIOSA).sum()
+        )
+        detalle.append(
+            {
+                "etiqueta_original": str(etiqueta),
+                "registros": int(len(indices)),
+                "predichos_malicious": predichos_maliciosos,
+                "tasa_deteccion": float(predichos_maliciosos / len(indices)),
+                "probabilidad_malicious_media": float(probabilidades[indices].mean()),
+            }
+        )
+    return detalle
+
+
 def main() -> None:
-    caracteristicas, objetivo, grupos, columnas_caracteristicas = cargar_datos()
-    datos_particionados = dividir_datos(caracteristicas, objetivo, grupos)
-    del caracteristicas, objetivo, grupos
+    (
+        caracteristicas,
+        objetivo,
+        archivos_origen,
+        etiquetas_originales,
+        columnas_caracteristicas,
+    ) = cargar_datos(incluir_etiquetas_originales=True)
+    indices, metadatos_particion = dividir_datos(
+        caracteristicas, etiquetas_originales
+    )
     gc.collect()
 
-    (
-        caracteristicas_entrenamiento,
-        caracteristicas_validacion,
-        caracteristicas_prueba,
-        objetivo_entrenamiento,
-        objetivo_validacion,
-        objetivo_prueba,
-    ) = datos_particionados
+    caracteristicas_entrenamiento = caracteristicas.iloc[indices["train"]].copy()
+    caracteristicas_validacion = caracteristicas.iloc[indices["validation"]].copy()
+    caracteristicas_prueba = caracteristicas.iloc[indices["test"]].copy()
+    objetivo_entrenamiento = objetivo.iloc[indices["train"]].copy()
+    objetivo_validacion = objetivo.iloc[indices["validation"]].copy()
+    objetivo_prueba = objetivo.iloc[indices["test"]].copy()
+    archivos_entrenamiento = archivos_origen.iloc[indices["train"]].copy()
+    archivos_validacion = archivos_origen.iloc[indices["validation"]].copy()
+    archivos_prueba = archivos_origen.iloc[indices["test"]].copy()
+    etiquetas_entrenamiento = etiquetas_originales.iloc[indices["train"]].copy()
+    etiquetas_validacion = etiquetas_originales.iloc[indices["validation"]].copy()
+    etiquetas_prueba = etiquetas_originales.iloc[indices["test"]].copy()
+    del caracteristicas, objetivo, archivos_origen, etiquetas_originales
+    gc.collect()
+
     filas_entrenamiento_originales = len(objetivo_entrenamiento)
-    (
-        caracteristicas_entrenamiento,
-        objetivo_entrenamiento,
-        filas_entrenamiento_muestra,
-    ) = limitar_entrenamiento(caracteristicas_entrenamiento, objetivo_entrenamiento)
+    indices_muestra, filas_entrenamiento_muestra = seleccionar_indices_muestra(
+        objetivo_entrenamiento, etiquetas_entrenamiento
+    )
+    caracteristicas_entrenamiento = caracteristicas_entrenamiento.iloc[
+        indices_muestra
+    ].copy()
+    objetivo_entrenamiento = objetivo_entrenamiento.iloc[indices_muestra].copy()
+    archivos_entrenamiento = archivos_entrenamiento.iloc[indices_muestra].copy()
+    etiquetas_entrenamiento = etiquetas_entrenamiento.iloc[indices_muestra].copy()
     print(
         "Particiones: "
         f"entrenamiento={len(objetivo_entrenamiento):,}, "
@@ -344,6 +481,7 @@ def main() -> None:
         print(
             f"Validación {nombre}: "
             f"recall={resultado['validacion']['recall_malicious']:.4f}, "
+            f"balanced_accuracy={resultado['validacion']['balanced_accuracy']:.4f}, "
             f"fpr={resultado['validacion']['fpr']:.4f}",
             flush=True,
         )
@@ -384,6 +522,11 @@ def main() -> None:
         modelo_seleccionado,
         caracteristicas_prueba,
         objetivo_prueba,
+    )
+    metricas_prueba_por_etiqueta = evaluar_por_etiqueta_original(
+        modelo_seleccionado,
+        caracteristicas_prueba,
+        etiquetas_prueba,
     )
 
     DIRECTORIO_MODELOS.mkdir(parents=True, exist_ok=True)
@@ -428,13 +571,13 @@ def main() -> None:
             "train_used": len(objetivo_entrenamiento),
             "validation": len(objetivo_validacion),
             "test": len(objetivo_prueba),
-            "strategy": "fixed_capture_day_groups",
-            "grouping": {
-                "unit": "capture_day",
-                "train": sorted(ARCHIVOS_ENTRENAMIENTO),
-                "validation": sorted(ARCHIVOS_VALIDACION),
-                "test": sorted(ARCHIVOS_PRUEBA),
+            **metadatos_particion,
+            "source_files_by_partition": {
+                "train": sorted(archivos_entrenamiento.unique().tolist()),
+                "validation": sorted(archivos_validacion.unique().tolist()),
+                "test": sorted(archivos_prueba.unique().tolist()),
             },
+            "train_original_label_counts_used": etiquetas_entrenamiento.value_counts().sort_index().to_dict(),
             "random_state": RANDOM_STATE,
         },
         "class_counts": {
@@ -444,12 +587,13 @@ def main() -> None:
         },
         "configurations": resultados,
         "selection": {
-            "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
+            "criterion": "max_validation_balanced_accuracy_then_recall_then_min_fpr",
             "configuration": nombre_seleccionado,
             "class_weight": peso_seleccionado,
             "final_training_rows": len(objetivo_entrenamiento_validacion),
             "retraining_seconds": tiempo_reentrenamiento,
             "final_test": metricas_prueba_finales,
+            "final_test_by_original_label": metricas_prueba_por_etiqueta,
             "model_path": str(ruta_modelo.relative_to(RAIZ_PROYECTO)),
         },
         "top_feature_importances": [
@@ -462,7 +606,9 @@ def main() -> None:
             "Las configuraciones candidatas se evaluaron únicamente con validación; la prueba se evaluó una sola vez después de seleccionar y reentrenar el modelo.",
             "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
             "Por restricción de recursos, se configuró un límite operativo de 1,762,141 filas estratificadas para el entrenamiento; este tamaño no se optimizó como hiperparámetro. Validación y prueba se conservaron completas.",
-            "La partición separa días completos de captura entre entrenamiento, validación y prueba; los resultados estiman generalización entre escenarios de CIC-IDS2017, no desempeño en redes reales.",
+            "Entrenamiento, validación y prueba contienen todos los ataques originales disponibles cuando el número de grupos lo permite; las particiones se realizan agrupando vectores idénticos de las 78 características.",
+            "Una misma combinación de características puede tener etiquetas originales distintas; esas filas se conservan juntas y se reportan como ambigüedad irreducible para el modelo.",
+            "La evaluación agrupada estima detección de ataques representados en el dataset; los análisis leave-one-day-out complementarios estiman transferencia a días/escenarios no vistos.",
         ],
     }
     RUTA_RESULTADOS.write_text(

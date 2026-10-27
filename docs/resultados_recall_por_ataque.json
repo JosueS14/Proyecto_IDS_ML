@@ -1,40 +1,124 @@
 {
   "modelo": "data\\processed\\modelos\\random_forest_seleccionado.joblib",
-  "particion": "prueba por día (viernes)",
+  "particion": "prueba estratificada, agrupada por vector de características",
   "archivos": [
     "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
     "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
-    "Friday-WorkingHours-Morning.pcap_ISCX.csv"
+    "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+    "Monday-WorkingHours.pcap_ISCX.csv",
+    "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+    "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+    "Tuesday-WorkingHours.pcap_ISCX.csv",
+    "Wednesday-workingHours.pcap_ISCX.csv"
   ],
+  "pliegue_prueba": 8,
+  "grupos_identicos_entre_particiones": 0,
   "nota": "Tasa de detección = proporción de registros de cada etiqueta original clasificados como MALICIOUS. Para BENIGN, la tasa es la tasa de falsos positivos.",
   "por_etiqueta": [
     {
       "etiqueta_original": "Bot",
-      "registros": 1956,
-      "predichos_malicious": 0,
-      "tasa_deteccion": 0.0,
-      "probabilidad_media": 0.0008047699377557826
+      "registros": 210,
+      "predichos_malicious": 127,
+      "tasa_deteccion": 0.6047619047619047,
+      "probabilidad_media": 0.5817660258958007
     },
     {
       "etiqueta_original": "DDoS",
-      "registros": 128025,
-      "predichos_malicious": 75263,
-      "tasa_deteccion": 0.5878773677016208,
-      "probabilidad_media": 0.375127286938934
+      "registros": 12775,
+      "predichos_malicious": 12769,
+      "tasa_deteccion": 0.9995303326810177,
+      "probabilidad_media": 0.9991053428923155
+    },
+    {
+      "etiqueta_original": "DoS GoldenEye",
+      "registros": 994,
+      "predichos_malicious": 992,
+      "tasa_deteccion": 0.9979879275653923,
+      "probabilidad_media": 0.9892027020538976
+    },
+    {
+      "etiqueta_original": "DoS Hulk",
+      "registros": 19536,
+      "predichos_malicious": 19461,
+      "tasa_deteccion": 0.9961609336609336,
+      "probabilidad_media": 0.980055410647075
+    },
+    {
+      "etiqueta_original": "DoS Slowhttptest",
+      "registros": 546,
+      "predichos_malicious": 544,
+      "tasa_deteccion": 0.9963369963369964,
+      "probabilidad_media": 0.9770000626418445
+    },
+    {
+      "etiqueta_original": "DoS slowloris",
+      "registros": 413,
+      "predichos_malicious": 412,
+      "tasa_deteccion": 0.9975786924939467,
+      "probabilidad_media": 0.994992468302294
+    },
+    {
+      "etiqueta_original": "FTP-Patator",
+      "registros": 779,
+      "predichos_malicious": 778,
+      "tasa_deteccion": 0.9987163029525032,
+      "probabilidad_media": 0.9965670457703051
+    },
+    {
+      "etiqueta_original": "Heartbleed",
+      "registros": 1,
+      "predichos_malicious": 1,
+      "tasa_deteccion": 1.0,
+      "probabilidad_media": 0.9
+    },
+    {
+      "etiqueta_original": "Infiltration",
+      "registros": 4,
+      "predichos_malicious": 3,
+      "tasa_deteccion": 0.75,
+      "probabilidad_media": 0.4700091186986829
     },
     {
       "etiqueta_original": "PortScan",
-      "registros": 158804,
-      "predichos_malicious": 125,
-      "tasa_deteccion": 0.0007871338253444498,
-      "probabilidad_media": 0.007081023821678979
+      "registros": 13969,
+      "predichos_malicious": 13967,
+      "tasa_deteccion": 0.9998568258286206,
+      "probabilidad_media": 0.9950278894958648
+    },
+    {
+      "etiqueta_original": "SSH-Patator",
+      "registros": 507,
+      "predichos_malicious": 498,
+      "tasa_deteccion": 0.9822485207100592,
+      "probabilidad_media": 0.8805826523281527
+    },
+    {
+      "etiqueta_original": "Web Attack – Brute Force",
+      "registros": 142,
+      "predichos_malicious": 127,
+      "tasa_deteccion": 0.8943661971830986,
+      "probabilidad_media": 0.8779140496498795
+    },
+    {
+      "etiqueta_original": "Web Attack – Sql Injection",
+      "registros": 2,
+      "predichos_malicious": 0,
+      "tasa_deteccion": 0.0,
+      "probabilidad_media": 0.22895638179554084
+    },
+    {
+      "etiqueta_original": "Web Attack – XSS",
+      "registros": 63,
+      "predichos_malicious": 63,
+      "tasa_deteccion": 1.0,
+      "probabilidad_media": 0.9780921760680652
     },
     {
       "etiqueta_original": "BENIGN",
-      "registros": 413928,
-      "predichos_malicious": 298,
-      "tasa_deteccion": 0.0007199319688448232,
-      "probabilidad_media": 0.005807212069041332
+      "registros": 225697,
+      "predichos_malicious": 357,
+      "tasa_deteccion": 0.0015817667049185411,
+      "probabilidad_media": 0.004698513222552776
     }
   ]
 }

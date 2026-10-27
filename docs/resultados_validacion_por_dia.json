@@ -19,10 +19,10 @@
       "fpr_desv": 0.0012314551063705036
     },
     "balanceado": {
-      "recall_malicious_media": 0.07228022460599431,
-      "recall_malicious_desv": 0.09294094842550975,
-      "fpr_media": 0.00176977771789932,
-      "fpr_desv": 0.001561465022521629
+      "recall_malicious_media": 0.022651631915193822,
+      "recall_malicious_desv": 0.03693812188329989,
+      "fpr_media": 0.00156047332897232,
+      "fpr_desv": 0.0014666111468900225
     }
   },
   "folds": [
@@ -36,9 +36,10 @@
       "filas_entrenamiento_originales": 2382036,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 445641,
-      "tiempo_entrenamiento_segundos": 74.90427599998657,
+      "tiempo_entrenamiento_segundos": 77.98334929999692,
       "metricas": {
         "accuracy": 0.967945049939301,
+        "balanced_accuracy": 0.49954544281709945,
         "precision_malicious": 0.00437636761487965,
         "recall_malicious": 0.00014459224985540774,
         "specificity_benign": 0.9989462933843435,
@@ -83,28 +84,29 @@
       "filas_entrenamiento_originales": 2382036,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 445641,
-      "tiempo_entrenamiento_segundos": 67.52373460005037,
+      "tiempo_entrenamiento_segundos": 68.12586739999824,
       "metricas": {
-        "accuracy": 0.9660331971250401,
-        "precision_malicious": 0.0015278838808250573,
-        "recall_malicious": 0.00014459224985540774,
-        "specificity_benign": 0.9969731987985428,
-        "f1_malicious": 0.0002641833432402087,
-        "f1_macro": 0.4914936419243762,
-        "fpr": 0.0030268012014571257,
-        "average_precision": 0.161996475892418,
-        "roc_auc": 0.9006899868000006,
-        "true_negatives": 430502,
-        "false_positives": 1307,
-        "false_negatives": 13830,
-        "true_positives": 2
+        "accuracy": 0.9665627713787556,
+        "balanced_accuracy": 0.49879717434954907,
+        "precision_malicious": 0.0009337068160597573,
+        "recall_malicious": 7.229612492770387e-05,
+        "specificity_benign": 0.9975220525741705,
+        "f1_malicious": 0.0001342011675501577,
+        "f1_macro": 0.4915656417400556,
+        "fpr": 0.0024779474258294757,
+        "average_precision": 0.07893183359830463,
+        "roc_auc": 0.7890127515229716,
+        "true_negatives": 430739,
+        "false_positives": 1070,
+        "false_negatives": 13831,
+        "true_positives": 1
       },
       "por_etiqueta": [
         {
           "etiqueta_original": "BENIGN",
           "registros": 431809,
-          "clasificados_malicious": 1307,
-          "tasa": 0.0030268012014571257
+          "clasificados_malicious": 1070,
+          "tasa": 0.0024779474258294757
         },
         {
           "etiqueta_original": "FTP-Patator",
@@ -115,8 +117,8 @@
         {
           "etiqueta_original": "SSH-Patator",
           "registros": 5897,
-          "clasificados_malicious": 1,
-          "tasa": 0.00016957775139901646
+          "clasificados_malicious": 0,
+          "tasa": 0.0
         }
       ]
     },
@@ -130,9 +132,10 @@
       "filas_entrenamiento_originales": 2136287,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 691390,
-      "tiempo_entrenamiento_segundos": 50.921296300017275,
+      "tiempo_entrenamiento_segundos": 56.08741509999527,
       "metricas": {
         "accuracy": 0.6380653466205759,
+        "balanced_accuracy": 0.5029621309089133,
         "precision_malicious": 0.9888010540184453,
         "recall_malicious": 0.005962927356369328,
         "specificity_benign": 0.9999613344614573,
@@ -195,52 +198,53 @@
       "filas_entrenamiento_originales": 2136287,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 691390,
-      "tiempo_entrenamiento_segundos": 58.90056950005237,
+      "tiempo_entrenamiento_segundos": 55.440381200001866,
       "metricas": {
-        "accuracy": 0.6390286234975918,
-        "precision_malicious": 0.9714912280701754,
-        "recall_malicious": 0.008799389803036683,
-        "specificity_benign": 0.9998521611761602,
-        "f1_malicious": 0.017440807552696436,
-        "f1_macro": 0.3981707651405846,
-        "fpr": 0.0001478388238398064,
-        "average_precision": 0.8506322722953085,
-        "roc_auc": 0.8836145986236463,
-        "true_negatives": 439603,
-        "false_positives": 65,
-        "false_negatives": 249507,
-        "true_positives": 2215
+        "accuracy": 0.6377109880096618,
+        "balanced_accuracy": 0.5024788793261948,
+        "precision_malicious": 0.9836065573770492,
+        "recall_malicious": 0.005005521964707098,
+        "specificity_benign": 0.9999522366876825,
+        "f1_malicious": 0.009960356201309866,
+        "f1_macro": 0.3941251155529132,
+        "fpr": 4.7763312317475914e-05,
+        "average_precision": 0.8613874342570897,
+        "roc_auc": 0.8917044938645947,
+        "true_negatives": 439647,
+        "false_positives": 21,
+        "false_negatives": 250462,
+        "true_positives": 1260
       },
       "por_etiqueta": [
         {
           "etiqueta_original": "BENIGN",
           "registros": 439668,
-          "clasificados_malicious": 65,
-          "tasa": 0.0001478388238398064
+          "clasificados_malicious": 21,
+          "tasa": 4.7763312317475914e-05
         },
         {
           "etiqueta_original": "DoS GoldenEye",
           "registros": 10293,
-          "clasificados_malicious": 127,
-          "tasa": 0.012338482463810356
+          "clasificados_malicious": 6,
+          "tasa": 0.0005829204313611193
         },
         {
           "etiqueta_original": "DoS Hulk",
           "registros": 230123,
-          "clasificados_malicious": 2084,
-          "tasa": 0.009056026559709373
+          "clasificados_malicious": 1252,
+          "tasa": 0.00544056873932636
         },
         {
           "etiqueta_original": "DoS Slowhttptest",
           "registros": 5499,
-          "clasificados_malicious": 2,
-          "tasa": 0.0003637024913620658
+          "clasificados_malicious": 1,
+          "tasa": 0.0001818512456810329
         },
         {
           "etiqueta_original": "DoS slowloris",
           "registros": 5796,
-          "clasificados_malicious": 2,
-          "tasa": 0.0003450655624568668
+          "clasificados_malicious": 1,
+          "tasa": 0.0001725327812284334
         },
         {
           "etiqueta_original": "Heartbleed",
@@ -261,9 +265,10 @@
       "filas_entrenamiento_originales": 2369194,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 458483,
-      "tiempo_entrenamiento_segundos": 59.648257400025614,
+      "tiempo_entrenamiento_segundos": 68.89897120000387,
       "metricas": {
         "accuracy": 0.9924250190301495,
+        "balanced_accuracy": 0.5019905558694222,
         "precision_malicious": 0.011655011655011656,
         "recall_malicious": 0.006768953068592058,
         "specificity_benign": 0.9972121586702523,
@@ -321,28 +326,29 @@
       "filas_entrenamiento_originales": 2369194,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 458483,
-      "tiempo_entrenamiento_segundos": 61.44014199997764,
+      "tiempo_entrenamiento_segundos": 60.77264389999618,
       "metricas": {
-        "accuracy": 0.9929702955180454,
-        "precision_malicious": 0.23486045286993154,
-        "recall_malicious": 0.20126353790613719,
-        "specificity_benign": 0.9968154611225445,
-        "f1_malicious": 0.21676792223572297,
-        "f1_macro": 0.6066186127751418,
-        "fpr": 0.003184538877455525,
-        "average_precision": 0.2996454937038154,
-        "roc_auc": 0.9618240157911846,
-        "true_negatives": 454814,
-        "false_positives": 1453,
-        "false_negatives": 1770,
-        "true_positives": 446
+        "accuracy": 0.9921065775612182,
+        "balanced_accuracy": 0.5022796336695914,
+        "precision_malicious": 0.011830201809324982,
+        "recall_malicious": 0.007671480144404332,
+        "specificity_benign": 0.9968877871947784,
+        "f1_malicious": 0.0093074185600876,
+        "f1_macro": 0.502672460792395,
+        "fpr": 0.003112212805221504,
+        "average_precision": 0.02564930658643438,
+        "roc_auc": 0.892367312930703,
+        "true_negatives": 454847,
+        "false_positives": 1420,
+        "false_negatives": 2199,
+        "true_positives": 17
       },
       "por_etiqueta": [
         {
           "etiqueta_original": "BENIGN",
           "registros": 456267,
-          "clasificados_malicious": 1453,
-          "tasa": 0.003184538877455525
+          "clasificados_malicious": 1420,
+          "tasa": 0.003112212805221504
         },
         {
           "etiqueta_original": "Infiltration",
@@ -353,20 +359,20 @@
         {
           "etiqueta_original": "Web Attack – Brute Force",
           "registros": 1507,
-          "clasificados_malicious": 295,
-          "tasa": 0.1957531519575315
+          "clasificados_malicious": 11,
+          "tasa": 0.0072992700729927005
         },
         {
           "etiqueta_original": "Web Attack – Sql Injection",
           "registros": 21,
-          "clasificados_malicious": 2,
-          "tasa": 0.09523809523809523
+          "clasificados_malicious": 1,
+          "tasa": 0.047619047619047616
         },
         {
           "etiqueta_original": "Web Attack – XSS",
           "registros": 652,
-          "clasificados_malicious": 149,
-          "tasa": 0.2285276073619632
+          "clasificados_malicious": 5,
+          "tasa": 0.007668711656441718
         }
       ]
     },
@@ -382,17 +388,18 @@
       "filas_entrenamiento_originales": 2124964,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 702713,
-      "tiempo_entrenamiento_segundos": 64.2256479000207,
+      "tiempo_entrenamiento_segundos": 74.4609077999994,
       "metricas": {
         "accuracy": 0.7031490807769317,
+        "balanced_accuracy": 0.6389032087019337,
         "precision_malicious": 0.998260091469477,
         "recall_malicious": 0.278144640476479,
         "specificity_benign": 0.9996617769273883,
         "f1_malicious": 0.4350668519075204,
         "f1_macro": 0.6168744651777538,
         "fpr": 0.0003382230726116619,
-        "average_precision": 0.8000283349409152,
-        "roc_auc": 0.8399497964940619,
+        "average_precision": 0.8000283350529107,
+        "roc_auc": 0.8399499106435857,
         "true_negatives": 413788,
         "false_positives": 140,
         "false_negatives": 208461,
@@ -437,28 +444,29 @@
       "filas_entrenamiento_originales": 2124964,
       "muestreo_entrenamiento": 1762141,
       "filas_prueba": 702713,
-      "tiempo_entrenamiento_segundos": 59.12213650008198,
+      "tiempo_entrenamiento_segundos": 64.72970999999961,
       "metricas": {
-        "accuracy": 0.6210487069401022,
-        "precision_malicious": 0.9870923030276779,
-        "recall_malicious": 0.07891337846494798,
-        "specificity_benign": 0.9992800680311552,
-        "f1_malicious": 0.1461432895546891,
-        "f1_macro": 0.45131542606295094,
-        "fpr": 0.0007199319688448232,
-        "average_precision": 0.6271424055233067,
-        "roc_auc": 0.5839914853421687,
-        "true_negatives": 413630,
-        "false_positives": 298,
-        "false_negatives": 265996,
-        "true_positives": 22789
+        "accuracy": 0.6206829815301552,
+        "balanced_accuracy": 0.5386266298271076,
+        "precision_malicious": 0.9890032550365092,
+        "recall_malicious": 0.07785722942673615,
+        "specificity_benign": 0.9993960302274791,
+        "f1_malicious": 0.14435074586140814,
+        "f1_macro": 0.4503409756738989,
+        "fpr": 0.0006039697725208249,
+        "average_precision": 0.6059390159473437,
+        "roc_auc": 0.6286062720965514,
+        "true_negatives": 413678,
+        "false_positives": 250,
+        "false_negatives": 266301,
+        "true_positives": 22484
       },
       "por_etiqueta": [
         {
           "etiqueta_original": "BENIGN",
           "registros": 413928,
-          "clasificados_malicious": 298,
-          "tasa": 0.0007199319688448232
+          "clasificados_malicious": 250,
+          "tasa": 0.0006039697725208249
         },
         {
           "etiqueta_original": "Bot",
@@ -469,14 +477,14 @@
         {
           "etiqueta_original": "DDoS",
           "registros": 128025,
-          "clasificados_malicious": 22665,
-          "tasa": 0.1770357352079672
+          "clasificados_malicious": 22388,
+          "tasa": 0.17487209529388792
         },
         {
           "etiqueta_original": "PortScan",
           "registros": 158804,
-          "clasificados_malicious": 124,
-          "tasa": 0.0007808367547416942
+          "clasificados_malicious": 96,
+          "tasa": 0.0006045187778645374
         }
       ]
     }

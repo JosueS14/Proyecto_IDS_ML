@@ -121,7 +121,11 @@ mantenimiento. Deben registrarse como mínimo:
 - Tiempo de carga, preparación e inferencia.
 - Versión del modelo y del esquema utilizado.
 
-Se debe comparar el comportamiento de los nuevos lotes con la línea base de la fase 4. La línea base debe incluir la media y la desviación de recall y FPR por día, obtenidas con varias semillas (`docs/resultados_multisemilla.json`), y no únicamente el valor de una ejecución (0.076022), que depende del orden de entrenamiento.
+Se debe comparar el comportamiento de los nuevos lotes con ambas líneas base de la fase
+4: la prueba agrupada para ataques conocidos (`docs/resultados_modelado.json`) y la
+evaluación de transferencia por día (`docs/resultados_validacion_por_dia.json`). No se
+deben interpretar las métricas altas de la prueba agrupada como evidencia de desempeño
+en días o redes no vistos.
 Una revisión de mantenimiento se activa cuando aumenta la proporción de errores, cambia
 la distribución de clases, se eleva la tasa de falsos positivos o aparecen características
 que no pertenecen al esquema registrado.

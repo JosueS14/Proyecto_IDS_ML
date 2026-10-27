@@ -1,5 +1,5 @@
-# Calcula el recall por tipo de ataque sobre la partición de prueba por día.
-# No reentrena el modelo: usa el artefacto persistido y la partición de 04.
+# Calcula el recall por tipo de ataque sobre la prueba agrupada de 04.
+# No reentrena el modelo: usa el artefacto persistido y la misma partición.
 
 from __future__ import annotations
 
@@ -19,9 +19,6 @@ if str(RAIZ_PROYECTO) not in sys.path:
 RUTA_MODELO = (
     RAIZ_PROYECTO / "data" / "processed" / "modelos" / "random_forest_seleccionado.joblib"
 )
-RUTA_GRUPOS = (
-    RAIZ_PROYECTO / "data" / "processed" / "dataset_cicids2017_preparado_grupos.parquet"
-)
 RUTA_RESULTADOS = RAIZ_PROYECTO / "docs" / "resultados_recall_por_ataque.json"
 CLASE_BENIGNA = "BENIGN"
 
@@ -29,16 +26,20 @@ entrenamiento = importlib.import_module("src.modelado.04_entrenar_random_forest"
 
 
 def main() -> None:
-    caracteristicas, objetivo, _, columnas = entrenamiento.cargar_datos()
-    grupos = pd.read_parquet(RUTA_GRUPOS)
+    caracteristicas, _, archivos, etiquetas_originales, columnas = (
+        entrenamiento.cargar_datos(incluir_etiquetas_originales=True)
+    )
+    indices, metadatos_particion = entrenamiento.dividir_datos(
+        caracteristicas, etiquetas_originales
+    )
     artefacto = joblib.load(RUTA_MODELO)
     modelo = artefacto["modelo"]
     if list(artefacto["feature_columns"]) != columnas:
         raise ValueError("El modelo persistido no usa las columnas esperadas.")
 
-    mascara_prueba = grupos["source_file"].isin(entrenamiento.ARCHIVOS_PRUEBA).to_numpy()
-    x_prueba = caracteristicas.loc[mascara_prueba]
-    etiquetas_originales = grupos.loc[mascara_prueba, "label_original"].reset_index(drop=True)
+    indices_prueba = indices["test"]
+    x_prueba = caracteristicas.iloc[indices_prueba]
+    etiquetas_originales = etiquetas_originales.iloc[indices_prueba].reset_index(drop=True)
     predicciones = pd.Series(modelo.predict(x_prueba))
     probabilidades = modelo.predict_proba(x_prueba)[
         :, list(modelo.classes_).index(entrenamiento.CLASE_MALICIOSA)
@@ -68,8 +69,12 @@ def main() -> None:
 
     resultado = {
         "modelo": str(RUTA_MODELO.relative_to(RAIZ_PROYECTO)),
-        "particion": "prueba por día (viernes)",
-        "archivos": sorted(entrenamiento.ARCHIVOS_PRUEBA),
+        "particion": "prueba estratificada, agrupada por vector de características",
+        "archivos": sorted(archivos.iloc[indices_prueba].unique().tolist()),
+        "pliegue_prueba": metadatos_particion["test_fold"],
+        "grupos_identicos_entre_particiones": metadatos_particion[
+            "identical_feature_vectors_cross_partition"
+        ],
         "nota": (
             "Tasa de detección = proporción de registros de cada etiqueta original "
             "clasificados como MALICIOUS. Para BENIGN, la tasa es la tasa de falsos positivos."

@@ -1,10 +1,10 @@
 {
   "dataset": "data\\processed\\dataset_cicids2017_preparado.parquet",
   "environment": {
-    "python": "3.14.6",
+    "python": "3.13.2",
     "numpy": "2.4.6",
-    "pandas": "3.0.3",
-    "scikit_learn": "1.9.0",
+    "pandas": "2.3.3",
+    "scikit_learn": "1.8.0",
     "joblib": "1.5.3"
   },
   "feature_count": 78,
@@ -15,42 +15,136 @@
     "n_jobs": 4
   },
   "split": {
-    "train_original": 1666481,
-    "train_used": 1666481,
-    "validation": 458483,
-    "test": 702713,
-    "strategy": "fixed_capture_day_groups",
-    "grouping": {
-      "unit": "capture_day",
+    "train_original": 2272892,
+    "train_used": 1762141,
+    "validation": 279147,
+    "test": 275638,
+    "strategy": "stratified_hash_group_split_by_feature_vector",
+    "group_unit": "identical_78_feature_vector",
+    "hash_folds": 10,
+    "validation_fold": 7,
+    "test_fold": 8,
+    "unique_feature_vectors": 2233299,
+    "duplicate_feature_rows": 594378,
+    "identical_feature_vectors_cross_partition": 0,
+    "conflicting_label_feature_groups": 269,
+    "rows_with_conflicting_feature_labels": 82456,
+    "label_counts_by_partition": {
+      "train": {
+        "BENIGN": 1823845,
+        "Bot": 1514,
+        "DDoS": 102329,
+        "DoS GoldenEye": 8320,
+        "DoS Hulk": 192015,
+        "DoS Slowhttptest": 4408,
+        "DoS slowloris": 4680,
+        "FTP-Patator": 6491,
+        "Heartbleed": 8,
+        "Infiltration": 29,
+        "PortScan": 122684,
+        "SSH-Patator": 4810,
+        "Web Attack – Brute Force": 1217,
+        "Web Attack – Sql Injection": 17,
+        "Web Attack – XSS": 525
+      },
+      "validation": {
+        "BENIGN": 221580,
+        "Bot": 232,
+        "DDoS": 12921,
+        "DoS GoldenEye": 979,
+        "DoS Hulk": 18572,
+        "DoS Slowhttptest": 545,
+        "DoS slowloris": 703,
+        "FTP-Patator": 665,
+        "Heartbleed": 2,
+        "Infiltration": 3,
+        "PortScan": 22151,
+        "SSH-Patator": 580,
+        "Web Attack – Brute Force": 148,
+        "Web Attack – Sql Injection": 2,
+        "Web Attack – XSS": 64
+      },
+      "test": {
+        "BENIGN": 225697,
+        "Bot": 210,
+        "DDoS": 12775,
+        "DoS GoldenEye": 994,
+        "DoS Hulk": 19536,
+        "DoS Slowhttptest": 546,
+        "DoS slowloris": 413,
+        "FTP-Patator": 779,
+        "Heartbleed": 1,
+        "Infiltration": 4,
+        "PortScan": 13969,
+        "SSH-Patator": 507,
+        "Web Attack – Brute Force": 142,
+        "Web Attack – Sql Injection": 2,
+        "Web Attack – XSS": 63
+      }
+    },
+    "source_files_by_partition": {
       "train": [
+        "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+        "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+        "Friday-WorkingHours-Morning.pcap_ISCX.csv",
         "Monday-WorkingHours.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
         "Tuesday-WorkingHours.pcap_ISCX.csv",
         "Wednesday-workingHours.pcap_ISCX.csv"
       ],
       "validation": [
+        "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+        "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+        "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+        "Monday-WorkingHours.pcap_ISCX.csv",
         "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
-        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv"
+        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+        "Tuesday-WorkingHours.pcap_ISCX.csv",
+        "Wednesday-workingHours.pcap_ISCX.csv"
       ],
       "test": [
         "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
         "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
-        "Friday-WorkingHours-Morning.pcap_ISCX.csv"
+        "Friday-WorkingHours-Morning.pcap_ISCX.csv",
+        "Monday-WorkingHours.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Afternoon-Infilteration.pcap_ISCX.csv",
+        "Thursday-WorkingHours-Morning-WebAttacks.pcap_ISCX.csv",
+        "Tuesday-WorkingHours.pcap_ISCX.csv",
+        "Wednesday-workingHours.pcap_ISCX.csv"
       ]
+    },
+    "train_original_label_counts_used": {
+      "BENIGN": 1414001,
+      "Bot": 1174,
+      "DDoS": 79334,
+      "DoS GoldenEye": 6450,
+      "DoS Hulk": 148867,
+      "DoS Slowhttptest": 3418,
+      "DoS slowloris": 3628,
+      "FTP-Patator": 5032,
+      "Heartbleed": 6,
+      "Infiltration": 23,
+      "PortScan": 95115,
+      "SSH-Patator": 3729,
+      "Web Attack – Brute Force": 944,
+      "Web Attack – Sql Injection": 13,
+      "Web Attack – XSS": 407
     },
     "random_state": 42
   },
   "class_counts": {
     "train": {
-      "BENIGN": 1400927,
-      "MALICIOUS": 265554
+      "BENIGN": 1414001,
+      "MALICIOUS": 348140
     },
     "validation": {
-      "BENIGN": 456267,
-      "MALICIOUS": 2216
+      "BENIGN": 221580,
+      "MALICIOUS": 57567
     },
     "test": {
-      "BENIGN": 413928,
-      "MALICIOUS": 288785
+      "BENIGN": 225697,
+      "MALICIOUS": 49941
     }
   },
   "configurations": [
@@ -59,21 +153,22 @@
       "class_weight": null,
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 48.011325799976476,
+      "tiempo_entrenamiento_segundos": 73.84322409999731,
       "validacion": {
-        "accuracy": 0.994665014842426,
-        "precision_malicious": 0.13836477987421383,
-        "recall_malicious": 0.019855595667870037,
-        "specificity_benign": 0.9993994744305418,
-        "f1_malicious": 0.03472770323599053,
-        "f1_macro": 0.5160264093587568,
-        "fpr": 0.0006005255694582339,
-        "average_precision": 0.5170683439850271,
-        "roc_auc": 0.9681259238021845,
-        "true_negatives": 455993,
-        "false_positives": 274,
-        "false_negatives": 2172,
-        "true_positives": 44
+        "accuracy": 0.9984703400000716,
+        "balanced_accuracy": 0.9973649227083405,
+        "precision_malicious": 0.9970943383094965,
+        "recall_malicious": 0.9954835235464763,
+        "specificity_benign": 0.9992463218702049,
+        "f1_malicious": 0.996288279830669,
+        "f1_macro": 0.9976624736885972,
+        "fpr": 0.0007536781297951079,
+        "average_precision": 0.9998426820118447,
+        "roc_auc": 0.999961273574925,
+        "true_negatives": 221413,
+        "false_positives": 167,
+        "false_negatives": 260,
+        "true_positives": 57307
       }
     },
     {
@@ -81,127 +176,236 @@
       "class_weight": "balanced",
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 46.711056599975564,
+      "tiempo_entrenamiento_segundos": 64.91006290000223,
       "validacion": {
-        "accuracy": 0.9943465733734947,
-        "precision_malicious": 0.25263157894736843,
-        "recall_malicious": 0.08664259927797834,
-        "specificity_benign": 0.9987551148779114,
-        "f1_malicious": 0.12903225806451613,
-        "f1_macro": 0.5630981704112665,
-        "fpr": 0.0012448851220886016,
-        "average_precision": 0.4508564421678133,
-        "roc_auc": 0.9818824998985844,
-        "true_negatives": 455699,
-        "false_positives": 568,
-        "false_negatives": 2024,
-        "true_positives": 192
+        "accuracy": 0.9983342110071037,
+        "balanced_accuracy": 0.9976199124427854,
+        "precision_malicious": 0.9955222326356347,
+        "recall_malicious": 0.9964041899004638,
+        "specificity_benign": 0.998835634985107,
+        "f1_malicious": 0.9959630160177106,
+        "f1_macro": 0.9974568064117313,
+        "fpr": 0.001164365014893041,
+        "average_precision": 0.9997953135324928,
+        "roc_auc": 0.9999456914771562,
+        "true_negatives": 221322,
+        "false_positives": 258,
+        "false_negatives": 207,
+        "true_positives": 57360
       }
     }
   ],
   "selection": {
-    "criterion": "max_validation_recall_malicious_then_min_validation_fpr",
+    "criterion": "max_validation_balanced_accuracy_then_recall_then_min_fpr",
     "configuration": "balanceado",
     "class_weight": "balanced",
-    "final_training_rows": 2124964,
-    "retraining_seconds": 65.41596949996892,
+    "final_training_rows": 2041288,
+    "retraining_seconds": 75.22897169999487,
     "final_test": {
-      "accuracy": 0.6959000331572064,
-      "precision_malicious": 0.996062680020083,
-      "recall_malicious": 0.2610523399761068,
-      "specificity_benign": 0.9992800680311552,
-      "f1_malicious": 0.4136844906727833,
-      "f1_macro": 0.6041985191426561,
-      "fpr": 0.0007199319688448232,
-      "average_precision": 0.6895928638183638,
-      "roc_auc": 0.5973817747544432,
-      "true_negatives": 413630,
-      "false_positives": 298,
-      "false_negatives": 213397,
-      "true_positives": 75388
+      "accuracy": 0.9979828615793178,
+      "balanced_accuracy": 0.9972167656733912,
+      "precision_malicious": 0.9928741092636579,
+      "recall_malicious": 0.996015298051701,
+      "specificity_benign": 0.9984182332950815,
+      "f1_malicious": 0.9944422231107557,
+      "f1_macro": 0.9966050259593704,
+      "fpr": 0.0015817667049185411,
+      "average_precision": 0.9993289190869821,
+      "roc_auc": 0.9998666853583196,
+      "true_negatives": 225340,
+      "false_positives": 357,
+      "false_negatives": 199,
+      "true_positives": 49742
     },
+    "final_test_by_original_label": [
+      {
+        "etiqueta_original": "BENIGN",
+        "registros": 225697,
+        "predichos_malicious": 357,
+        "tasa_deteccion": 0.0015817667049185411,
+        "probabilidad_malicious_media": 0.004698513222552776
+      },
+      {
+        "etiqueta_original": "Bot",
+        "registros": 210,
+        "predichos_malicious": 127,
+        "tasa_deteccion": 0.6047619047619047,
+        "probabilidad_malicious_media": 0.5817660258958007
+      },
+      {
+        "etiqueta_original": "DDoS",
+        "registros": 12775,
+        "predichos_malicious": 12769,
+        "tasa_deteccion": 0.9995303326810177,
+        "probabilidad_malicious_media": 0.9991053428923155
+      },
+      {
+        "etiqueta_original": "DoS GoldenEye",
+        "registros": 994,
+        "predichos_malicious": 992,
+        "tasa_deteccion": 0.9979879275653923,
+        "probabilidad_malicious_media": 0.9892027020538976
+      },
+      {
+        "etiqueta_original": "DoS Hulk",
+        "registros": 19536,
+        "predichos_malicious": 19461,
+        "tasa_deteccion": 0.9961609336609336,
+        "probabilidad_malicious_media": 0.980055410647075
+      },
+      {
+        "etiqueta_original": "DoS Slowhttptest",
+        "registros": 546,
+        "predichos_malicious": 544,
+        "tasa_deteccion": 0.9963369963369964,
+        "probabilidad_malicious_media": 0.9770000626418442
+      },
+      {
+        "etiqueta_original": "DoS slowloris",
+        "registros": 413,
+        "predichos_malicious": 412,
+        "tasa_deteccion": 0.9975786924939467,
+        "probabilidad_malicious_media": 0.994992468302294
+      },
+      {
+        "etiqueta_original": "FTP-Patator",
+        "registros": 779,
+        "predichos_malicious": 778,
+        "tasa_deteccion": 0.9987163029525032,
+        "probabilidad_malicious_media": 0.9965670457703051
+      },
+      {
+        "etiqueta_original": "Heartbleed",
+        "registros": 1,
+        "predichos_malicious": 1,
+        "tasa_deteccion": 1.0,
+        "probabilidad_malicious_media": 0.9
+      },
+      {
+        "etiqueta_original": "Infiltration",
+        "registros": 4,
+        "predichos_malicious": 3,
+        "tasa_deteccion": 0.75,
+        "probabilidad_malicious_media": 0.4700091186986829
+      },
+      {
+        "etiqueta_original": "PortScan",
+        "registros": 13969,
+        "predichos_malicious": 13967,
+        "tasa_deteccion": 0.9998568258286206,
+        "probabilidad_malicious_media": 0.9950278894958648
+      },
+      {
+        "etiqueta_original": "SSH-Patator",
+        "registros": 507,
+        "predichos_malicious": 498,
+        "tasa_deteccion": 0.9822485207100592,
+        "probabilidad_malicious_media": 0.8805826523281527
+      },
+      {
+        "etiqueta_original": "Web Attack – Brute Force",
+        "registros": 142,
+        "predichos_malicious": 127,
+        "tasa_deteccion": 0.8943661971830986,
+        "probabilidad_malicious_media": 0.8779140496498795
+      },
+      {
+        "etiqueta_original": "Web Attack – Sql Injection",
+        "registros": 2,
+        "predichos_malicious": 0,
+        "tasa_deteccion": 0.0,
+        "probabilidad_malicious_media": 0.22895638179554084
+      },
+      {
+        "etiqueta_original": "Web Attack – XSS",
+        "registros": 63,
+        "predichos_malicious": 63,
+        "tasa_deteccion": 1.0,
+        "probabilidad_malicious_media": 0.9780921760680652
+      }
+    ],
     "model_path": "data\\processed\\modelos\\random_forest_seleccionado.joblib"
   },
   "top_feature_importances": [
     {
-      "feature": "Bwd Packets/s",
-      "importance": 0.10701562189304602
-    },
-    {
-      "feature": "Packet Length Std",
-      "importance": 0.07685248468741777
+      "feature": "Init_Win_bytes_forward",
+      "importance": 0.08072232483682869
     },
     {
       "feature": "Max Packet Length",
-      "importance": 0.07296093650911505
-    },
-    {
-      "feature": "Bwd Packet Length Max",
-      "importance": 0.050026047493625374
-    },
-    {
-      "feature": "Avg Bwd Segment Size",
-      "importance": 0.04951257329166128
-    },
-    {
-      "feature": "Packet Length Variance",
-      "importance": 0.047960773253252625
-    },
-    {
-      "feature": "Init_Win_bytes_forward",
-      "importance": 0.04704456946967637
-    },
-    {
-      "feature": "Total Length of Bwd Packets",
-      "importance": 0.035322392434840214
-    },
-    {
-      "feature": "Bwd Packet Length Std",
-      "importance": 0.0318358767030726
+      "importance": 0.07199048345148704
     },
     {
       "feature": "Average Packet Size",
-      "importance": 0.03090132102565091
-    },
-    {
-      "feature": "Packet Length Mean",
-      "importance": 0.03032591695847746
-    },
-    {
-      "feature": "Fwd Header Length",
-      "importance": 0.026817969372659917
-    },
-    {
-      "feature": "Fwd Header Length.1",
-      "importance": 0.02655911203551044
-    },
-    {
-      "feature": "Init_Win_bytes_backward",
-      "importance": 0.024794519212534217
-    },
-    {
-      "feature": "Bwd Packet Length Mean",
-      "importance": 0.023778414711209415
+      "importance": 0.05171939708867189
     },
     {
       "feature": "Min Packet Length",
-      "importance": 0.023176567084648242
+      "importance": 0.050275126498360675
+    },
+    {
+      "feature": "Init_Win_bytes_backward",
+      "importance": 0.05000429395843091
+    },
+    {
+      "feature": "Packet Length Std",
+      "importance": 0.047534579949910366
     },
     {
       "feature": "Fwd Packet Length Mean",
-      "importance": 0.02046136663291564
+      "importance": 0.039672987713553445
     },
     {
-      "feature": "Flow Bytes/s",
-      "importance": 0.017635108427874815
+      "feature": "Bwd Packet Length Max",
+      "importance": 0.03437225194232498
     },
     {
-      "feature": "Fwd Packet Length Min",
-      "importance": 0.014365363678162782
+      "feature": "Fwd Header Length.1",
+      "importance": 0.03162459879235918
+    },
+    {
+      "feature": "Subflow Fwd Bytes",
+      "importance": 0.028758007343826122
+    },
+    {
+      "feature": "Fwd Packet Length Max",
+      "importance": 0.027998516895471736
+    },
+    {
+      "feature": "Packet Length Variance",
+      "importance": 0.027832862970019107
+    },
+    {
+      "feature": "Avg Bwd Segment Size",
+      "importance": 0.024236228579437066
+    },
+    {
+      "feature": "Fwd Header Length",
+      "importance": 0.0235794653608099
+    },
+    {
+      "feature": "Bwd Packet Length Min",
+      "importance": 0.022619688136905056
+    },
+    {
+      "feature": "Bwd Packet Length Std",
+      "importance": 0.022551776697842533
+    },
+    {
+      "feature": "Packet Length Mean",
+      "importance": 0.02125514805350845
+    },
+    {
+      "feature": "Avg Fwd Segment Size",
+      "importance": 0.020978546425622132
     },
     {
       "feature": "Fwd IAT Max",
-      "importance": 0.013320342883679266
+      "importance": 0.02059392677326882
+    },
+    {
+      "feature": "Protocol",
+      "importance": 0.020508087533106848
     }
   ],
   "notes": [
@@ -210,6 +414,8 @@
     "Las configuraciones candidatas se evaluaron únicamente con validación; la prueba se evaluó una sola vez después de seleccionar y reentrenar el modelo.",
     "No se fijó un umbral numérico de aceptación antes del entrenamiento.",
     "Por restricción de recursos, se configuró un límite operativo de 1,762,141 filas estratificadas para el entrenamiento; este tamaño no se optimizó como hiperparámetro. Validación y prueba se conservaron completas.",
-    "La partición separa días completos de captura entre entrenamiento, validación y prueba; los resultados estiman generalización entre escenarios de CIC-IDS2017, no desempeño en redes reales."
+    "Entrenamiento, validación y prueba contienen todos los ataques originales disponibles cuando el número de grupos lo permite; las particiones se realizan agrupando vectores idénticos de las 78 características.",
+    "Una misma combinación de características puede tener etiquetas originales distintas; esas filas se conservan juntas y se reportan como ambigüedad irreducible para el modelo.",
+    "La evaluación agrupada estima detección de ataques representados en el dataset; los análisis leave-one-day-out complementarios estiman transferencia a días/escenarios no vistos."
   ]
 }

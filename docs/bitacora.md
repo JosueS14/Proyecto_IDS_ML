@@ -328,3 +328,50 @@ Ejecutar la validación leave-one-day-out con ambas configuraciones (`04c_valida
 
 Se mantiene la configuración sin balanceo: igual recall que la balanceada y menor FPR. La sección 10.5 de `thesis/04_desarrollo_modelo.md` documenta la tabla completa.
 
+# Sesion 20
+## Objetivo
+
+Cambiar la evaluación principal para representar ataques conocidos en entrenamiento,
+validación y prueba, evitando que vectores idénticos de características aparezcan en
+más de una partición.
+
+## Procedimiento
+
+- Se agruparon filas por el vector exacto de las 78 características que recibe el modelo.
+- Se asignaron los grupos a diez pliegues deterministas y se eligieron validación y prueba
+  para mantener las 14 etiquetas originales de ataque en los tres conjuntos.
+- El submuestreo de entrenamiento se estratificó por etiqueta original, no solo por la
+  clase binaria agregada.
+- La selección entre Random Forest sin balanceo y con `class_weight="balanced"` se hizo
+  por balanced accuracy de validación; la prueba quedó reservada.
+- Se conservó leave-one-day-out como evaluación complementaria de transferencia a días
+  no vistos.
+
+## Resultados
+
+- Entrenamiento: 2,272,892 filas antes del límite y 1,762,141 usadas; validación: 279,147;
+  prueba: 275,638.
+- Las tres particiones contienen `BENIGN` y las 14 etiquetas originales de ataque.
+- De 2,827,677 filas hay 2,233,299 vectores de características distintos; 594,378 filas
+  repiten un vector, y ninguno de esos vectores se comparte entre particiones.
+- Se encontraron 269 vectores idénticos asociados a etiquetas originales distintas
+  (82,456 filas); se conservaron juntos y se registraron como ambigüedad de etiquetas.
+- Se seleccionó `class_weight="balanced"` con balanced accuracy de validación 0.997620.
+- En prueba: recall `MALICIOUS` 0.996015, especificidad `BENIGN` 0.998418, 49,742
+  verdaderos positivos, 225,340 verdaderos negativos, 199 falsos negativos y 357 falsos
+  positivos.
+- El recall por ataque varía: DDoS 99.95 %, PortScan 99.99 %, Bot 60.5 %, SQL Injection
+  0/2. Las categorías con muy pocos registros no permiten conclusiones estables.
+- En leave-one-day-out, la configuración balanceada obtuvo recall medio 0.0227 ± 0.0369;
+  esto confirma que la alta puntuación agrupada no implica transferencia a días no vistos.
+- La batería del prototipo pasó 9/9 pruebas; el verificador de despliegue pasó sin
+  advertencias con Python 3.13.2 y las dependencias fijadas.
+
+## Decisión
+
+La evaluación agrupada se adopta como principal para ataques conocidos del dataset. La
+evaluación por día se conserva como estimación separada de generalización entre
+escenarios. Ambas se documentan en `thesis/04_desarrollo_modelo.md` y sus métricas
+reproducibles quedan en `docs/resultados_modelado.json` y
+`docs/resultados_validacion_por_dia.json`.
+

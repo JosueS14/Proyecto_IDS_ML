@@ -149,16 +149,16 @@ docs/resultados_modelado.json
 
 En la configuración oficial, la partición de entrenamiento tiene 1,666,481 filas y no se submuestrea. El límite operativo de 1,762,141 filas solo se aplica si una partición lo supera. La validación y la prueba conservan sus particiones completas. La prueba no se utiliza para seleccionar la configuración.
 
-La separación se realiza por día completo de captura para evitar que el mismo escenario temporal
-aparezca en más de una partición:
+La evaluación principal realiza una partición aproximada 80/10/10 agrupando los vectores
+idénticos de las 78 características. Usa las etiquetas originales para representar los
+ataques en entrenamiento, validación y prueba cuando hay ejemplos suficientes. No se
+separan vectores de entrada idénticos entre conjuntos. El submuestreo por recursos se
+aplica solo al entrenamiento y se estratifica por etiqueta original.
 
-- Entrenamiento: Monday, Tuesday y Wednesday.
-- Validación: todos los archivos del jueves.
-- Prueba: todos los archivos del viernes.
-
-Esta separación es más exigente que una división aleatoria por fila. Las métricas resultantes miden
-la transferencia entre escenarios del dataset y no deben interpretarse como detección de zero-day ni
-como desempeño en una red real.
+La separación por día completo se conserva como análisis complementario para medir
+transferencia a escenarios no vistos. La evaluación principal mide ataques conocidos del
+dataset; ninguna de las dos debe interpretarse como detección de zero-day ni como
+desempeño en una red real.
 
 ## 6.1 Análisis complementarios
 
