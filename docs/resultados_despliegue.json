@@ -1,6 +1,6 @@
 {
   "estado": "PASÓ",
-  "python": "3.13.2",
+  "python": "3.14.6",
   "plataforma": "Windows-11-10.0.26300-SP0",
   "archivos": {
     "modelo": {
@@ -25,9 +25,9 @@
     }
   },
   "paquetes": {
-    "pandas": "2.3.3",
+    "pandas": "3.0.3",
     "numpy": "2.4.6",
-    "sklearn": "1.8.0",
+    "sklearn": "1.9.0",
     "joblib": "1.5.3",
     "pyarrow": "23.0.1"
   },
@@ -53,5 +53,9 @@
     "tiene_label": true
   },
   "errores": [],
-  "advertencias": []
+  "advertencias": [
+    "El artefacto fue validado con Python 3.13.x; el entorno actual usa Python 3.14.6",
+    "El artefacto fue validado con pandas 2.3.3; el entorno actual usa 3.0.3",
+    "El artefacto fue validado con sklearn 1.8.0; el entorno actual usa 1.9.0"
+  ]
 }
