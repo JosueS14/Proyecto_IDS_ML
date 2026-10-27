@@ -153,7 +153,7 @@
       "class_weight": null,
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 73.84322409999731,
+      "tiempo_entrenamiento_segundos": 48.44808270000067,
       "validacion": {
         "accuracy": 0.9984703400000716,
         "balanced_accuracy": 0.9973649227083405,
@@ -176,22 +176,22 @@
       "class_weight": "balanced",
       "n_estimators": 50,
       "n_jobs": 4,
-      "tiempo_entrenamiento_segundos": 64.91006290000223,
+      "tiempo_entrenamiento_segundos": 48.10368739999831,
       "validacion": {
-        "accuracy": 0.9983342110071037,
-        "balanced_accuracy": 0.9976199124427854,
-        "precision_malicious": 0.9955222326356347,
-        "recall_malicious": 0.9964041899004638,
-        "specificity_benign": 0.998835634985107,
-        "f1_malicious": 0.9959630160177106,
-        "f1_macro": 0.9974568064117313,
-        "fpr": 0.001164365014893041,
-        "average_precision": 0.9997953135324928,
-        "roc_auc": 0.9999456914771562,
-        "true_negatives": 221322,
-        "false_positives": 258,
-        "false_negatives": 207,
-        "true_positives": 57360
+        "accuracy": 0.9983915284778271,
+        "balanced_accuracy": 0.9980031833402463,
+        "precision_malicious": 0.994870906255415,
+        "recall_malicious": 0.9973422273177341,
+        "specificity_benign": 0.9986641393627583,
+        "f1_malicious": 0.9961050339616749,
+        "f1_macro": 0.9975457644182948,
+        "fpr": 0.0013358606372416283,
+        "average_precision": 0.9998168430024195,
+        "roc_auc": 0.9999581968709623,
+        "true_negatives": 221284,
+        "false_positives": 296,
+        "false_negatives": 153,
+        "true_positives": 57414
       }
     }
   ],
@@ -200,128 +200,128 @@
     "configuration": "balanceado",
     "class_weight": "balanced",
     "final_training_rows": 2041288,
-    "retraining_seconds": 75.22897169999487,
+    "retraining_seconds": 55.84335529999953,
     "final_test": {
-      "accuracy": 0.9979828615793178,
-      "balanced_accuracy": 0.9972167656733912,
-      "precision_malicious": 0.9928741092636579,
-      "recall_malicious": 0.996015298051701,
-      "specificity_benign": 0.9984182332950815,
-      "f1_malicious": 0.9944422231107557,
-      "f1_macro": 0.9966050259593704,
-      "fpr": 0.0015817667049185411,
-      "average_precision": 0.9993289190869821,
-      "roc_auc": 0.9998666853583196,
-      "true_negatives": 225340,
-      "false_positives": 357,
-      "false_negatives": 199,
-      "true_positives": 49742
+      "accuracy": 0.9979610938985191,
+      "balanced_accuracy": 0.9974763494205483,
+      "precision_malicious": 0.9920677628300947,
+      "recall_malicious": 0.9967161250275325,
+      "specificity_benign": 0.9982365738135642,
+      "f1_malicious": 0.9943865116464901,
+      "f1_macro": 0.9965704169190869,
+      "fpr": 0.0017634261864357967,
+      "average_precision": 0.9994165583668064,
+      "roc_auc": 0.9998843721259039,
+      "true_negatives": 225299,
+      "false_positives": 398,
+      "false_negatives": 164,
+      "true_positives": 49777
     },
     "final_test_by_original_label": [
       {
         "etiqueta_original": "BENIGN",
         "registros": 225697,
-        "predichos_malicious": 357,
-        "tasa_deteccion": 0.0015817667049185411,
-        "probabilidad_malicious_media": 0.004698513222552776
+        "predichos_malicious": 398,
+        "tasa_deteccion": 0.0017634261864357967,
+        "probabilidad_malicious_media": 0.005054032512724878
       },
       {
         "etiqueta_original": "Bot",
         "registros": 210,
-        "predichos_malicious": 127,
-        "tasa_deteccion": 0.6047619047619047,
-        "probabilidad_malicious_media": 0.5817660258958007
+        "predichos_malicious": 139,
+        "tasa_deteccion": 0.6619047619047619,
+        "probabilidad_malicious_media": 0.6548530609314193
       },
       {
         "etiqueta_original": "DDoS",
         "registros": 12775,
-        "predichos_malicious": 12769,
-        "tasa_deteccion": 0.9995303326810177,
-        "probabilidad_malicious_media": 0.9991053428923155
+        "predichos_malicious": 12771,
+        "tasa_deteccion": 0.9996868884540118,
+        "probabilidad_malicious_media": 0.9992858582892423
       },
       {
         "etiqueta_original": "DoS GoldenEye",
         "registros": 994,
-        "predichos_malicious": 992,
-        "tasa_deteccion": 0.9979879275653923,
-        "probabilidad_malicious_media": 0.9892027020538976
+        "predichos_malicious": 993,
+        "tasa_deteccion": 0.9989939637826962,
+        "probabilidad_malicious_media": 0.9928189713723997
       },
       {
         "etiqueta_original": "DoS Hulk",
         "registros": 19536,
-        "predichos_malicious": 19461,
-        "tasa_deteccion": 0.9961609336609336,
-        "probabilidad_malicious_media": 0.980055410647075
+        "predichos_malicious": 19469,
+        "tasa_deteccion": 0.9965704340704341,
+        "probabilidad_malicious_media": 0.9792564021706712
       },
       {
         "etiqueta_original": "DoS Slowhttptest",
         "registros": 546,
-        "predichos_malicious": 544,
-        "tasa_deteccion": 0.9963369963369964,
-        "probabilidad_malicious_media": 0.9770000626418442
+        "predichos_malicious": 545,
+        "tasa_deteccion": 0.9981684981684982,
+        "probabilidad_malicious_media": 0.9827565648852156
       },
       {
         "etiqueta_original": "DoS slowloris",
         "registros": 413,
         "predichos_malicious": 412,
         "tasa_deteccion": 0.9975786924939467,
-        "probabilidad_malicious_media": 0.994992468302294
+        "probabilidad_malicious_media": 0.9958696590743916
       },
       {
         "etiqueta_original": "FTP-Patator",
         "registros": 779,
         "predichos_malicious": 778,
         "tasa_deteccion": 0.9987163029525032,
-        "probabilidad_malicious_media": 0.9965670457703051
+        "probabilidad_malicious_media": 0.9964413077560486
       },
       {
         "etiqueta_original": "Heartbleed",
         "registros": 1,
         "predichos_malicious": 1,
         "tasa_deteccion": 1.0,
-        "probabilidad_malicious_media": 0.9
+        "probabilidad_malicious_media": 0.98
       },
       {
         "etiqueta_original": "Infiltration",
         "registros": 4,
         "predichos_malicious": 3,
         "tasa_deteccion": 0.75,
-        "probabilidad_malicious_media": 0.4700091186986829
+        "probabilidad_malicious_media": 0.5506249999999999
       },
       {
         "etiqueta_original": "PortScan",
         "registros": 13969,
         "predichos_malicious": 13967,
         "tasa_deteccion": 0.9998568258286206,
-        "probabilidad_malicious_media": 0.9950278894958648
+        "probabilidad_malicious_media": 0.9966441038714688
       },
       {
         "etiqueta_original": "SSH-Patator",
         "registros": 507,
-        "predichos_malicious": 498,
-        "tasa_deteccion": 0.9822485207100592,
-        "probabilidad_malicious_media": 0.8805826523281527
+        "predichos_malicious": 503,
+        "tasa_deteccion": 0.9921104536489151,
+        "probabilidad_malicious_media": 0.8957543060722241
       },
       {
         "etiqueta_original": "Web Attack – Brute Force",
         "registros": 142,
-        "predichos_malicious": 127,
-        "tasa_deteccion": 0.8943661971830986,
-        "probabilidad_malicious_media": 0.8779140496498795
+        "predichos_malicious": 132,
+        "tasa_deteccion": 0.9295774647887324,
+        "probabilidad_malicious_media": 0.8920414956249745
       },
       {
         "etiqueta_original": "Web Attack – Sql Injection",
         "registros": 2,
-        "predichos_malicious": 0,
-        "tasa_deteccion": 0.0,
-        "probabilidad_malicious_media": 0.22895638179554084
+        "predichos_malicious": 1,
+        "tasa_deteccion": 0.5,
+        "probabilidad_malicious_media": 0.3892832125184335
       },
       {
         "etiqueta_original": "Web Attack – XSS",
         "registros": 63,
         "predichos_malicious": 63,
         "tasa_deteccion": 1.0,
-        "probabilidad_malicious_media": 0.9780921760680652
+        "probabilidad_malicious_media": 0.9709994643766079
       }
     ],
     "model_path": "data\\processed\\modelos\\random_forest_seleccionado.joblib"
@@ -329,83 +329,83 @@
   "top_feature_importances": [
     {
       "feature": "Init_Win_bytes_forward",
-      "importance": 0.08072232483682869
+      "importance": 0.07804072050180565
     },
     {
       "feature": "Max Packet Length",
-      "importance": 0.07199048345148704
+      "importance": 0.07150595980485272
     },
     {
       "feature": "Average Packet Size",
-      "importance": 0.05171939708867189
+      "importance": 0.06032236166317087
     },
     {
       "feature": "Min Packet Length",
-      "importance": 0.050275126498360675
-    },
-    {
-      "feature": "Init_Win_bytes_backward",
-      "importance": 0.05000429395843091
+      "importance": 0.04885218493341099
     },
     {
       "feature": "Packet Length Std",
-      "importance": 0.047534579949910366
-    },
-    {
-      "feature": "Fwd Packet Length Mean",
-      "importance": 0.039672987713553445
-    },
-    {
-      "feature": "Bwd Packet Length Max",
-      "importance": 0.03437225194232498
-    },
-    {
-      "feature": "Fwd Header Length.1",
-      "importance": 0.03162459879235918
-    },
-    {
-      "feature": "Subflow Fwd Bytes",
-      "importance": 0.028758007343826122
-    },
-    {
-      "feature": "Fwd Packet Length Max",
-      "importance": 0.027998516895471736
+      "importance": 0.04353626896405965
     },
     {
       "feature": "Packet Length Variance",
-      "importance": 0.027832862970019107
+      "importance": 0.04233595536490706
+    },
+    {
+      "feature": "Init_Win_bytes_backward",
+      "importance": 0.03969103076095764
+    },
+    {
+      "feature": "Subflow Fwd Bytes",
+      "importance": 0.0327332565773252
     },
     {
       "feature": "Avg Bwd Segment Size",
-      "importance": 0.024236228579437066
+      "importance": 0.03202467113505098
     },
     {
-      "feature": "Fwd Header Length",
-      "importance": 0.0235794653608099
+      "feature": "Fwd Packet Length Mean",
+      "importance": 0.031237383905219348
     },
     {
-      "feature": "Bwd Packet Length Min",
-      "importance": 0.022619688136905056
-    },
-    {
-      "feature": "Bwd Packet Length Std",
-      "importance": 0.022551776697842533
-    },
-    {
-      "feature": "Packet Length Mean",
-      "importance": 0.02125514805350845
+      "feature": "Bwd Packet Length Max",
+      "importance": 0.030338782061960678
     },
     {
       "feature": "Avg Fwd Segment Size",
-      "importance": 0.020978546425622132
+      "importance": 0.030067117583086434
     },
     {
-      "feature": "Fwd IAT Max",
-      "importance": 0.02059392677326882
+      "feature": "Fwd Header Length",
+      "importance": 0.028010515649947974
     },
     {
-      "feature": "Protocol",
-      "importance": 0.020508087533106848
+      "feature": "Fwd Packet Length Max",
+      "importance": 0.02609999915193852
+    },
+    {
+      "feature": "Bwd Header Length",
+      "importance": 0.02552093945359896
+    },
+    {
+      "feature": "Bwd Packet Length Mean",
+      "importance": 0.023549824968683443
+    },
+    {
+      "feature": "Fwd Header Length.1",
+      "importance": 0.022521787319535583
+    },
+    {
+      "feature": "Total Length of Fwd Packets",
+      "importance": 0.020892681614386958
+    },
+    {
+      "feature": "Bwd Packet Length Std",
+      "importance": 0.020244546526030017
+    },
+    {
+      "feature": "Bwd Packet Length Min",
+      "importance": 0.02012961816918876
     }
   ],
   "notes": [
