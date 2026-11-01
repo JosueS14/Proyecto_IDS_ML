@@ -13,7 +13,7 @@ Las decisiones adoptadas antes del entrenamiento fueron:
 - Clasificador principal: Random Forest.
 - Características: las 78 variables numéricas del dataset preparado.
 - Variable positiva: `MALICIOUS`.
-- División principal: entrenamiento, validación y prueba contienen etiquetas originales de todos los ataques cuando hay grupos suficientes; los vectores idénticos de las 78 características se asignan siempre a una sola partición.
+- División principal: se agrupan los vectores idénticos de las 78 características; no se separan archivos, días ni sesiones de captura. Las etiquetas originales quedan representadas en cada partición cuando hay grupos suficientes.
 - Proporciones aproximadas: 80 % entrenamiento, 10 % validación y 10 % prueba.
 - Semilla: `random_state=42`.
 - Configuraciones: sin balanceo y con `class_weight="balanced"`.
@@ -28,7 +28,7 @@ El procedimiento se implementó en `src/modelado/04_entrenar_random_forest.py`.
 2. Se valida que las 78 características coincidan exactamente con el esquema registrado.
 3. Se verifica que no existan valores faltantes, valores no finitos ni etiquetas desconocidas.
 4. Se agrupan las filas por el vector exacto de las 78 características, que es la entrada efectiva del modelo.
-5. Se distribuyen los grupos en diez pliegues deterministas y se eligen dos pliegues para validación y prueba, buscando mantener las etiquetas originales presentes en las tres particiones.
+5. Se calcula un hash del vector de características y se distribuyen los grupos en diez pliegues deterministas. En la ejecución registrada, el pliegue 7 se usa para validación, el 8 para prueba y los ocho restantes para entrenamiento; se seleccionan pliegues que mantienen las etiquetas originales representadas cuando hay grupos suficientes.
 6. Se submuestrea solo entrenamiento, estratificando por etiqueta de ataque original para conservar las clases minoritarias.
 7. Se entrenan Random Forest sin balanceo y con `class_weight="balanced"`.
 8. Se selecciona usando únicamente validación.
@@ -37,6 +37,12 @@ El procedimiento se implementó en `src/modelado/04_entrenar_random_forest.py`.
 11. Se persiste el modelo y se guardan las métricas, la partición y la importancia de características.
 
 ## 3. Restricción de recursos
+
+La partición es por vector de características, no por archivo o sesión de captura. Los
+ocho CSV de origen aparecen en entrenamiento, validación y prueba, como muestra
+`source_files_by_partition` en `docs/resultados_modelado.json`. La agrupación impide que
+vectores de entrada exactamente idénticos crucen de una partición a otra, pero no
+garantiza independencia entre sesiones ni escenarios.
 
 La partición agrupada contiene 2,272,892 filas de entrenamiento antes del límite operativo,
 279,147 de validación y 275,638 de prueba. El entrenamiento se submuestreó a 1,762,141
@@ -103,11 +109,12 @@ La matriz de confusión final fue:
 | Real `BENIGN` | 225,299 | 398 |
 | Real `MALICIOUS` | 164 | 49,777 |
 
-El resultado de esta prueba estima la detección de ataques conocidos dentro de CIC-IDS2017.
-No es directamente comparable con la evaluación leave-one-day-out: archivos y días de
-captura aparecen en las tres particiones, pero nunca se separa entre ellas un vector
-idéntico de características. La prueba registró 164 falsos negativos y 398 falsos
-positivos.
+El recall `MALICIOUS` de 0.996716 (≈0.9967) estima la detección de ataques conocidos de
+CIC-IDS2017 en vectores de características retenidos. No mide generalización a sesiones,
+archivos o días no vistos: los ocho archivos de origen aparecen en las tres particiones.
+La evaluación leave-one-day-out de la sección 10.5 responde a esa pregunta de transferencia
+entre días y no es directamente comparable con la prueba agrupada. La prueba registró 164
+falsos negativos y 398 falsos positivos.
 
 ## 6. Importancia de características
 
@@ -237,7 +244,7 @@ Este resultado corresponde al protocolo por día y al modelo sin balanceo, no al
 agrupado actual. Ilustra la variabilidad al transferir a días no vistos; no debe
 compararse directamente con la prueba estratificada que contiene ataques de todos los días.
 
-Se verificó la causa de la variabilidad. Con los mismos datos, el viernes obtuvo recall 0.278 con el orden de filas del Parquet y 0.076 con el orden de concatenación usado en la fase 4 (lunes-martes-miércoles seguido de jueves). Un control con todas las filas de entrenamiento, sin submuestreo, dio 0.278; por tanto, el submuestreo no explica la diferencia.
+Se verificó la causa de la variabilidad en este análisis leave-one-day-out anterior a la partición agrupada principal. Al dejar viernes fuera, el recall fue 0.278 con el orden de filas del Parquet y 0.076 con el orden de concatenación lunes-miércoles seguido de jueves. Un control con todas las filas de entrenamiento, sin submuestreo, dio 0.278; por tanto, el submuestreo no explica la diferencia. Estos resultados describen la sensibilidad del protocolo por día al orden de entrenamiento, no la partición agrupada principal.
 
 ### 10.4 Conclusión de los análisis complementarios
 

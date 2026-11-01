@@ -244,6 +244,11 @@ Eliminar la fuga de escenario causada por la partición aleatoria por fila.
 - La configuración sin balanceo fue seleccionada por validación con recall `0.019856`.
 - La prueba final obtuvo recall `0.076022`, lo que evidencia una generalización limitada hacia escenarios de ataque no presentes en el entrenamiento.
 
+Nota de vigencia: esta sesión registra una evaluación anterior con separación por día.
+La partición principal fue sustituida posteriormente por la partición agrupada por
+vectores descrita en la sesión 20 y actualizada en la sesión 21; no debe interpretarse
+como la metodología vigente.
+
 ## Decisión
 
 Las métricas anteriores basadas en una partición aleatoria por fila dejan de ser las métricas principales. La evaluación por día de captura se conserva como resultado válido para analizar transferencia entre escenarios de CIC-IDS2017 y no se interpreta como detección de zero-day ni como desempeño en redes reales.

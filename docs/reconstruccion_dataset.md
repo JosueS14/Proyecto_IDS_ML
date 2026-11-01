@@ -124,8 +124,9 @@ data/processed/dataset_cicids2017_preparado_grupos.parquet
 ```
 
 La salida esperada contiene aproximadamente 2,827,677 filas, 78 características y la columna `Label`.
-El archivo de grupos conserva, en el mismo orden de filas, el nombre del CSV de origen. Esa columna
-solo se utiliza para separar escenarios durante el modelado; nunca entra al modelo.
+El archivo de grupos conserva, en el mismo orden de filas, el nombre del CSV de origen. La
+partición principal agrupa por el vector de características, no separa archivos completos;
+la procedencia sirve para describir las capturas y nunca entra al modelo.
 
 ## 6. Entrenar nuevamente el modelo
 
@@ -135,7 +136,7 @@ Para repetir el entrenamiento y la evaluación:
 python src/modelado/04_entrenar_random_forest.py
 ```
 
-El script separa archivos completos entre entrenamiento, validación y prueba, aplica el muestreo estratificado únicamente dentro del entrenamiento por limitaciones de recursos, compara las configuraciones sin ponderación y con `class_weight="balanced"`, y guarda el modelo seleccionado en:
+El script asigna los vectores idénticos de las 78 características a una misma partición, compara las configuraciones sin ponderación y con `class_weight="balanced"`, y guarda el modelo seleccionado en:
 
 ```text
 data/processed/modelos/random_forest_seleccionado.joblib
@@ -147,18 +148,21 @@ También actualiza:
 docs/resultados_modelado.json
 ```
 
-En la configuración oficial, la partición de entrenamiento tiene 1,666,481 filas y no se submuestrea. El límite operativo de 1,762,141 filas solo se aplica si una partición lo supera. La validación y la prueba conservan sus particiones completas. La prueba no se utiliza para seleccionar la configuración.
+La ejecución actual tiene 2,272,892 filas de entrenamiento antes del límite, 279,147 de validación y 275,638 de prueba. El entrenamiento se submuestrea a 1,762,141 filas; validación y prueba se conservan completas. La prueba no se utiliza para seleccionar la configuración.
 
-La evaluación principal realiza una partición aproximada 80/10/10 agrupando los vectores
-idénticos de las 78 características. Usa las etiquetas originales para representar los
-ataques en entrenamiento, validación y prueba cuando hay ejemplos suficientes. No se
-separan vectores de entrada idénticos entre conjuntos. El submuestreo por recursos se
-aplica solo al entrenamiento y se estratifica por etiqueta original.
+La partición principal es aproximadamente 80/10/10 y usa diez pliegues hash de los
+vectores de las 78 características. En la ejecución actual, los pliegues 7 y 8 son
+validación y prueba, respectivamente. La matriz `source_files_by_partition` de
+`docs/resultados_modelado.json` confirma que los ocho archivos de captura aparecen en
+los tres conjuntos. Así se evita el cruce de vectores idénticos, pero no se separan
+sesiones, días o archivos completos. El submuestreo por recursos se aplica solo al
+entrenamiento y se estratifica por etiqueta original.
 
-La separación por día completo se conserva como análisis complementario para medir
-transferencia a escenarios no vistos. La evaluación principal mide ataques conocidos del
-dataset; ninguna de las dos debe interpretarse como detección de zero-day ni como
-desempeño en una red real.
+La prueba principal mide el reconocimiento de ataques conocidos del dataset en vectores
+retenidos. El recall `MALICIOUS` de 0.996716 (≈0.9967) no mide generalización a capturas
+no vistas. La evaluación leave-one-day-out se conserva como análisis separado de
+transferencia entre días; ambas evaluaciones son internas a CIC-IDS2017 y ninguna debe
+interpretarse como detección de zero-day ni como desempeño en una red real.
 
 ## 6.1 Análisis complementarios
 

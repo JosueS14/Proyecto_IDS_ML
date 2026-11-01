@@ -52,7 +52,7 @@ Recodificación BENIGN/MALICIOUS y eliminación de duplicados
 Dataset Parquet preparado + metadatos + procedencia de grupos
 ```
 
-El resultado principal es `data/processed/dataset_cicids2017_preparado.parquet`. El esquema y los contadores de filas se almacenan en `data/processed/dataset_cicids2017_preparado_metadatos.json`. La procedencia de cada fila se conserva, en el mismo orden, en `data/processed/dataset_cicids2017_preparado_grupos.parquet`; esta información se utiliza únicamente para separar escenarios durante el modelado y no se entrega como característica al clasificador.
+El resultado principal es `data/processed/dataset_cicids2017_preparado.parquet`. El esquema y los contadores de filas se almacenan en `data/processed/dataset_cicids2017_preparado_metadatos.json`. La procedencia de cada fila se conserva, en el mismo orden, en `data/processed/dataset_cicids2017_preparado_grupos.parquet`. En la partición principal, la procedencia no se usa para separar archivos o días: se agrupan vectores idénticos de características, y el archivo de origen solo permite describir los resultados por captura. No se entrega como característica al clasificador.
 
 ## 4. Esquema de salida
 
@@ -141,22 +141,25 @@ Se implementará en la fase 5. Registrará como mínimo la fecha de análisis, l
 
 ## 8. Partición y prevención de fuga
 
-La partición de entrenamiento, validación y prueba se realiza después de generar el
-dataset preparado. La prueba se mantiene separada de la selección de configuración y
-del ajuste del modelo.
+La partición se realiza después de preparar el dataset. La prueba no participa en la
+selección de configuración ni en el ajuste del modelo. El método principal no separa
+archivos ni sesiones completas: calcula un hash del vector de las 78 características,
+distribuye los vectores en diez pliegues deterministas y asigna cada vector idéntico
+completo a una sola partición. En la ejecución registrada, el pliegue 7 es validación,
+el 8 es prueba y los ocho restantes son entrenamiento.
 
-La partición principal agrupa filas con vectores idénticos de las 78 características y
-asigna cada grupo completo a entrenamiento, validación o prueba. Las etiquetas originales
-se usan para que las categorías de ataque estén representadas en las tres particiones
-cuando hay suficientes grupos. La procedencia por archivo se conserva para analizar el
-desempeño por escenario.
+La partición es aproximadamente 80/10/10: 2,272,892 filas de entrenamiento antes del
+límite operativo, 279,147 de validación y 275,638 de prueba. El entrenamiento se
+submuestrea a 1,762,141 filas, estratificando por etiqueta original. Según
+`docs/resultados_modelado.json`, los ocho archivos CSV de origen aparecen en las tres
+particiones. Por tanto, esta división evita que vectores de entrada exactamente
+idénticos crucen entre conjuntos, pero no aísla sesiones, días o archivos de captura.
 
-La partición principal usa aproximadamente 80/10/10: 2,272,892 filas de entrenamiento
-antes del límite, 279,147 de validación y 275,638 de prueba. Por recursos, se muestrea
-entrenamiento a 1,762,141 filas estratificando por etiqueta original. La comprobación
-adicional leave-one-day-out mantiene días completos fuera del entrenamiento para medir
-transferencia a escenarios no vistos. Ambas evaluaciones responden a objetivos distintos;
-ninguna constituye una validación externa en una red real.
+La prueba principal estima el reconocimiento de ataques conocidos del dataset en
+vectores retenidos. El recall `MALICIOUS` de 0.996716 (≈0.9967) no es una medida de
+generalización a capturas o días no vistos. La transferencia a días completos se estudia
+por separado con leave-one-day-out; ambas evaluaciones siguen siendo internas a
+CIC-IDS2017 y ninguna equivale a una validación externa en una red real.
 
 No se aplicó balanceo sintético. La configuración `class_weight="balanced"` del clasificador modifica los pesos de las clases durante el ajuste, sin alterar la composición de validación ni de prueba. Cualquier técnica de remuestreo que se incorpore posteriormente deberá aplicarse únicamente al entrenamiento.
 
