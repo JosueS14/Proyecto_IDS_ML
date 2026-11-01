@@ -328,7 +328,7 @@ Ejecutar la validación leave-one-day-out con ambas configuraciones (`04c_valida
 
 Se mantiene la configuración sin balanceo: igual recall que la balanceada y menor FPR. La sección 10.5 de `thesis/04_desarrollo_modelo.md` documenta la tabla completa.
 
-# Sesion 20
+# Sesion 20 (ejecución anterior; cifras vigentes en la sesión 21)
 ## Objetivo
 
 Cambiar la evaluación principal para representar ataques conocidos en entrenamiento,
@@ -374,4 +374,36 @@ evaluación por día se conserva como estimación separada de generalización en
 escenarios. Ambas se documentan en `thesis/04_desarrollo_modelo.md` y sus métricas
 reproducibles quedan en `docs/resultados_modelado.json` y
 `docs/resultados_validacion_por_dia.json`.
+
+# Sesion 21
+
+## Objetivo
+
+Actualizar la documentación con los JSON regenerados al ejecutar los scripts del
+proyecto. Esta ejecución sustituye las cifras de modelado de la sesión 20 como
+resultado vigente.
+
+## Resultados vigentes
+
+- Entorno del modelado: Python 3.14.6, NumPy 2.4.6, pandas 3.0.3,
+  scikit-learn 1.9.0 y joblib 1.5.3.
+- La configuración balanceada obtuvo balanced accuracy 0.998003 y FPR 0.001336
+  en validación.
+- En prueba: accuracy 0.997961, balanced accuracy 0.997476, precision
+  `MALICIOUS` 0.992068, recall 0.996716, Average Precision 0.999417 y ROC-AUC
+  0.999884.
+- La matriz de confusión fue TN 225,299, FP 398, FN 164 y TP 49,777.
+- Bot tuvo 139 detecciones de 210 (66.2 %) y SQL Injection 1 de 2 (50 %).
+- En la importancia de características, `Init_Win_bytes_forward` obtuvo 0.078041
+  y `Packet Length Variance` aparece entre las diez primeras (0.042336).
+- En leave-one-day-out balanceado, el recall medio fue 0.0723 ± 0.0929 y el FPR
+  medio 0.00177 ± 0.00156.
+- La batería de validación pasó 9/9 pruebas; la muestra Parquet produjo 199
+  predicciones `BENIGN`, 1 `MALICIOUS` y ningún error.
+- La prueba offline de laboratorio procesó 20 flujos sin errores, generó 10
+  alertas y tardó 0.079 segundos en inferencia (0.676 segundos en total).
+
+Los detalles reproducibles se conservan en los JSON de `docs/`; las secciones 4,
+5 y 10 de `thesis/04_desarrollo_modelo.md` y la fase 6 de
+`thesis/06_pruebas_validacion.md` reflejan esta ejecución.
 

@@ -61,18 +61,17 @@ Los parámetros utilizados fueron:
 
 ## 4. Resultados de validación
 
-Los resultados oficiales se regeneraron con el entorno fijado por el repositorio:
-Python 3.13.2, NumPy 2.4.6, pandas 2.3.3, scikit-learn 1.8.0 y joblib 1.5.3.
-Las cifras completas y la procedencia del entorno están registradas en
-`docs/resultados_modelado.json`; las tablas de este documento presentan sus valores
-redondeados a seis decimales.
+Los resultados de esta ejecución se generaron con Python 3.14.6, NumPy 2.4.6,
+pandas 3.0.3, scikit-learn 1.9.0 y joblib 1.5.3. Las cifras completas y la
+procedencia del entorno están registradas en `docs/resultados_modelado.json`; las
+tablas de este documento presentan sus valores redondeados a seis decimales.
 
 | Configuración | Accuracy | Balanced accuracy | Precision `MALICIOUS` | Recall `MALICIOUS` | F1 macro | FPR |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Sin balanceo | 0.998470 | 0.997365 | 0.997094 | 0.995484 | 0.997662 | 0.000754 |
-| `class_weight="balanced"` | 0.998334 | 0.997620 | 0.995522 | 0.996404 | 0.997457 | 0.001164 |
+| `class_weight="balanced"` | 0.998392 | 0.998003 | 0.994871 | 0.997342 | 0.997546 | 0.001336 |
 
-Se seleccionó la configuración balanceada: obtuvo balanced accuracy 0.997620 frente a
+Se seleccionó la configuración balanceada: obtuvo balanced accuracy 0.998003 frente a
 0.997365 para la configuración sin balanceo. La configuración sin balanceo tuvo algo más
 de precisión y menor FPR en validación; por eso se reportan ambas y se da prioridad a la
 balanced accuracy, que considera tanto la detección de ataques como el reconocimiento de
@@ -86,28 +85,28 @@ reservada. En esta partición están representados los 14 tipos de ataque origin
 
 | Métrica | Resultado |
 | --- | ---: |
-| Accuracy | 0.997983 |
-| Balanced accuracy | 0.997217 |
-| Precision `MALICIOUS` | 0.992874 |
-| Recall `MALICIOUS` | 0.996015 |
-| Especificidad `BENIGN` | 0.998418 |
-| F1-score `MALICIOUS` | 0.994442 |
-| F1-score macro | 0.996605 |
-| FPR (tasa de falsos positivos) | 0.001582 |
-| Average precision | 0.999329 |
-| ROC-AUC | 0.999867 |
+| Accuracy | 0.997961 |
+| Balanced accuracy | 0.997476 |
+| Precision `MALICIOUS` | 0.992068 |
+| Recall `MALICIOUS` | 0.996716 |
+| Especificidad `BENIGN` | 0.998237 |
+| F1-score `MALICIOUS` | 0.994387 |
+| F1-score macro | 0.996570 |
+| FPR (tasa de falsos positivos) | 0.001763 |
+| Average precision | 0.999417 |
+| ROC-AUC | 0.999884 |
 
 La matriz de confusión final fue:
 
 | | Predicho `BENIGN` | Predicho `MALICIOUS` |
 | --- | ---: | ---: |
-| Real `BENIGN` | 225,340 | 357 |
-| Real `MALICIOUS` | 199 | 49,742 |
+| Real `BENIGN` | 225,299 | 398 |
+| Real `MALICIOUS` | 164 | 49,777 |
 
 El resultado de esta prueba estima la detección de ataques conocidos dentro de CIC-IDS2017.
 No es directamente comparable con la evaluación leave-one-day-out: archivos y días de
 captura aparecen en las tres particiones, pero nunca se separa entre ellas un vector
-idéntico de características. La prueba registró 199 falsos negativos y 357 falsos
+idéntico de características. La prueba registró 164 falsos negativos y 398 falsos
 positivos.
 
 ## 6. Importancia de características
@@ -116,16 +115,16 @@ Las características con mayor importancia en el modelo final fueron:
 
 | Característica | Importancia aproximada |
 | --- | ---: |
-| `Init_Win_bytes_forward` | 0.080722 |
-| `Max Packet Length` | 0.071990 |
-| `Average Packet Size` | 0.051719 |
-| `Min Packet Length` | 0.050275 |
-| `Init_Win_bytes_backward` | 0.050004 |
-| `Packet Length Std` | 0.047535 |
-| `Fwd Packet Length Mean` | 0.039673 |
-| `Bwd Packet Length Max` | 0.034372 |
-| `Fwd Header Length.1` | 0.031625 |
-| `Subflow Fwd Bytes` | 0.028758 |
+| `Init_Win_bytes_forward` | 0.078041 |
+| `Max Packet Length` | 0.071506 |
+| `Average Packet Size` | 0.060322 |
+| `Min Packet Length` | 0.048852 |
+| `Packet Length Std` | 0.043536 |
+| `Packet Length Variance` | 0.042336 |
+| `Init_Win_bytes_backward` | 0.039691 |
+| `Subflow Fwd Bytes` | 0.032733 |
+| `Avg Bwd Segment Size` | 0.032025 |
+| `Fwd Packet Length Mean` | 0.031237 |
 
 La importancia de características se utilizará como elemento interpretativo y no como criterio para eliminar variables en esta fase. Una selección reducida de características requeriría un experimento separado.
 
@@ -150,9 +149,9 @@ es mucho más difícil. Los dos resultados contestan preguntas distintas y deben
 presentarse juntos. Ninguno demuestra generalización a redes reales ni detección de
 ataques zero-day.
 
-En la prueba agrupada, SQL Injection tuvo recall 0/2; las métricas de Heartbleed (1
+En la prueba agrupada, SQL Injection tuvo recall 1/2; las métricas de Heartbleed (1
 registro) e Infiltration (4) son demasiado pequeñas para considerarse estables. Bot
-obtuvo recall 0.605. Además, 269 vectores idénticos aparecen con etiquetas originales
+obtuvo recall 0.662. Además, 269 vectores idénticos aparecen con etiquetas originales
 distintas, en 82,456 filas; como el modelo recibe las mismas características para esos
 casos, existe ambigüedad de etiqueta que no puede resolverse solo mediante el clasificador.
 
@@ -187,21 +186,21 @@ modelo oficial agrupado.
 
 | Etiqueta original | Registros de prueba | Detectados | Recall |
 | --- | ---: | ---: | ---: |
-| Bot | 210 | 127 | 60.5 % |
-| DDoS | 12,775 | 12,769 | 99.95 % |
-| DoS GoldenEye | 994 | 992 | 99.8 % |
-| DoS Hulk | 19,536 | 19,461 | 99.6 % |
-| DoS Slowhttptest | 546 | 544 | 99.6 % |
+| Bot | 210 | 139 | 66.2 % |
+| DDoS | 12,775 | 12,771 | 99.97 % |
+| DoS GoldenEye | 994 | 993 | 99.9 % |
+| DoS Hulk | 19,536 | 19,469 | 99.7 % |
+| DoS Slowhttptest | 546 | 545 | 99.8 % |
 | DoS slowloris | 413 | 412 | 99.8 % |
 | FTP-Patator | 779 | 778 | 99.9 % |
 | Heartbleed | 1 | 1 | 100 % |
 | Infiltration | 4 | 3 | 75.0 % |
 | PortScan | 13,969 | 13,967 | 99.99 % |
-| SSH-Patator | 507 | 498 | 98.2 % |
-| Web Attack – Brute Force | 142 | 127 | 89.4 % |
-| Web Attack – Sql Injection | 2 | 0 | 0 % |
+| SSH-Patator | 507 | 503 | 99.2 % |
+| Web Attack – Brute Force | 142 | 132 | 93.0 % |
+| Web Attack – Sql Injection | 2 | 1 | 50.0 % |
 | Web Attack – XSS | 63 | 63 | 100 % |
-| BENIGN (falsos positivos) | 225,697 | 357 | FPR 0.158 % |
+| BENIGN (falsos positivos) | 225,697 | 398 | FPR 0.176 % |
 
 Los resultados de las categorías con muy pocos registros de prueba (en especial
 Heartbleed, Infiltration y SQL Injection) no son estimaciones estables.
@@ -252,15 +251,15 @@ Se verificó la causa de la variabilidad. Con los mismos datos, el viernes obtuv
 | Día | Configuración | Recall | FPR | ROC-AUC | Average precision |
 | --- | --- | ---: | ---: | ---: | ---: |
 | Martes | sin balanceo | 0.0001 | 0.0011 | 0.7875 | 0.0857 |
-| Martes | balanceado | 0.0001 | 0.0025 | 0.7890 | 0.0789 |
+| Martes | balanceado | 0.0001 | 0.0030 | 0.9007 | 0.1620 |
 | Miércoles | sin balanceo | 0.0060 | 0.0000 | 0.8879 | 0.8598 |
-| Miércoles | balanceado | 0.0050 | 0.0000 | 0.8917 | 0.8614 |
+| Miércoles | balanceado | 0.0088 | 0.0001 | 0.8836 | 0.8506 |
 | Jueves | sin balanceo | 0.0068 | 0.0028 | 0.9091 | 0.0345 |
-| Jueves | balanceado | 0.0077 | 0.0031 | 0.8924 | 0.0256 |
+| Jueves | balanceado | 0.2013 | 0.0032 | 0.9618 | 0.2996 |
 | Viernes | sin balanceo | 0.2781 | 0.0003 | 0.8399 | 0.8000 |
-| Viernes | balanceado | 0.0779 | 0.0006 | 0.6286 | 0.6059 |
+| Viernes | balanceado | 0.0789 | 0.0007 | 0.5840 | 0.6271 |
 | Media ± desv. | sin balanceo | 0.0728 ± 0.1370 | 0.00105 ± 0.00123 | | |
-| Media ± desv. | balanceado | 0.0227 ± 0.0369 | 0.00156 ± 0.00147 | | |
+| Media ± desv. | balanceado | 0.0723 ± 0.0929 | 0.00177 ± 0.00156 | | |
 
 Esta evaluación por día no selecciona el modelo oficial. La configuración balanceada
 mantiene recall bajo al probar días completos no vistos, sobre todo martes a jueves;
