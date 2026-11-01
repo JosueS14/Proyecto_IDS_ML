@@ -29,10 +29,10 @@ La batería principal registró 9 pruebas y las 9 finalizaron correctamente. Ade
 
 ### 3.1 Parquet preparado
 
-En una muestra de 200 registros:
+En la ejecución registrada en `docs/resultados_validacion.json`, sobre una muestra de 200 registros:
 
-- 199 fueron clasificados como `BENIGN`.
-- 1 fue clasificado como `MALICIOUS`.
+- 198 fueron clasificados como `BENIGN`.
+- 2 fueron clasificados como `MALICIOUS`.
 - 0 registros presentaron errores de datos.
 
 ### 3.2 CSV original

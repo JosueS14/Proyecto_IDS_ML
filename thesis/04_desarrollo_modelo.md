@@ -61,6 +61,12 @@ Los parámetros utilizados fueron:
 
 ## 4. Resultados de validación
 
+Los resultados oficiales se regeneraron con el entorno fijado por el repositorio:
+Python 3.13.2, NumPy 2.4.6, pandas 2.3.3, scikit-learn 1.8.0 y joblib 1.5.3.
+Las cifras completas y la procedencia del entorno están registradas en
+`docs/resultados_modelado.json`; las tablas de este documento presentan sus valores
+redondeados a seis decimales.
+
 | Configuración | Accuracy | Balanced accuracy | Precision `MALICIOUS` | Recall `MALICIOUS` | F1 macro | FPR |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 | Sin balanceo | 0.998470 | 0.997365 | 0.997094 | 0.995484 | 0.997662 | 0.000754 |
@@ -87,7 +93,7 @@ reservada. En esta partición están representados los 14 tipos de ataque origin
 | Especificidad `BENIGN` | 0.998418 |
 | F1-score `MALICIOUS` | 0.994442 |
 | F1-score macro | 0.996605 |
-| Tasa de falsos positivos | 0.001582 |
+| FPR (tasa de falsos positivos) | 0.001582 |
 | Average precision | 0.999329 |
 | ROC-AUC | 0.999867 |
 
