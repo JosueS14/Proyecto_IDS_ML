@@ -7,7 +7,7 @@ import json
 from pathlib import Path
 import sys
 from time import perf_counter
-from typing import Any, Literal
+from typing import Any, Literal, cast, overload
 
 import joblib
 import numpy as np
@@ -51,7 +51,6 @@ COLUMNA_OBJETIVO = "Label"
 CLASE_BENIGNA = "BENIGN"
 CLASE_MALICIOSA = "MALICIOUS"
 
-# Se conservan para los análisis complementarios por día (04c/04d/04e).
 ARCHIVOS_ENTRENAMIENTO = {
     "Monday-WorkingHours.pcap_ISCX.csv",
     "Tuesday-WorkingHours.pcap_ISCX.csv",
@@ -68,9 +67,24 @@ ARCHIVOS_PRUEBA = {
 }
 
 
+@overload
+def cargar_datos(
+    incluir_etiquetas_originales: Literal[False] = False,
+) -> tuple[pd.DataFrame, pd.Series, pd.Series, list[str]]: ...
+
+
+@overload
+def cargar_datos(
+    incluir_etiquetas_originales: Literal[True],
+) -> tuple[pd.DataFrame, pd.Series, pd.Series, pd.Series, list[str]]: ...
+
+
 def cargar_datos(
     incluir_etiquetas_originales: bool = False,
-) -> tuple[pd.DataFrame, ...]:
+) -> (
+    tuple[pd.DataFrame, pd.Series, pd.Series, list[str]]
+    | tuple[pd.DataFrame, pd.Series, pd.Series, pd.Series, list[str]]
+):
     if not RUTA_DATASET_PREPARADO.exists():
         raise FileNotFoundError(
             f"No existe el dataset preparado: {RUTA_DATASET_PREPARADO}"
@@ -84,7 +98,7 @@ def cargar_datos(
         )
 
     metadatos = json.loads(RUTA_METADATOS.read_text(encoding="utf-8"))
-    columnas_caracteristicas = metadatos["feature_columns"]
+    columnas_caracteristicas = cast(list[str], metadatos["feature_columns"])
     dataset = pd.read_parquet(RUTA_DATASET_PREPARADO)
     grupos = pd.read_parquet(RUTA_GRUPOS)
 
@@ -170,9 +184,11 @@ def dividir_datos(
             for nombre, conteo in conteos.items():
                 fraccion = fracciones_objetivo[nombre]
                 proporcion_por_etiqueta = conteo / totales_etiqueta
-                puntuacion += float(
-                    (((proporcion_por_etiqueta - fraccion) / fraccion) ** 2).mean()
+                desviaciones = np.asarray(
+                    (proporcion_por_etiqueta - fraccion) / fraccion,
+                    dtype=np.float64,
                 )
+                puntuacion += float(np.mean(np.square(desviaciones)))
             candidatos.append(
                 (puntuacion, pliegue_validacion, pliegue_prueba)
             )
