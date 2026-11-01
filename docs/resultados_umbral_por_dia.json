@@ -25,7 +25,7 @@
       ],
       "filas_entrenamiento": 1762141,
       "muestreo_entrenamiento": 1762141,
-      "tiempo_entrenamiento_segundos": 51.52414780005347,
+      "tiempo_entrenamiento_segundos": 50.8268379000001,
       "umbral_elegido": 0.62,
       "referencia_umbral_0_5": {
         "umbral": 0.5,
@@ -47,7 +47,7 @@
         "false_positives": 158,
         "true_negatives": 431651
       },
-      "roc_auc": 0.7875252694971583,
+      "roc_auc": 0.7875252694971582,
       "average_precision": 0.08571851966612154,
       "por_etiqueta_umbral_elegido": [
         {
@@ -161,7 +161,7 @@
       ],
       "filas_entrenamiento": 1762141,
       "muestreo_entrenamiento": 1762141,
-      "tiempo_entrenamiento_segundos": 38.697916099918075,
+      "tiempo_entrenamiento_segundos": 37.7403140000024,
       "umbral_elegido": 0.36949832775919733,
       "referencia_umbral_0_5": {
         "umbral": 0.5,
@@ -183,8 +183,8 @@
         "false_positives": 55,
         "true_negatives": 439613
       },
-      "roc_auc": 0.8878522014715109,
-      "average_precision": 0.85981116042251,
+      "roc_auc": 0.8878522014850643,
+      "average_precision": 0.8598111604958051,
       "por_etiqueta_umbral_elegido": [
         {
           "etiqueta_original": "BENIGN",
@@ -315,7 +315,7 @@
       ],
       "filas_entrenamiento": 1762141,
       "muestreo_entrenamiento": 1762141,
-      "tiempo_entrenamiento_segundos": 46.865888500004075,
+      "tiempo_entrenamiento_segundos": 45.78463489999558,
       "umbral_elegido": 0.5590909090909091,
       "referencia_umbral_0_5": {
         "umbral": 0.5,
@@ -338,7 +338,7 @@
         "true_negatives": 455039
       },
       "roc_auc": 0.9090713055395657,
-      "average_precision": 0.03449378132410202,
+      "average_precision": 0.03449952435978971,
       "por_etiqueta_umbral_elegido": [
         {
           "etiqueta_original": "BENIGN",
@@ -463,7 +463,7 @@
       ],
       "filas_entrenamiento": 1762141,
       "muestreo_entrenamiento": 1762141,
-      "tiempo_entrenamiento_segundos": 50.461082600057125,
+      "tiempo_entrenamiento_segundos": 49.08715780000057,
       "umbral_elegido": 0.52,
       "referencia_umbral_0_5": {
         "umbral": 0.5,

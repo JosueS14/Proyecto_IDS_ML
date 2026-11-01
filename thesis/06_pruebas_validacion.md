@@ -31,8 +31,8 @@ La batería principal registró 9 pruebas y las 9 finalizaron correctamente. Ade
 
 En la ejecución registrada en `docs/resultados_validacion.json`, sobre una muestra de 200 registros:
 
-- 198 fueron clasificados como `BENIGN`.
-- 2 fueron clasificados como `MALICIOUS`.
+- 199 fueron clasificados como `BENIGN`.
+- 1 fue clasificado como `MALICIOUS`.
 - 0 registros presentaron errores de datos.
 
 ### 3.2 CSV original
@@ -48,11 +48,11 @@ Marcar un registro inválido como `ERROR_DATOS` evita producir una predicción s
 
 ### 3.3 Rendimiento básico
 
-La inferencia sobre 1,000 filas se completó en aproximadamente 0.08 segundos después de cargar el modelo. El tiempo total de la prueba, incluyendo carga y preparación, fue inferior a un segundo en el entorno utilizado.
+La inferencia sobre 1,000 filas se completó en aproximadamente 0.044 segundos después de cargar el modelo. El tiempo total de la prueba, incluyendo carga y preparación, fue inferior a un segundo en el entorno utilizado.
 
 ### 3.4 Prueba complementaria offline en entorno controlado
 
-Se ejecutó `src/pruebas/06_prueba_entorno_controlado.py` como prueba funcional de extremo a extremo. La prueba extrajo del archivo `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` una muestra local de 20 flujos válidos: 10 benignos y 10 asociados a ataques. Para la inferencia se utilizaron las 78 características definidas por el modelo.
+Se ejecutó `src/pruebas/06_prueba_entorno_controlado.py` como prueba funcional de extremo a extremo. La prueba extrajo del archivo `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` una muestra local de 20 flujos válidos: 10 benignos y 10 asociados a ataques. Para la inferencia se utilizaron las 78 características definidas por el modelo. La ejecución registrada en `docs/resultados_prueba_laboratorio.json` usó Python 3.14.6, pandas 3.0.3 y scikit-learn 1.9.0.
 
 La prueba se reproduce desde la raíz del proyecto con:
 
@@ -69,7 +69,7 @@ Resultados de la ejecución:
 - 10 alertas generadas, correspondientes a las predicciones `MALICIOUS`.
 - En esta muestra pequeña, los 10 flujos asociados a ataques fueron detectados. Este resultado es solo una comprobación funcional del flujo y no constituye una estimación del desempeño predictivo.
 - Los archivos de resultados y alertas se guardaron por separado.
-- La inferencia tardó aproximadamente 0.04 segundos; el tiempo total de la prueba fue aproximadamente 1.89 segundos en el entorno utilizado.
+- La inferencia tardó aproximadamente 0.079 segundos; el tiempo total de la prueba fue aproximadamente 0.68 segundos en el entorno utilizado.
 
 Los tiempos son observaciones de una ejecución y pueden variar según el equipo. La prueba tampoco verifica visualmente la interacción con la ventana Tkinter; esa comprobación continúa siendo manual.
 
