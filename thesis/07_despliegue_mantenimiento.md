@@ -138,8 +138,9 @@ procedimiento:
 1. Conservar los archivos originales de entrada sin modificarlos.
 2. Ejecutar nuevamente la comprensión y preparación de los datos.
 3. Confirmar que el orden y la cantidad de características sean compatibles.
-4. Separar entrenamiento, validación y prueba sin reutilizar la prueba para seleccionar el
-   modelo.
+4. Repetir la partición agrupada por vector de características sin usar la prueba para
+   seleccionar el modelo. Esta partición no aísla sesiones o días; conservar además la
+   evaluación leave-one-day-out como medición complementaria de transferencia.
 5. Entrenar y comparar las configuraciones definidas, repitiendo la evaluación con varias semillas y reportando media y desviación. El umbral de decisión solo se modifica si la selección con validación es estable entre días.
 6. Evaluar la configuración seleccionada sobre la prueba reservada.
 7. Ejecutar las pruebas de integración y el verificador de despliegue.
