@@ -138,9 +138,7 @@ La columna `Label` es la variable objetivo y nunca deberá utilizarse como entra
 
 ## 7. Corrección de resultados previos
 
-Se registraron 3,036,743 flujos y una distribución de 74.86 % benigno frente a 25.14 % malicioso. El análisis reproducible de esta fase, ejecutado sobre los ocho archivos actuales y con exclusión explícita de las 288,602 filas completamente vacías, produce 2,830,743 registros con etiqueta válida y una distribución de 80.30 % frente a 19.70 %.
-
-Por tanto, los resultados de esta fase sustituyen a esas cifras anteriores para efectos del proyecto. La diferencia queda registrada como una corrección de trazabilidad y no como una modificación del dataset original.
+Las cifras reproducibles de esta fase son 3,119,345 filas brutas y 2,830,743 registros con etiqueta válida, después de excluir conceptualmente las 288,602 filas completamente vacías. La distribución válida es de 80.30 % de tráfico benigno y 19.70 % de tráfico malicioso. Estas cifras sustituyen los resultados previos y no representan una modificación del dataset original.
 
 ## 8. Artefactos generados
 
