@@ -15,9 +15,10 @@
     "pandas": "3.0.3",
     "scikit_learn": "1.9.0"
   },
-  "duracion_inferencia_segundos": 0.07889649999560788,
+  "duracion_inferencia_segundos": 0.08989539998583496,
   "muestra": {
-    "archivo_fuente": "data\\raw\\Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv",
+    "archivo_fuente": "data\\raw\\Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv",
+    "etiqueta_ataque": "PortScan",
     "registros_por_clase_real": {
       "BENIGN": 10,
       "MALICIOUS": 10
@@ -25,10 +26,10 @@
     "total_registros": 20,
     "caracteristicas": 78,
     "predicciones": {
-      "BENIGN": 10,
-      "MALICIOUS": 10
+      "BENIGN": 13,
+      "MALICIOUS": 7
     },
-    "alertas_generadas": 10,
+    "alertas_generadas": 7,
     "errores_de_datos": 0
   },
   "verificaciones": {
@@ -43,6 +44,6 @@
     "resultados": "data\\processed\\prueba_laboratorio\\resultado_inferencia.csv",
     "alertas": "data\\processed\\prueba_laboratorio\\alertas_ids.csv"
   },
-  "huella_sha256_entrada": "7ca1c025f91417536ac22fcd740bb160029cc2dfedc4f544a89c02cd43c6d44a",
-  "duracion_total_segundos": 0.6763290999952005
+  "huella_sha256_entrada": "fdda6b5d5b4ddd8ea7263c2dccca686d79ed37eb510402f53286c031710d8c17",
+  "duracion_total_segundos": 1.327122800052166
 }

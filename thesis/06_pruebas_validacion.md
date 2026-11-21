@@ -52,7 +52,7 @@ La inferencia sobre 1,000 filas se completó en aproximadamente 0.044 segundos d
 
 ### 3.4 Prueba complementaria offline en entorno controlado
 
-Se ejecutó `src/pruebas/06_prueba_entorno_controlado.py` como prueba funcional de extremo a extremo. La prueba extrajo del archivo `Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv` una muestra local de 20 flujos válidos: 10 benignos y 10 asociados a ataques. Para la inferencia se utilizaron las 78 características definidas por el modelo. La ejecución registrada en `docs/resultados_prueba_laboratorio.json` usó Python 3.14.6, pandas 3.0.3 y scikit-learn 1.9.0.
+Se ejecutó `src/pruebas/06_prueba_entorno_controlado.py` como prueba funcional de extremo a extremo. La prueba extrajo del archivo `Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv` una muestra local de 20 flujos válidos: 10 benignos y 10 etiquetados como `PortScan`. El script comprueba que las muestras maliciosas pertenezcan a esa etiqueta. Para la inferencia se utilizaron las 78 características definidas por el modelo. La ejecución registrada en `docs/resultados_prueba_laboratorio.json` usó Python 3.14.6, pandas 3.0.3 y scikit-learn 1.9.0.
 
 La prueba se reproduce desde la raíz del proyecto con:
 
@@ -64,12 +64,12 @@ La entrada está disponible en `data/flujos_prueba_offline.csv`; los resultados 
 
 Resultados de la ejecución:
 
-- 20 flujos analizados y 0 errores de datos.
-- 10 predicciones `BENIGN` y 10 predicciones `MALICIOUS`.
-- 10 alertas generadas, correspondientes a las predicciones `MALICIOUS`.
-- En esta muestra pequeña, los 10 flujos asociados a ataques fueron detectados. Este resultado es solo una comprobación funcional del flujo y no constituye una estimación del desempeño predictivo.
+- 20 flujos analizados: 10 benignos y 10 etiquetados como `PortScan`; 0 errores de datos.
+- 13 predicciones `BENIGN` y 7 predicciones `MALICIOUS`.
+- 7 alertas generadas, correspondientes a las predicciones `MALICIOUS`.
+- En esta muestra pequeña, 7 de los 10 flujos `PortScan` fueron clasificados como `MALICIOUS`; los otros 3 fueron clasificados como `BENIGN`. Es una observación de esta muestra, no una estimación estable del desempeño ni el criterio de aprobación de la prueba funcional.
 - Los archivos de resultados y alertas se guardaron por separado.
-- La inferencia tardó aproximadamente 0.079 segundos; el tiempo total de la prueba fue aproximadamente 0.68 segundos en el entorno utilizado.
+- La inferencia tardó aproximadamente 0.090 segundos; el tiempo total de la prueba fue aproximadamente 1.33 segundos en el entorno utilizado.
 
 Los tiempos son observaciones de una ejecución y pueden variar según el equipo. La prueba tampoco verifica visualmente la interacción con la ventana Tkinter; esa comprobación continúa siendo manual.
 

@@ -31,13 +31,14 @@ RUTA_FUENTE = (
     RAIZ_PROYECTO
     / "data"
     / "raw"
-    / "Friday-WorkingHours-Afternoon-DDos.pcap_ISCX.csv"
+    / "Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv"
 )
 RUTA_ENTRADA = RAIZ_PROYECTO / "data" / "flujos_prueba_offline.csv"
 RUTA_SANDBOX = RAIZ_PROYECTO / "data" / "processed" / "prueba_laboratorio"
 RUTA_INFORME = RAIZ_PROYECTO / "docs" / "resultados_prueba_laboratorio.json"
 REGISTROS_POR_CLASE = 10
 TAMANO_BLOQUE = 25_000
+ETIQUETA_ATAQUE_PRUEBA = "PortScan"
 
 
 def sha256(ruta: Path) -> str:
@@ -89,7 +90,8 @@ def crear_muestra_controlada(
             if clase == "BENIGN":
                 es_clase = etiquetas.eq("BENIGN")
             else:
-                es_clase = etiquetas.notna() & etiquetas.ne("BENIGN") & etiquetas.ne("")
+                es_clase = etiquetas.eq(ETIQUETA_ATAQUE_PRUEBA)
+
             indices = bloque.index[es_clase & validas][:restantes]
             if len(indices) == 0:
                 continue
@@ -152,6 +154,14 @@ def main() -> None:
         ruta_alertas = RUTA_SANDBOX / "alertas_ids.csv"
 
         muestra, conteos_reales = crear_muestra_controlada(columnas)
+        etiquetas_ataque = muestra.loc[
+            muestra["Label"].ne("BENIGN"), "Label"
+        ].unique()
+        if list(etiquetas_ataque) != [ETIQUETA_ATAQUE_PRUEBA]:
+            raise AssertionError(
+                "La muestra de ataque debe contener únicamente "
+                f"{ETIQUETA_ATAQUE_PRUEBA}: {etiquetas_ataque.tolist()}"
+            )
         muestra.to_csv(ruta_entrada, index=False, encoding="cp1252")
         huella_entrada_antes = sha256(ruta_entrada)
 
@@ -219,6 +229,7 @@ def main() -> None:
                 "duracion_inferencia_segundos": duracion_inferencia,
                 "muestra": {
                     "archivo_fuente": str(RUTA_FUENTE.relative_to(RAIZ_PROYECTO)),
+                    "etiqueta_ataque": ETIQUETA_ATAQUE_PRUEBA,
                     "registros_por_clase_real": conteos_reales,
                     "total_registros": len(muestra),
                     "caracteristicas": len(columnas),
