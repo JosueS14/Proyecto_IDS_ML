@@ -405,10 +405,29 @@ resultado vigente.
   medio 0.00177 ± 0.00156.
 - La batería de validación pasó 9/9 pruebas; la muestra Parquet produjo 199
   predicciones `BENIGN`, 1 `MALICIOUS` y ningún error.
-- La prueba offline de laboratorio procesó 20 flujos sin errores, generó 10
-  alertas y tardó 0.079 segundos en inferencia (0.676 segundos en total).
+- La ejecución offline anterior, con DDoS, procesó 20 flujos sin errores, generó 10
+  alertas y tardó 0.079 segundos en inferencia (0.676 segundos en total). Fue sustituida
+  en la sesión 22 por una muestra PortScan.
 
 Los detalles reproducibles se conservan en los JSON de `docs/`; las secciones 4,
 5 y 10 de `thesis/04_desarrollo_modelo.md` y la fase 6 de
 `thesis/06_pruebas_validacion.md` reflejan esta ejecución.
+
+# Sesion 22
+
+## Objetivo
+
+Cambiar la muestra de la prueba offline de DDoS a PortScan.
+
+## Resultados
+
+- La prueba toma ahora 10 flujos benignos y 10 flujos con etiqueta `PortScan` del archivo `Friday-WorkingHours-Afternoon-PortScan.pcap_ISCX.csv`.
+- Se agregó una verificación para asegurar que la muestra maliciosa contenga únicamente la etiqueta `PortScan`.
+- La ejecución procesó 20 flujos sin errores: 13 predicciones `BENIGN`, 7 `MALICIOUS` y 7 alertas.
+- En esta muestra concreta, 7 de los 10 flujos PortScan fueron clasificados como `MALICIOUS`; este conteo no es una evaluación estadística del modelo.
+- La inferencia tardó aproximadamente 0.090 segundos y la ejecución completa 1.33 segundos.
+
+## Decisión
+
+Se conserva la prueba como validación funcional del flujo offline, no como medida de desempeño predictivo. Los resultados actualizados están en `docs/resultados_prueba_laboratorio.json` y `thesis/06_pruebas_validacion.md`.
 
